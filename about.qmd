@@ -1,0 +1,40 @@
+---
+title: "About DEMOPAST"
+---
+
+## Italian Historical Demographic Atlas
+
+DEMOPAST is a digital atlas of Italian historical demography based on digitized census data from ISTAT (Istituto Nazionale di Statistica), starting from the first national census of 1881.
+
+### The Project
+
+The primary goal of DEMOPAST is to provide consistent population data by sex and age classes across all Italian provinces over time. Census data has been digitized, classified, and harmonized to account for changing administrative boundaries.
+
+### Data Sources
+
+All data comes from the official Italian national censuses published by ISTAT. The original census volumes have been digitized and the population tables extracted and classified.
+
+### GENPOP
+
+DEMOPAST is part of the [GENPOP](https://genpop.org) research project.
+
+### Available Census Years
+
+| Year | Provinces | Notes |
+|------|-----------|-------|
+| 1881 | 69 | First national census of unified Italy |
+| 1911 | 69 | |
+| 1921 | 71 | Includes Venezia Giulia and Venezia Tridentina (post-WWI) |
+| 1931 | 89 | Province boundaries redrawn |
+
+### Team
+
+- **Nicola Barban**
+- **Michail Raftakis**
+- **Lorenzo Lionello**
+- **Luciana Maselli**
+- **Riccardo Omenti**
+
+### Contact
+
+For questions about the data or the project, please contact the DEMOPAST team.

@@ -1,0 +1,234 @@
+---
+title: "Compare Provinces"
+page-layout: full
+format:
+  html:
+    toc: false
+    include-in-header:
+      text: |
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+---
+
+```{=html}
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+<div style="text-align:center;margin:1.5rem 0;">
+  <label for="compareYear" style="font-weight:bold;font-size:1.2rem;">Year: </label>
+  <select id="compareYear" style="padding:4px 8px;font-size:1rem;">
+    <option value="1881">1881</option>
+    <option value="1911">1911</option>
+    <option value="1921">1921</option>
+    <option value="1931">1931</option>
+  </select>
+</div>
+
+<div style="display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin:1rem 0;">
+  <!-- Province A -->
+  <div style="flex:1;max-width:550px;min-width:350px;">
+    <div style="text-align:center;margin-bottom:1rem;">
+      <label for="provA" style="font-weight:bold;">Province A: </label>
+      <select id="provA" style="padding:4px 8px;font-size:1rem;width:250px;"></select>
+    </div>
+    <div style="background:#f8f9fa;border-radius:4px;padding:1rem;">
+      <h4 id="nameA" style="margin-top:0;text-align:center;"></h4>
+      <table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin-bottom:0.5rem;">
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Total population</td><td id="totalA" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Child/Woman Ratio (‰)</td><td id="cwrA" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Old-age dependency (%)</td><td id="oldDepA" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Structural dependency (%)</td><td id="structDepA" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+        <tr><td style="padding:3px 4px;">Mean age (years)</td><td id="meanAgeA" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      </table>
+      <canvas id="pyramidA"></canvas>
+    </div>
+  </div>
+
+  <!-- Province B -->
+  <div style="flex:1;max-width:550px;min-width:350px;">
+    <div style="text-align:center;margin-bottom:1rem;">
+      <label for="provB" style="font-weight:bold;">Province B: </label>
+      <select id="provB" style="padding:4px 8px;font-size:1rem;width:250px;"></select>
+    </div>
+    <div style="background:#f8f9fa;border-radius:4px;padding:1rem;">
+      <h4 id="nameB" style="margin-top:0;text-align:center;"></h4>
+      <table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin-bottom:0.5rem;">
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Total population</td><td id="totalB" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Child/Woman Ratio (‰)</td><td id="cwrB" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Old-age dependency (%)</td><td id="oldDepB" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Structural dependency (%)</td><td id="structDepB" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+        <tr><td style="padding:3px 4px;">Mean age (years)</td><td id="meanAgeB" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      </table>
+      <canvas id="pyramidB"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+const AGE_GROUPS = [
+  {label: '0', col: '0'}, {label: '1–4', col: '1_4'}, {label: '5–9', col: '5_9'},
+  {label: '10–14', col: '10_14'}, {label: '15–19', col: '15_19'}, {label: '20–24', col: '20_24'},
+  {label: '25–29', col: '25_29'}, {label: '30–34', col: '30_34'}, {label: '35–39', col: '35_39'},
+  {label: '40–44', col: '40_44'}, {label: '45–49', col: '45_49'}, {label: '50–54', col: '50_54'},
+  {label: '55–59', col: '55_59'}, {label: '60–64', col: '60_64'}, {label: '65–69', col: '65_69'},
+  {label: '70–74', col: '70_74'}, {label: '75–79', col: '75_79'}, {label: '80–84', col: '80_84'},
+  {label: '85+', col: '85plus'},
+];
+
+let censusCache = {};
+let chartA = null;
+let chartB = null;
+
+function fmt(n) { return Number(n).toLocaleString('en-US'); }
+
+async function loadCensus(year) {
+  if (censusCache[year]) return censusCache[year];
+  const resp = await fetch('data/census/census_' + year + '.csv');
+  const text = await resp.text();
+  const parsed = Papa.parse(text, { header: true, skipEmptyLines: true, dynamicTyping: true });
+  const byCode = {};
+  parsed.data.forEach(function(row) {
+    const entry = { den_prov: row.DEN_PROV, cod: parseInt(row.COD_PROV) };
+    Object.keys(row).forEach(function(key) {
+      if (key !== 'DEN_PROV' && key !== 'COD_PROV') {
+        entry[key] = parseFloat(row[key]) || 0;
+      }
+    });
+    byCode[parseInt(row.COD_PROV)] = entry;
+  });
+  censusCache[year] = byCode;
+  return byCode;
+}
+
+function populateDropdowns(data) {
+  const selectA = document.getElementById('provA');
+  const selectB = document.getElementById('provB');
+  selectA.innerHTML = '';
+  selectB.innerHTML = '';
+
+  const sorted = Object.entries(data).sort((a, b) => a[1].den_prov.localeCompare(b[1].den_prov));
+  sorted.forEach(function([cod, prov]) {
+    const optA = document.createElement('option');
+    optA.value = cod;
+    optA.textContent = prov.den_prov;
+    selectA.appendChild(optA);
+
+    const optB = document.createElement('option');
+    optB.value = cod;
+    optB.textContent = prov.den_prov;
+    selectB.appendChild(optB);
+  });
+
+  // Default: select first and second province
+  if (sorted.length >= 2) {
+    selectA.value = sorted[0][0];
+    selectB.value = sorted[1][0];
+  }
+}
+
+function drawPyramid(canvasId, prov, name, year, existingChart) {
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  if (existingChart) existingChart.destroy();
+
+  const reversed = [...AGE_GROUPS].reverse();
+  const labels = reversed.map(ag => ag.label);
+  const maleData = reversed.map(ag => -(prov['m_' + ag.col] || 0));
+  const femaleData = reversed.map(ag => prov['f_' + ag.col] || 0);
+  const maxVal = Math.max(Math.max(...maleData.map(Math.abs)), Math.max(...femaleData));
+
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Male',
+          data: maleData,
+          backgroundColor: 'rgba(54, 162, 235, 0.7)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Female',
+          data: femaleData,
+          backgroundColor: 'rgba(255, 99, 132, 0.7)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        title: {
+          display: true,
+          text: name + ' — ' + year,
+          font: { size: 13 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ': ' + Math.abs(context.raw).toLocaleString('en-US');
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            callback: function(value) {
+              return Math.abs(value).toLocaleString('en-US');
+            }
+          },
+          suggestedMin: -maxVal * 1.1,
+          suggestedMax: maxVal * 1.1
+        }
+      }
+    }
+  });
+}
+
+function fillPanel(suffix, prov) {
+  document.getElementById('name' + suffix).textContent = prov.den_prov;
+  document.getElementById('total' + suffix).textContent = fmt(prov.total_pop);
+  document.getElementById('cwr' + suffix).textContent = prov.cwr || 'N/A';
+  document.getElementById('oldDep' + suffix).textContent = prov.old_dep || 'N/A';
+  document.getElementById('structDep' + suffix).textContent = prov.struct_dep || 'N/A';
+  document.getElementById('meanAge' + suffix).textContent = prov.mean_age || 'N/A';
+}
+
+async function updateComparison() {
+  const year = parseInt(document.getElementById('compareYear').value);
+  const data = await loadCensus(year);
+
+  populateDropdowns(data);
+  updatePanels();
+}
+
+function updatePanels() {
+  const year = parseInt(document.getElementById('compareYear').value);
+  const data = censusCache[year];
+  if (!data) return;
+
+  const codA = parseInt(document.getElementById('provA').value);
+  const codB = parseInt(document.getElementById('provB').value);
+  const provA = data[codA];
+  const provB = data[codB];
+
+  if (provA) {
+    fillPanel('A', provA);
+    chartA = drawPyramid('pyramidA', provA, provA.den_prov, year, chartA);
+  }
+  if (provB) {
+    fillPanel('B', provB);
+    chartB = drawPyramid('pyramidB', provB, provB.den_prov, year, chartB);
+  }
+}
+
+document.getElementById('compareYear').addEventListener('change', updateComparison);
+document.getElementById('provA').addEventListener('change', updatePanels);
+document.getElementById('provB').addEventListener('change', updatePanels);
+
+updateComparison();
+</script>
+```

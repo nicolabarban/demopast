@@ -1,0 +1,25 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - data/**
+    - downloads/**
+
+website:
+  title: "DEMOPAST — Italian Historical Demographic Atlas"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Atlas
+      - href: compare.qmd
+        text: Compare
+      - href: about.qmd
+        text: About
+  page-footer:
+    center: "© 2026 DEMOPAST — A GENPOP Project"
+
+format:
+  html:
+    theme: flatly
+    css: styles.css
+    toc: false
