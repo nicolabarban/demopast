@@ -2,6 +2,7 @@ raw/
 .DS_Store
 _site/
 .quarto/
+.claude/
 
 /.quarto/
 **/*.quarto_ipynb
