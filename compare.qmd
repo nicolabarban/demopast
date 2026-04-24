@@ -142,16 +142,18 @@ function drawPyramid(canvasId, prov, name, year, existingChart) {
         {
           label: 'Male',
           data: maleData,
-          backgroundColor: 'rgba(54, 162, 235, 0.7)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
+          backgroundColor: 'rgba(30, 64, 175, 0.85)',
+          borderColor: 'rgba(30, 64, 175, 1)',
+          borderWidth: 0,
+          borderRadius: 2
         },
         {
           label: 'Female',
           data: femaleData,
-          backgroundColor: 'rgba(255, 99, 132, 0.7)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
+          backgroundColor: 'rgba(190, 24, 93, 0.85)',
+          borderColor: 'rgba(190, 24, 93, 1)',
+          borderWidth: 0,
+          borderRadius: 2
         }
       ]
     },
@@ -175,6 +177,7 @@ function drawPyramid(canvasId, prov, name, year, existingChart) {
       },
       scales: {
         x: {
+          stacked: true,
           ticks: {
             callback: function(value) {
               return Math.abs(value).toLocaleString('en-US');
@@ -182,6 +185,9 @@ function drawPyramid(canvasId, prov, name, year, existingChart) {
           },
           suggestedMin: -maxVal * 1.1,
           suggestedMax: maxVal * 1.1
+        },
+        y: {
+          stacked: true
         }
       }
     }
