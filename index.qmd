@@ -303,7 +303,7 @@ async function updateMap() {
   showNationalData(year);
 }
 
-const legend = L.control({ position: 'bottomright' });
+const legend = L.control({ position: 'bottomleft' });
 legend.onAdd = function() {
   const div = L.DomUtil.create('div', 'map-legend');
   div.id = 'legendContent';
