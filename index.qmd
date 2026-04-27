@@ -58,12 +58,19 @@ format:
   </select>
 </div>
 
-<!-- Side-by-side layout: 1/3 map (centered), 2/3 info panel -->
+<!-- Side-by-side layout: map + legend on the left, info panel on the right -->
 <div style="display:flex;gap:1.5rem;align-items:flex-start;">
-  <div style="flex:0 0 33%;display:flex;justify-content:center;">
+  <div style="flex:0 0 38%;display:flex;flex-direction:column;gap:0.75rem;">
     <div id="map" style="width:100%;"></div>
+    <div id="legendWrapper">
+      <div class="legend-header">
+        <span class="legend-title">Legend</span>
+        <button id="legendToggle" type="button">Hide</button>
+      </div>
+      <div id="legendContent" class="map-legend"></div>
+    </div>
   </div>
-  <div id="provinceInfo" style="flex:0 0 64%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:750px;overflow-y:auto;">
+  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:750px;overflow-y:auto;">
     <h4 id="provName" style="margin-top:0;"></h4>
 
     <h5 style="margin-top:0;margin-bottom:0.5rem;">Demographic Indices</h5>
@@ -133,6 +140,7 @@ const AGE_GROUPS = [
 
 const map = L.map('map', {
   zoomControl: false,
+  attributionControl: false,
   dragging: false,
   scrollWheelZoom: false,
   doubleClickZoom: false,
@@ -307,13 +315,11 @@ async function updateMap() {
   showNationalData(year);
 }
 
-const legend = L.control({ position: 'bottomleft' });
-legend.onAdd = function() {
-  const div = L.DomUtil.create('div', 'map-legend');
-  div.id = 'legendContent';
-  return div;
-};
-legend.addTo(map);
+document.getElementById('legendToggle').addEventListener('click', function() {
+  const wrapper = document.getElementById('legendWrapper');
+  const hidden = wrapper.classList.toggle('legend-hidden');
+  this.textContent = hidden ? 'Show' : 'Hide';
+});
 
 function updateLegend() {
   const div = document.getElementById('legendContent');
