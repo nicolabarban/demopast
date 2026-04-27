@@ -18,7 +18,7 @@ format:
   <label for="yearSlider" class="year-label">Year: <span id="yearDisplay">1881</span></label><br>
   <input type="range" id="yearSlider" min="0" max="3" step="1" value="0" style="width:60%;max-width:500px;">
   <div style="display:flex;justify-content:space-between;max-width:500px;margin:0 auto;">
-    <span>1881</span><span>1911</span><span>1921</span><span>1931</span>
+    <span>1881</span><span>1901</span><span>1911</span><span>1921</span>
   </div>
 </div>
 
@@ -101,13 +101,13 @@ format:
     </table>
 
     <div style="margin-top:0.5rem;">
-      <a id="downloadLink" href="#" download>Download province data (CSV)</a>
+      <a id="downloadLink" href="#" download>Download all-province data for this year (CSV)</a>
     </div>
   </div>
 </div>
 
 <script>
-const YEARS = [1881, 1911, 1921, 1931];
+const YEARS = [1881, 1901, 1911, 1921];
 const CHOROPLETH_COLORS = ['#eff3ff', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
 const AGE_GROUPS = [
   {label: '0', col: '0'},
@@ -250,14 +250,8 @@ function onEachFeature(feature, layer) {
       }
 
       const dlLink = document.getElementById('downloadLink');
-      const paddedCod = String(cod).padStart(3, '0');
-      const csvName = prov ? prov.den_prov : name.replace(/\s+/g, '');
-      if (year === 1931) {
-        dlLink.style.display = 'none';
-      } else {
-        dlLink.style.display = 'inline';
-        dlLink.href = 'downloads/' + year + '/' + paddedCod + '_' + csvName + '_' + year + '.csv';
-      }
+      dlLink.style.display = 'inline';
+      dlLink.href = 'downloads/' + year + '/data_census_' + year + '_adjusted_age.csv';
     }
   });
 }

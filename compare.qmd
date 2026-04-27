@@ -16,9 +16,9 @@ format:
   <label for="compareYear" style="font-weight:bold;font-size:1.2rem;">Year: </label>
   <select id="compareYear" style="padding:4px 8px;font-size:1rem;">
     <option value="1881">1881</option>
+    <option value="1901">1901</option>
     <option value="1911">1911</option>
     <option value="1921">1921</option>
-    <option value="1931">1931</option>
   </select>
 </div>
 

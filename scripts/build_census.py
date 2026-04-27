@@ -1,16 +1,19 @@
-"""Transform long-format adjusted-age census CSVs in raw/census/ into the
+"""Transform long-format adjusted-age census CSVs in downloads/ into the
 wide-format per-province CSVs consumed by the Quarto site (data/census/).
 
-Input  (long):  raw/census/{year}/data_census_{year}_adjusted_age.csv
+Input  (long):  downloads/{year}/data_census_{year}_adjusted_age.csv
                 columns: code, province, age_class, male, female, total
 Output (wide):  data/census/census_{year}.csv
                 columns: COD_PROV, DEN_PROV, total_pop, male_pop, female_pop,
                          m_{age}, f_{age}, t_{age} for 19 age groups,
                          cwr, old_dep, struct_dep, mean_age
 
+The same long-format CSV that feeds this pipeline is also what the site
+exposes through the per-year "Download province data" link, so downloads/
+is both the public download artifact and the build input.
+
 DEN_PROV is preserved from any pre-existing data/census/census_{year}.csv
-(joined on COD_PROV) so that download-link filenames in downloads/{year}/
-continue to resolve. New province codes fall back to the raw name with
+(joined on COD_PROV). New province codes fall back to the raw name with
 spaces stripped.
 """
 
@@ -22,7 +25,7 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
-RAW_DIR = ROOT / "raw" / "census"
+SRC_DIR = ROOT / "downloads"
 OUT_DIR = ROOT / "data" / "census"
 
 YEARS = (1881, 1901, 1911, 1921)
@@ -83,7 +86,7 @@ def sanitize_name(name: str) -> str:
 
 
 def build_year(year: int) -> pd.DataFrame:
-    src = RAW_DIR / str(year) / f"data_census_{year}_adjusted_age.csv"
+    src = SRC_DIR / str(year) / f"data_census_{year}_adjusted_age.csv"
     df = pd.read_csv(src, dtype={"code": int, "age_class": str})
     unknown = set(df["age_class"]) - set(AGE_CLASS_TO_SUFFIX)
     if unknown:

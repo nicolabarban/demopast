@@ -22,10 +22,10 @@ DEMOPAST is part of the [GENPOP](https://genpop.org) research project.
 
 | Year | Provinces | Notes |
 |------|-----------|-------|
-| 1881 | 69 | First national census of unified Italy |
-| 1911 | 69 | |
-| 1921 | 71 | Includes Venezia Giulia and Venezia Tridentina (post-WWI) |
-| 1931 | 89 | Province boundaries redrawn |
+| 1881 | 68 | First national census of unified Italy |
+| 1901 | 69 | |
+| 1911 | 66 | |
+| 1921 | 69 | Includes Venezia Giulia and Venezia Tridentina (post-WWI) |
 
 ### Team
 
