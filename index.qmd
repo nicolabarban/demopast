@@ -116,26 +116,30 @@ format:
 <script>
 const YEARS = [1881, 1901, 1911, 1921];
 const CHOROPLETH_COLORS = ['#eff3ff', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
+// `width` is the number of single years of age contained in the group; the
+// pyramid divides counts by this so each bar shows people per single year
+// of age (rates), making the 1-year and 4-year buckets comparable to the
+// 5-year buckets.
 const AGE_GROUPS = [
-  {label: '0', col: '0'},
-  {label: '1–4', col: '1_4'},
-  {label: '5–9', col: '5_9'},
-  {label: '10–14', col: '10_14'},
-  {label: '15–19', col: '15_19'},
-  {label: '20–24', col: '20_24'},
-  {label: '25–29', col: '25_29'},
-  {label: '30–34', col: '30_34'},
-  {label: '35–39', col: '35_39'},
-  {label: '40–44', col: '40_44'},
-  {label: '45–49', col: '45_49'},
-  {label: '50–54', col: '50_54'},
-  {label: '55–59', col: '55_59'},
-  {label: '60–64', col: '60_64'},
-  {label: '65–69', col: '65_69'},
-  {label: '70–74', col: '70_74'},
-  {label: '75–79', col: '75_79'},
-  {label: '80–84', col: '80_84'},
-  {label: '85+', col: '85plus'},
+  {label: '0', col: '0', width: 1},
+  {label: '1–4', col: '1_4', width: 4},
+  {label: '5–9', col: '5_9', width: 5},
+  {label: '10–14', col: '10_14', width: 5},
+  {label: '15–19', col: '15_19', width: 5},
+  {label: '20–24', col: '20_24', width: 5},
+  {label: '25–29', col: '25_29', width: 5},
+  {label: '30–34', col: '30_34', width: 5},
+  {label: '35–39', col: '35_39', width: 5},
+  {label: '40–44', col: '40_44', width: 5},
+  {label: '45–49', col: '45_49', width: 5},
+  {label: '50–54', col: '50_54', width: 5},
+  {label: '55–59', col: '55_59', width: 5},
+  {label: '60–64', col: '60_64', width: 5},
+  {label: '65–69', col: '65_69', width: 5},
+  {label: '70–74', col: '70_74', width: 5},
+  {label: '75–79', col: '75_79', width: 5},
+  {label: '80–84', col: '80_84', width: 5},
+  {label: '85+', col: '85plus', width: 5},
 ];
 
 const map = L.map('map', {
@@ -405,8 +409,8 @@ function drawPyramid(prov, name, year) {
 
   const reversed = [...AGE_GROUPS].reverse();
   const labels = reversed.map(ag => ag.label);
-  const maleData = reversed.map(ag => -(prov['m_' + ag.col] || 0));
-  const femaleData = reversed.map(ag => prov['f_' + ag.col] || 0);
+  const maleData = reversed.map(ag => -((prov['m_' + ag.col] || 0) / ag.width));
+  const femaleData = reversed.map(ag => (prov['f_' + ag.col] || 0) / ag.width);
   const maxVal = Math.max(Math.max(...maleData.map(Math.abs)), Math.max(...femaleData));
 
   pyramidChart = new Chart(ctx, {
@@ -445,7 +449,7 @@ function drawPyramid(prov, name, year) {
         tooltip: {
           callbacks: {
             label: function(context) {
-              return context.dataset.label + ': ' + Math.abs(context.raw).toLocaleString('en-US');
+              return context.dataset.label + ': ' + Math.round(Math.abs(context.raw)).toLocaleString('en-US') + ' / yr of age';
             }
           }
         }
@@ -455,7 +459,7 @@ function drawPyramid(prov, name, year) {
           stacked: true,
           ticks: {
             callback: function(value) {
-              return Math.abs(value).toLocaleString('en-US');
+              return Math.round(Math.abs(value)).toLocaleString('en-US');
             }
           },
           suggestedMin: -maxVal * 1.1,
