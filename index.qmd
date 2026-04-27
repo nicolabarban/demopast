@@ -151,10 +151,13 @@ function getSelectedField() {
   return document.getElementById('ageSelect').value;
 }
 
-function computeColorScale(year) {
+// Choropleth breaks are pinned to the earliest year (YEARS[0]) so the legend
+// stays constant as the user moves the slider — colors are then comparable
+// across years for the same metric.
+function computeColorScale() {
   const field = getSelectedField();
-  const yearData = censusData[year] || {};
-  const values = Object.values(yearData).map(p => p[field] || 0).filter(v => v > 0);
+  const baseData = censusData[YEARS[0]] || {};
+  const values = Object.values(baseData).map(p => p[field] || 0).filter(v => v > 0);
   if (values.length === 0) return [0, 1, 10, 100, 1000];
   values.sort((a, b) => a - b);
   const breaks = [];
@@ -287,9 +290,10 @@ async function updateMap() {
   const year = YEARS[yearIndex];
   document.getElementById('yearDisplay').textContent = year;
 
+  await loadCensusData(YEARS[0]);
   await loadCensusData(year);
   const geojson = await loadGeoJSON(year);
-  currentColorScale = computeColorScale(year);
+  currentColorScale = computeColorScale();
 
   if (currentLayer) map.removeLayer(currentLayer);
 
