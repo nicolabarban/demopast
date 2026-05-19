@@ -13,6 +13,8 @@ website:
         text: Atlas
       - href: compare.qmd
         text: Compare
+      - href: series.qmd
+        text: Series
       - href: about.qmd
         text: About
   page-footer:

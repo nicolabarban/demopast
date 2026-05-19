@@ -40,6 +40,7 @@ python3 scripts/build_geojson.py   # raw/shapefiles/*                           
 
 - `index.qmd` — Atlas page: map (1/3) + info panel (2/3) with indices, pyramid, age table
 - `compare.qmd` — Side-by-side province comparison
+- `series.qmd` — Time-series chart. Loads all five census CSVs at init, lets the user pick a geographic level (Italy / Macro-area / Region / Provinces, multi-select) and an indicator, and plots a Chart.js line per selection across 1881/1901/1911/1921/1931. Province→region→macro-area is mapped in a `REGION_MAP` object inside `series.qmd` keyed by `COD_PROV`; if you add new provinces or split a region, update that object. Ratio indicators (CWR / dependencies / mean age) are recomputed from aggregated counts the same way as `showNationalData` in `index.qmd`.
 - `about.qmd` — Project info, team
 - `_quarto.yml` — site config; output to `_site/`
 - `scripts/build_census.py`, `scripts/build_geojson.py` — offline data pipeline (see above)

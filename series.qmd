@@ -1,0 +1,414 @@
+---
+title: "Time Series"
+page-layout: full
+format:
+  html:
+    toc: false
+    include-in-header:
+      text: |
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+---
+
+```{=html}
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+<p style="max-width:780px;margin:0 auto 1.5rem;color:var(--c-text-muted);font-size:0.95rem;">
+  Build historical trends across census years (1881, 1901, 1911, 1921, 1931). Pick a geographic level — national, macro-area, region, or individual provinces — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
+</p>
+
+<div class="series-controls">
+  <div class="series-control">
+    <label for="seriesLevel">Geography</label>
+    <select id="seriesLevel">
+      <option value="italy">Italy (national total)</option>
+      <option value="macro">Macro-area</option>
+      <option value="region">Region</option>
+      <option value="province">Province</option>
+    </select>
+  </div>
+
+  <div class="series-control" id="seriesPickWrap">
+    <label for="seriesPick"><span id="seriesPickLabel">Select</span>
+      <span class="hint">(Ctrl / Cmd-click for multiple)</span></label>
+    <select id="seriesPick" multiple size="8"></select>
+  </div>
+
+  <div class="series-control">
+    <label for="seriesMetric">Indicator</label>
+    <select id="seriesMetric">
+      <optgroup label="Population">
+        <option value="total_pop">Total population</option>
+        <option value="male_pop">Male population</option>
+        <option value="female_pop">Female population</option>
+      </optgroup>
+      <optgroup label="Demographic indices">
+        <option value="cwr">Child/Woman Ratio (‰)</option>
+        <option value="old_dep">Old-age dependency (%)</option>
+        <option value="struct_dep">Structural dependency (%)</option>
+        <option value="mean_age">Mean age (years)</option>
+      </optgroup>
+      <optgroup label="Age groups (count)">
+        <option value="t_0">Age 0</option>
+        <option value="t_1_4">Age 1–4</option>
+        <option value="t_5_9">Age 5–9</option>
+        <option value="t_10_14">Age 10–14</option>
+        <option value="t_15_19">Age 15–19</option>
+        <option value="t_20_24">Age 20–24</option>
+        <option value="t_25_29">Age 25–29</option>
+        <option value="t_30_34">Age 30–34</option>
+        <option value="t_35_39">Age 35–39</option>
+        <option value="t_40_44">Age 40–44</option>
+        <option value="t_45_49">Age 45–49</option>
+        <option value="t_50_54">Age 50–54</option>
+        <option value="t_55_59">Age 55–59</option>
+        <option value="t_60_64">Age 60–64</option>
+        <option value="t_65_69">Age 65–69</option>
+        <option value="t_70_74">Age 70–74</option>
+        <option value="t_75_79">Age 75–79</option>
+        <option value="t_80_84">Age 80–84</option>
+        <option value="t_85plus">Age 85+</option>
+      </optgroup>
+    </select>
+  </div>
+</div>
+
+<div class="series-chart-wrap">
+  <canvas id="seriesChart"></canvas>
+  <div id="seriesEmpty" class="series-empty">Select at least one geography to render a series.</div>
+</div>
+
+<script>
+const YEARS = [1881, 1901, 1911, 1921, 1931];
+
+// COD_PROV -> {region, macro}. Codes follow ISTAT numbering; we use modern
+// regions/macro-areas so that historical name changes (Girgenti -> Agrigento,
+// Aquila -> L'Aquila, etc.) collapse into the same bucket across years.
+const NO = 'Nord-Ovest', NE = 'Nord-Est', CE = 'Centro', SU = 'Sud', IS = 'Isole';
+const REGION_MAP = {
+   1: {r: 'Piemonte',           m: NO},
+   2: {r: 'Piemonte',           m: NO},
+   3: {r: 'Piemonte',           m: NO},
+   4: {r: 'Piemonte',           m: NO},
+   6: {r: 'Piemonte',           m: NO},
+   7: {r: "Valle d'Aosta",       m: NO},
+   8: {r: 'Liguria',            m: NO},
+   9: {r: 'Liguria',            m: NO},
+  10: {r: 'Liguria',            m: NO},
+  11: {r: 'Liguria',            m: NO},
+  12: {r: 'Lombardia',          m: NO},
+  13: {r: 'Lombardia',          m: NO},
+  14: {r: 'Lombardia',          m: NO},
+  15: {r: 'Lombardia',          m: NO},
+  16: {r: 'Lombardia',          m: NO},
+  17: {r: 'Lombardia',          m: NO},
+  18: {r: 'Lombardia',          m: NO},
+  19: {r: 'Lombardia',          m: NO},
+  20: {r: 'Lombardia',          m: NO},
+  21: {r: 'Trentino-Alto Adige', m: NE},
+  22: {r: 'Trentino-Alto Adige', m: NE},
+  23: {r: 'Veneto',             m: NE},
+  24: {r: 'Veneto',             m: NE},
+  25: {r: 'Veneto',             m: NE},
+  26: {r: 'Veneto',             m: NE},
+  27: {r: 'Veneto',             m: NE},
+  28: {r: 'Veneto',             m: NE},
+  29: {r: 'Veneto',             m: NE},
+  30: {r: 'Friuli-Venezia Giulia', m: NE},
+  31: {r: 'Friuli-Venezia Giulia', m: NE},
+  32: {r: 'Friuli-Venezia Giulia', m: NE},
+  33: {r: 'Emilia-Romagna',     m: NE},
+  34: {r: 'Emilia-Romagna',     m: NE},
+  35: {r: 'Emilia-Romagna',     m: NE},
+  36: {r: 'Emilia-Romagna',     m: NE},
+  37: {r: 'Emilia-Romagna',     m: NE},
+  38: {r: 'Emilia-Romagna',     m: NE},
+  39: {r: 'Emilia-Romagna',     m: NE},
+  40: {r: 'Emilia-Romagna',     m: NE},
+  41: {r: 'Marche',             m: CE},
+  42: {r: 'Marche',             m: CE},
+  43: {r: 'Marche',             m: CE},
+  44: {r: 'Marche',             m: CE},
+  45: {r: 'Toscana',            m: CE},
+  46: {r: 'Toscana',            m: CE},
+  47: {r: 'Toscana',            m: CE},
+  48: {r: 'Toscana',            m: CE},
+  49: {r: 'Toscana',            m: CE},
+  50: {r: 'Toscana',            m: CE},
+  51: {r: 'Toscana',            m: CE},
+  52: {r: 'Toscana',            m: CE},
+  53: {r: 'Toscana',            m: CE},
+  54: {r: 'Umbria',             m: CE},
+  55: {r: 'Umbria',             m: CE},
+  56: {r: 'Lazio',              m: CE},
+  57: {r: 'Lazio',              m: CE},
+  58: {r: 'Lazio',              m: CE},
+  60: {r: 'Lazio',              m: CE},
+  61: {r: 'Campania',           m: SU},
+  62: {r: 'Campania',           m: SU},
+  63: {r: 'Campania',           m: SU},
+  64: {r: 'Campania',           m: SU},
+  65: {r: 'Campania',           m: SU},
+  66: {r: 'Abruzzo',            m: SU},
+  67: {r: 'Abruzzo',            m: SU},
+  68: {r: 'Abruzzo',            m: SU},
+  69: {r: 'Abruzzo',            m: SU},
+  70: {r: 'Molise',             m: SU},
+  71: {r: 'Puglia',             m: SU},
+  72: {r: 'Puglia',             m: SU},
+  73: {r: 'Puglia',             m: SU},
+  74: {r: 'Puglia',             m: SU},
+  75: {r: 'Puglia',             m: SU},
+  76: {r: 'Basilicata',         m: SU},
+  77: {r: 'Basilicata',         m: SU},
+  78: {r: 'Calabria',           m: SU},
+  79: {r: 'Calabria',           m: SU},
+  80: {r: 'Calabria',           m: SU},
+  81: {r: 'Sicilia',            m: IS},
+  82: {r: 'Sicilia',            m: IS},
+  83: {r: 'Sicilia',            m: IS},
+  84: {r: 'Sicilia',            m: IS},
+  85: {r: 'Sicilia',            m: IS},
+  86: {r: 'Sicilia',            m: IS},
+  87: {r: 'Sicilia',            m: IS},
+  88: {r: 'Sicilia',            m: IS},
+  89: {r: 'Sicilia',            m: IS},
+  90: {r: 'Sardegna',           m: IS},
+  91: {r: 'Sardegna',           m: IS},
+  92: {r: 'Sardegna',           m: IS}
+};
+
+const MACROS = [NO, NE, CE, SU, IS];
+
+// Fields aggregated as raw sums across selected provinces.
+const COUNT_FIELDS = ['total_pop','male_pop','female_pop'];
+const AGE_SUFFIXES = ['0','1_4','5_9','10_14','15_19','20_24','25_29','30_34','35_39','40_44','45_49','50_54','55_59','60_64','65_69','70_74','75_79','80_84','85plus'];
+AGE_SUFFIXES.forEach(a => { ['m_','f_','t_'].forEach(p => COUNT_FIELDS.push(p+a)); });
+
+const AGE_MIDPOINTS = {'0':0.5,'1_4':2.5,'5_9':7,'10_14':12,'15_19':17,'20_24':22,'25_29':27,'30_34':32,'35_39':37,'40_44':42,'45_49':47,'50_54':52,'55_59':57,'60_64':62,'65_69':67,'70_74':72,'75_79':77,'80_84':82,'85plus':87.5};
+const FERTILE_F = ['f_15_19','f_20_24','f_25_29','f_30_34','f_35_39','f_40_44'];
+const CHILD_T = ['t_0','t_1_4'];
+const YOUNG_T = ['t_0','t_1_4','t_5_9','t_10_14'];
+const WORKING_T = ['t_15_19','t_20_24','t_25_29','t_30_34','t_35_39','t_40_44','t_45_49','t_50_54','t_55_59','t_60_64'];
+const OLD_T = ['t_65_69','t_70_74','t_75_79','t_80_84','t_85plus'];
+
+// Palette for series lines; cycles if more series than colors.
+const PALETTE = ['#1e40af','#be185d','#15803d','#b45309','#7c3aed','#0e7490','#9f1239','#4d7c0f','#1d4ed8','#c2410c'];
+
+let censusByYear = {};   // {year: {cod: row}}
+let provinceCanon = {};  // {cod: canonical name}
+let chart = null;
+
+async function loadAllCensus() {
+  await Promise.all(YEARS.map(async y => {
+    const resp = await fetch('data/census/census_' + y + '.csv');
+    const text = await resp.text();
+    const parsed = Papa.parse(text, {header: true, skipEmptyLines: true, dynamicTyping: true});
+    const byCode = {};
+    parsed.data.forEach(row => {
+      const cod = parseInt(row.COD_PROV);
+      const entry = {den_prov: row.DEN_PROV};
+      Object.keys(row).forEach(k => {
+        if (k !== 'COD_PROV' && k !== 'DEN_PROV') entry[k] = parseFloat(row[k]) || 0;
+      });
+      byCode[cod] = entry;
+    });
+    censusByYear[y] = byCode;
+  }));
+  // Pick canonical names from the most recent census that knows each code,
+  // so dropdown labels prefer modern names (Imperia, Agrigento) over
+  // archaic ones (Porto Maurizio, Girgenti) when both exist.
+  [...YEARS].sort((a, b) => b - a).forEach(y => {
+    Object.entries(censusByYear[y] || {}).forEach(([cod, row]) => {
+      if (!provinceCanon[cod]) provinceCanon[cod] = row.den_prov;
+    });
+  });
+}
+
+function provincesInRegion(region) {
+  return Object.keys(REGION_MAP).filter(c => REGION_MAP[c].r === region).map(Number);
+}
+function provincesInMacro(macro) {
+  return Object.keys(REGION_MAP).filter(c => REGION_MAP[c].m === macro).map(Number);
+}
+function allProvinces() {
+  return Object.keys(REGION_MAP).map(Number);
+}
+function regionsList() {
+  return [...new Set(Object.values(REGION_MAP).map(v => v.r))].sort();
+}
+
+function aggregate(yearData, codes) {
+  const sums = {};
+  COUNT_FIELDS.forEach(f => sums[f] = 0);
+  let n = 0;
+  codes.forEach(c => {
+    const row = yearData[c];
+    if (!row) return;
+    n++;
+    COUNT_FIELDS.forEach(f => sums[f] += (row[f] || 0));
+  });
+  if (n === 0) return null;
+  return sums;
+}
+
+function readMetric(agg, metric) {
+  if (!agg) return null;
+  if (COUNT_FIELDS.includes(metric)) return agg[metric];
+  const sumOf = keys => keys.reduce((s, k) => s + (agg[k] || 0), 0);
+  if (metric === 'cwr') {
+    const w = sumOf(FERTILE_F);
+    return w > 0 ? Math.round(sumOf(CHILD_T) / w * 10000) / 10 : null;
+  }
+  if (metric === 'old_dep') {
+    const w = sumOf(WORKING_T);
+    return w > 0 ? Math.round(sumOf(OLD_T) / w * 1000) / 10 : null;
+  }
+  if (metric === 'struct_dep') {
+    const w = sumOf(WORKING_T);
+    return w > 0 ? Math.round((sumOf(YOUNG_T) + sumOf(OLD_T)) / w * 1000) / 10 : null;
+  }
+  if (metric === 'mean_age') {
+    let wt = 0;
+    AGE_SUFFIXES.forEach(a => wt += (agg['t_' + a] || 0) * AGE_MIDPOINTS[a]);
+    return agg.total_pop > 0 ? Math.round(wt / agg.total_pop * 10) / 10 : null;
+  }
+  return null;
+}
+
+function seriesForSelection(level, picks, metric) {
+  // Returns [{label, codes}].
+  if (level === 'italy') return [{label: 'Italy', codes: allProvinces()}];
+  if (level === 'macro')
+    return picks.map(p => ({label: p, codes: provincesInMacro(p)}));
+  if (level === 'region')
+    return picks.map(p => ({label: p, codes: provincesInRegion(p)}));
+  if (level === 'province')
+    return picks.map(p => ({label: provinceCanon[parseInt(p)] || p, codes: [parseInt(p)]}));
+  return [];
+}
+
+function refreshPicker() {
+  const level = document.getElementById('seriesLevel').value;
+  const wrap = document.getElementById('seriesPickWrap');
+  const pick = document.getElementById('seriesPick');
+  const label = document.getElementById('seriesPickLabel');
+
+  pick.innerHTML = '';
+  if (level === 'italy') {
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = '';
+
+  let options = [];
+  if (level === 'macro') {
+    options = MACROS.map(m => [m, m]);
+    label.textContent = 'Macro-areas';
+  } else if (level === 'region') {
+    options = regionsList().map(r => [r, r]);
+    label.textContent = 'Regions';
+  } else if (level === 'province') {
+    const codes = allProvinces().sort((a, b) => {
+      return (provinceCanon[a] || '').localeCompare(provinceCanon[b] || '');
+    });
+    options = codes.map(c => [String(c), provinceCanon[c] || String(c)]);
+    label.textContent = 'Provinces';
+  }
+
+  options.forEach(([val, txt]) => {
+    const opt = document.createElement('option');
+    opt.value = val;
+    opt.textContent = txt;
+    pick.appendChild(opt);
+  });
+  // Auto-select the first item so the chart isn't empty on a fresh switch.
+  if (pick.options.length > 0) pick.options[0].selected = true;
+}
+
+function metricLabel() {
+  const sel = document.getElementById('seriesMetric');
+  return sel.options[sel.selectedIndex].textContent.trim();
+}
+
+function fmtTick(v) {
+  if (v === null || v === undefined) return '';
+  if (Math.abs(v) >= 1000) return v.toLocaleString('en-US');
+  return v;
+}
+
+function render() {
+  const level = document.getElementById('seriesLevel').value;
+  const pick = document.getElementById('seriesPick');
+  const picks = Array.from(pick.selectedOptions).map(o => o.value);
+  const metric = document.getElementById('seriesMetric').value;
+
+  const series = seriesForSelection(level, picks, metric);
+  const empty = document.getElementById('seriesEmpty');
+  const canvas = document.getElementById('seriesChart');
+
+  if (series.length === 0) {
+    empty.style.display = '';
+    canvas.style.display = 'none';
+    if (chart) { chart.destroy(); chart = null; }
+    return;
+  }
+  empty.style.display = 'none';
+  canvas.style.display = '';
+
+  const datasets = series.map((s, i) => {
+    const data = YEARS.map(y => readMetric(aggregate(censusByYear[y], s.codes), metric));
+    const color = PALETTE[i % PALETTE.length];
+    return {
+      label: s.label,
+      data: data,
+      borderColor: color,
+      backgroundColor: color + '22',
+      borderWidth: 2,
+      tension: 0.18,
+      pointRadius: 4,
+      pointHoverRadius: 6,
+      spanGaps: false   // gap when a year has no data for the selection
+    };
+  });
+
+  if (chart) chart.destroy();
+  chart = new Chart(canvas.getContext('2d'), {
+    type: 'line',
+    data: {labels: YEARS.map(String), datasets},
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {mode: 'nearest', intersect: false},
+      plugins: {
+        title: {display: true, text: metricLabel(), font: {size: 14, weight: 'normal'}, color: '#374151'},
+        legend: {position: 'bottom'},
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const v = ctx.parsed.y;
+              if (v === null || v === undefined) return ctx.dataset.label + ': —';
+              return ctx.dataset.label + ': ' + (Number.isInteger(v) ? v.toLocaleString('en-US') : v.toLocaleString('en-US'));
+            }
+          }
+        }
+      },
+      scales: {
+        x: {title: {display: true, text: 'Census year'}, grid: {display: false}},
+        y: {title: {display: true, text: metricLabel()}, beginAtZero: false,
+            ticks: {callback: fmtTick}}
+      }
+    }
+  });
+}
+
+document.getElementById('seriesLevel').addEventListener('change', () => { refreshPicker(); render(); });
+document.getElementById('seriesPick').addEventListener('change', render);
+document.getElementById('seriesMetric').addEventListener('change', render);
+
+(async function init() {
+  await loadAllCensus();
+  refreshPicker();
+  render();
+})();
+</script>
+```
