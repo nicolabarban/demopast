@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DEMOPAST (demopast.it) is an Italian historical demographic atlas, part of the GENPOP project. It displays interactive choropleth maps of Italian provinces with census data for 1881, 1901, 1911, and 1921.
+DEMOPAST (demopast.it) is an Italian historical demographic atlas, part of the GENPOP project. It displays interactive choropleth maps of Italian provinces with census data for 1881, 1901, 1911, 1921, and 1931.
 
 ## Tech Stack
 
@@ -43,9 +43,9 @@ python3 scripts/build_geojson.py   # raw/shapefiles/*                           
 - `about.qmd` — Project info, team
 - `_quarto.yml` — site config; output to `_site/`
 - `scripts/build_census.py`, `scripts/build_geojson.py` — offline data pipeline (see above)
-- `data/geojson/province_{year}.geojson` — Province boundaries (WGS84) for 1881/1901/1911/1921. `province_1931.geojson` still exists on disk but is unreferenced by the site (1931 was retired from the atlas).
-- `data/census/census_{year}.csv` — Aggregated data: 19 age groups × M/F/T + 4 demographic indices. Rebuilt from `downloads/{year}/data_census_{year}_adjusted_age.csv` by `scripts/build_census.py`. `census_1931.csv` is an orphan from the previous pipeline and is not referenced by the site.
-- `downloads/{year}/data_census_{year}_adjusted_age.csv` — Long-format adjusted-age source CSVs for 1881/1901/1911/1921. These are both the public download (linked from the atlas page per year) and the input to `scripts/build_census.py`. The previous per-province `{COD_PROV:03d}_{DEN_PROV}_{year}.csv` files have been retired.
+- `data/geojson/province_{year}.geojson` — Province boundaries (WGS84) for 1881/1901/1911/1921/1931.
+- `data/census/census_{year}.csv` — Aggregated data: 19 age groups × M/F/T + 4 demographic indices. Rebuilt from `downloads/{year}/data_census_{year}_adjusted_age.csv` by `scripts/build_census.py`.
+- `downloads/{year}/data_census_{year}_adjusted_age.csv` — Long-format adjusted-age source CSVs for 1881/1901/1911/1921/1931. These are both the public download (linked from the atlas page per year) and the input to `scripts/build_census.py`. The previous per-province `{COD_PROV:03d}_{DEN_PROV}_{year}.csv` files have been retired. The 1931 file was originally in Mac Roman encoding — `build_census.py` expects UTF-8, so re-converting any future updated source (e.g. `iconv -f MAC -t UTF-8`) is required before running the build.
 - `raw/shapefiles/` — Shapefile sources for `build_geojson.py` (gitignored, optional — only needed to regenerate GeoJSONs).
 
 ## Key Conventions

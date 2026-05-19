@@ -16,9 +16,9 @@ format:
 
 <div class="slider-container">
   <label for="yearSlider" class="year-label">Year: <span id="yearDisplay">1881</span></label><br>
-  <input type="range" id="yearSlider" min="0" max="3" step="1" value="0" style="width:60%;max-width:500px;">
+  <input type="range" id="yearSlider" min="0" max="4" step="1" value="0" style="width:60%;max-width:500px;">
   <div style="display:flex;justify-content:space-between;max-width:500px;margin:0 auto;">
-    <span>1881</span><span>1901</span><span>1911</span><span>1921</span>
+    <span>1881</span><span>1901</span><span>1911</span><span>1921</span><span>1931</span>
   </div>
 </div>
 
@@ -114,7 +114,7 @@ format:
 </div>
 
 <script>
-const YEARS = [1881, 1901, 1911, 1921];
+const YEARS = [1881, 1901, 1911, 1921, 1931];
 const CHOROPLETH_COLORS = ['#eff3ff', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
 // `width` is the number of single years of age contained in the group; the
 // pyramid divides counts by this so each bar shows people per single year
