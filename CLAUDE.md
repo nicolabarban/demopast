@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DEMOPAST (demopast.it) is an Italian historical demographic atlas, part of the GENPOP project. It displays interactive choropleth maps of Italian provinces with census data for 1881, 1901, 1911, 1921, and 1931.
+DEMOPAST (demopast.it) is an Italian historical demographic atlas, part of the GENPOP project. It displays interactive choropleth maps of Italian provinces with census data for 1861, 1871, 1881, 1901, 1911, 1921, and 1931.
 
 ## Tech Stack
 
@@ -34,19 +34,21 @@ python3 scripts/build_geojson.py   # raw/shapefiles/*                           
 
 - `scripts/build_census.py` reads the long-format adjusted-age CSVs **directly from `downloads/`** (`downloads/{year}/data_census_{year}_adjusted_age.csv`, columns `code, province, age_class, male, female, total`) and pivots them into the wide per-province schema the site consumes, recomputing `cwr` / `old_dep` / `struct_dep` / `mean_age`. The same files are what users download from the site, so `downloads/` is both the public artifact and the build input — there is no longer a separate `raw/census/` source. `DEN_PROV` is preserved from any pre-existing `data/census/census_{year}.csv` (join on `COD_PROV`) since province names in the long-format source are modern (e.g. "Imperia") while GeoJSONs use historical names (e.g. "Porto Maurizio").
 - `scripts/build_geojson.py` reprojects shapefiles to WGS84 and simplifies with `tolerance=0.005` degrees (~500 m). Shapefiles must expose `COD_PROV` (int) and `DEN_PROV` (str) attributes. Shapefile sources live under `raw/shapefiles/` (gitignored) and are only needed when regenerating a GeoJSON.
-- The 1881 adjusted-age source is missing `COD_PROV=92` (Cagliari); that province renders uncoloured with "N/A" in the panel — expected given the source gap.
+- The 1881 adjusted-age source is missing `COD_PROV=92` (Cagliari); that province renders uncoloured with "N/A" in the panel — expected given the source gap. (Cagliari is present in 1861 and 1871.)
+- The 1871 sources contain a duplicate `COD_PROV=79` with two distinct `DEN_PROV` values ("Calabria Ulteriore II" and "Catanzaro"), reflecting a historical naming transition. Both shapefile and CSV preserve the duplicate; downstream code that joins on `COD_PROV` alone may pick either row.
+- 1861 has 59 provinces (no Veneto, Lazio, Trentino, Friuli orientale); 1871 has 70 (Veneto and Lazio annexed). Historical province names like "Umbria", "Principato Ulteriore/Citeriore", "Terra del Lavoro", "Capitanata", "Terra di Bari", "Terra d'Otranto", "Calabria Citeriore/Ulteriore I/II", "Noto" appear only in these two years.
 
 ## File Structure
 
 - `index.qmd` — Atlas page: map (1/3) + info panel (2/3) with indices, pyramid, age table
 - `compare.qmd` — Side-by-side province comparison
-- `series.qmd` — Time-series chart. Loads all five census CSVs at init, lets the user pick a geographic level (Italy / Macro-area / Region / Provinces, multi-select) and an indicator, and plots a Chart.js line per selection across 1881/1901/1911/1921/1931. Province→region→macro-area is mapped in a `REGION_MAP` object inside `series.qmd` keyed by `COD_PROV`; if you add new provinces or split a region, update that object. Ratio indicators (CWR / dependencies / mean age) are recomputed from aggregated counts the same way as `showNationalData` in `index.qmd`.
+- `series.qmd` — Time-series chart. Loads all seven census CSVs at init, lets the user pick a geographic level (Italy / Macro-area / Region / Provinces, multi-select) and an indicator, and plots a Chart.js line per selection across 1861/1871/1881/1901/1911/1921/1931. Province→region→macro-area is mapped in a `REGION_MAP` object inside `series.qmd` keyed by `COD_PROV`; if you add new provinces or split a region, update that object. Ratio indicators (CWR / dependencies / mean age) are recomputed from aggregated counts the same way as `showNationalData` in `index.qmd`.
 - `about.qmd` — Project info, team
 - `_quarto.yml` — site config; output to `_site/`
 - `scripts/build_census.py`, `scripts/build_geojson.py` — offline data pipeline (see above)
-- `data/geojson/province_{year}.geojson` — Province boundaries (WGS84) for 1881/1901/1911/1921/1931.
+- `data/geojson/province_{year}.geojson` — Province boundaries (WGS84) for 1861/1871/1881/1901/1911/1921/1931.
 - `data/census/census_{year}.csv` — Aggregated data: 19 age groups × M/F/T + 4 demographic indices. Rebuilt from `downloads/{year}/data_census_{year}_adjusted_age.csv` by `scripts/build_census.py`.
-- `downloads/{year}/data_census_{year}_adjusted_age.csv` — Long-format adjusted-age source CSVs for 1881/1901/1911/1921/1931. These are both the public download (linked from the atlas page per year) and the input to `scripts/build_census.py`. The previous per-province `{COD_PROV:03d}_{DEN_PROV}_{year}.csv` files have been retired. The 1931 file was originally in Mac Roman encoding — `build_census.py` expects UTF-8, so re-converting any future updated source (e.g. `iconv -f MAC -t UTF-8`) is required before running the build.
+- `downloads/{year}/data_census_{year}_adjusted_age.csv` — Long-format adjusted-age source CSVs for 1861/1871/1881/1901/1911/1921/1931. These are both the public download (linked from the atlas page per year) and the input to `scripts/build_census.py`. The previous per-province `{COD_PROV:03d}_{DEN_PROV}_{year}.csv` files have been retired. The 1931 file was originally in Mac Roman encoding — `build_census.py` expects UTF-8, so re-converting any future updated source (e.g. `iconv -f MAC -t UTF-8`) is required before running the build.
 - `raw/shapefiles/` — Shapefile sources for `build_geojson.py` (gitignored, optional — only needed to regenerate GeoJSONs).
 
 ## Key Conventions

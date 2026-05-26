@@ -4,7 +4,7 @@ title: "About DEMOPAST"
 
 ## Italian Historical Demographic Atlas
 
-DEMOPAST is a digital atlas of Italian historical demography based on digitized census data from ISTAT (Istituto Nazionale di Statistica), starting from the first national census of 1881.
+DEMOPAST is a digital atlas of Italian historical demography based on digitized census data from ISTAT (Istituto Nazionale di Statistica), starting from the first national census of the unified Kingdom of Italy in 1861.
 
 ### The Project
 
@@ -22,7 +22,9 @@ DEMOPAST is part of the [GENPOP](https://genpop.org) research project.
 
 | Year | Provinces | Notes |
 |------|-----------|-------|
-| 1881 | 68 | First national census of unified Italy |
+| 1861 | 59 | First national census of the Kingdom of Italy (Veneto, Lazio, Trentino not yet annexed) |
+| 1871 | 70 | After annexation of Veneto (1866) and Rome (1870) |
+| 1881 | 68 | |
 | 1901 | 69 | |
 | 1911 | 69 | |
 | 1921 | 69 | Includes Venezia Giulia and Venezia Tridentina (post-WWI) |
