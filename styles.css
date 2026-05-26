@@ -88,6 +88,45 @@ a:hover { color: var(--c-accent-hov); text-decoration: underline; }
   background: var(--c-bg);
 }
 
+.demopast-footer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  text-align: center;
+}
+.demopast-footer-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.demopast-footer-logos img {
+  height: 56px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+  opacity: 0.9;
+  transition: opacity 0.15s ease;
+}
+.demopast-footer-logos img:hover {
+  opacity: 1;
+}
+.demopast-disclaimer {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--c-text-soft);
+  margin: 0 auto 0.75rem;
+  max-width: 780px;
+  text-align: center;
+}
+.demopast-copyright {
+  font-size: 0.78rem;
+  color: var(--c-text-soft);
+  margin: 0;
+}
+
 /* ----------------- Controls bar (slider + select) ----------------- */
 
 .slider-container {

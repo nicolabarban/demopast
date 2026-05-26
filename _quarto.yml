@@ -4,6 +4,7 @@ project:
   resources:
     - data/**
     - downloads/**
+    - images/**
 
 website:
   title: "DEMOPAST — Italian Historical Demographic Atlas"
@@ -17,11 +18,12 @@ website:
         text: Series
       - href: about.qmd
         text: About
-  page-footer:
-    center: "© 2026 DEMOPAST — A GENPOP Project"
+  page-footer: ""
 
 format:
   html:
     theme: flatly
     css: styles.css
     toc: false
+    include-after-body:
+      file: _includes/footer.html
