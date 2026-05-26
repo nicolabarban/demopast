@@ -2,11 +2,10 @@
 title: "Download"
 ---
 
-All DEMOPAST data is available for direct download below. Three distinct
-artefacts are produced for each of the seven census years (1861, 1871, 1881,
-1901, 1911, 1921, 1931): the long-format adjusted-age census tabulation,
-the wide-format per-province table used internally by this site, and the
-province boundary shapes as GeoJSON.
+All DEMOPAST data is available for direct download below, for each of the
+seven census years (1861, 1871, 1881, 1901, 1911, 1921, 1931): the
+long-format adjusted-age census tabulation and the province boundary
+shapes as GeoJSON.
 
 ## Census tables — long format (adjusted age)
 
@@ -26,28 +25,6 @@ tables; everything else on the site is computed from them.
 | 1911 | [data_census_1911_adjusted_age.csv](/downloads/1911/data_census_1911_adjusted_age.csv) | 52 KB |
 | 1921 | [data_census_1921_adjusted_age.csv](/downloads/1921/data_census_1921_adjusted_age.csv) | 53 KB |
 | 1931 | [data_census_1931_adjusted_age.csv](/downloads/1931/data_census_1931_adjusted_age.csv) | 67 KB |
-
-## Census tables — wide format (per province)
-
-The same population counts pivoted to one row per province, plus four
-pre-computed demographic indicators. This is what the atlas and the
-province-comparison page consume directly.
-
-**Columns:** `COD_PROV`, `DEN_PROV`, `total_pop`, `male_pop`, `female_pop`,
-`m_{age}` / `f_{age}` / `t_{age}` for each of the 19 age groups (e.g.
-`t_15_19`, `m_85plus`), `cwr` (child/woman ratio, ‰), `old_dep` (old-age
-dependency ratio, %), `struct_dep` (structural dependency ratio, %),
-`mean_age` (years).
-
-| Year | File | Size |
-|------|------|------|
-| 1861 | [census_1861.csv](/data/census/census_1861.csv) | 21 KB |
-| 1871 | [census_1871.csv](/data/census/census_1871.csv) | 25 KB |
-| 1881 | [census_1881.csv](/data/census/census_1881.csv) | 25 KB |
-| 1901 | [census_1901.csv](/data/census/census_1901.csv) | 25 KB |
-| 1911 | [census_1911.csv](/data/census/census_1911.csv) | 25 KB |
-| 1921 | [census_1921.csv](/data/census/census_1921.csv) | 25 KB |
-| 1931 | [census_1931.csv](/data/census/census_1931.csv) | 32 KB |
 
 ## Province boundaries — GeoJSON
 
@@ -79,17 +56,3 @@ follows:
 Source census data comes from the Istituto Nazionale di Statistica
 (ISTAT); historical administrative boundaries come from
 [ISTAT's *Confini statistico-amministrativi: analisi storica*](https://www.istat.it/notizia/confini-statistico-amministrativi-analisi-storica/).
-
-## Notes on the data
-
-- **1881 / Cagliari (`COD_PROV = 92`)**: the 1881 adjusted-age source is
-  missing this province; it appears uncoloured on the 1881 map. Cagliari
-  is present in 1861 and 1871.
-- **1871 / `COD_PROV = 79`**: this code appears twice with two distinct
-  names ("Calabria Ulteriore II" and "Catanzaro"), reflecting a naming
-  transition that ISTAT preserves in the historical reconstruction.
-- **Provinces over time**: the count varies considerably across years.
-  1861 (59) covers Italy post-unification before the annexation of
-  Veneto and Lazio; 1871 (70) adds Veneto and Lazio after 1866 and
-  1870; the count grows to 89 by 1931 under the Fascist administrative
-  reform.
