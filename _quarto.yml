@@ -16,6 +16,8 @@ website:
         text: Compare
       - href: series.qmd
         text: Series
+      - href: download.qmd
+        text: Download
       - href: about.qmd
         text: About
   page-footer: ""
