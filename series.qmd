@@ -13,7 +13,7 @@ format:
 <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
 <p style="max-width:780px;margin:0 auto 1.5rem;color:var(--c-text-muted);font-size:0.95rem;">
-  Build historical trends across census years (1861, 1871, 1881, 1901, 1911, 1921, 1931). Pick a geographic level — national, macro-area, region, or individual provinces — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
+  Build historical trends across census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936). Pick a geographic level — national, macro-area, region, or individual provinces — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
 </p>
 
 <div class="series-controls">
@@ -78,7 +78,7 @@ format:
 </div>
 
 <script>
-const YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931];
+const YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936];
 
 // COD_PROV -> {region, macro}. Codes follow ISTAT numbering; we use modern
 // regions/macro-areas so that historical name changes (Girgenti -> Agrigento,
@@ -89,6 +89,7 @@ const REGION_MAP = {
    2: {r: 'Piemonte',           m: NO},
    3: {r: 'Piemonte',           m: NO},
    4: {r: 'Piemonte',           m: NO},
+   5: {r: 'Piemonte',           m: NO},
    6: {r: 'Piemonte',           m: NO},
    7: {r: "Valle d'Aosta",       m: NO},
    8: {r: 'Liguria',            m: NO},
@@ -142,6 +143,7 @@ const REGION_MAP = {
   56: {r: 'Lazio',              m: CE},
   57: {r: 'Lazio',              m: CE},
   58: {r: 'Lazio',              m: CE},
+  59: {r: 'Lazio',              m: CE},
   60: {r: 'Lazio',              m: CE},
   61: {r: 'Campania',           m: SU},
   62: {r: 'Campania',           m: SU},
