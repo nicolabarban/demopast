@@ -25,7 +25,7 @@ tables; everything else on the site is computed from them.
 | 1911 | [data_census_1911_adjusted_age.csv](/downloads/1911/data_census_1911_adjusted_age.csv) | 52 KB |
 | 1921 | [data_census_1921_adjusted_age.csv](/downloads/1921/data_census_1921_adjusted_age.csv) | 53 KB |
 | 1931 | [data_census_1931_adjusted_age.csv](/downloads/1931/data_census_1931_adjusted_age.csv) | 67 KB |
-| 1936 | [data_census_1936_adjusted_age.csv](/downloads/1936/data_census_1936_adjusted_age.csv) | 61 KB |
+| 1936 | [data_census_1936_adjusted_age.csv](/downloads/1936/data_census_1936_adjusted_age.csv) | 68 KB |
 
 ## Province boundaries — GeoJSON
 
