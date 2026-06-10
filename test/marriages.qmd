@@ -1,0 +1,216 @@
+---
+title: "Marriages — DEMOPAST (test)"
+page-layout: full
+format:
+  html:
+    toc: false
+    include-in-header:
+      text: |
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+---
+
+```{=html}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+<div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
+  <strong>Test section</strong> — marriages from ISTAT <em>Movimento dello stato civile</em> volumes.
+  <a href="index.html">← back to test home</a>
+</div>
+
+<div id="noData" style="display:none;background:#e7f1ff;border:1px solid #b6d4fe;border-radius:4px;padding:1rem;margin-bottom:1rem;">
+  <strong>Data extraction in progress.</strong> Provincial marriage tables (1862–1961) are being digitised
+  from the <em>Movimento dello stato civile</em> volumes and the <em>Annuari di Statistiche Demografiche</em>.
+  This page will populate automatically once <code>data/marriages/marriages_panel.csv</code> is published.
+</div>
+
+<div class="slider-container">
+  <label for="yearSlider" class="year-label">Year: <span id="yearDisplay">—</span></label><br>
+  <input type="range" id="yearSlider" min="0" max="0" step="1" value="0" style="width:60%;max-width:500px;">
+  <div id="yearTicks" style="display:flex;justify-content:space-between;max-width:500px;margin:0 auto;"></div>
+</div>
+
+<div style="text-align:center;margin:1rem 0;">
+  <label for="indSelect" style="font-weight:bold;">Indicator: </label>
+  <select id="indSelect" style="padding:4px 8px;font-size:1rem;">
+    <option value="nuptiality">Crude Marriage Rate (marriages / 1,000 pop.)</option>
+    <option value="marriages">Total marriages</option>
+  </select>
+</div>
+
+<div style="display:flex;gap:1.5rem;align-items:flex-start;">
+  <div style="flex:0 0 38%;display:flex;flex-direction:column;gap:0.75rem;">
+    <div id="map" style="width:100%;height:560px;"></div>
+    <div id="legendWrapper">
+      <div class="legend-header">
+        <span class="legend-title">Legend</span>
+        <button id="legendToggle" type="button">Hide</button>
+      </div>
+      <div id="legendContent" class="map-legend"></div>
+    </div>
+  </div>
+  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:700px;overflow-y:auto;">
+    <h4 id="provName" style="margin-top:0;"></h4>
+    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+      <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Crude Marriage Rate (‰)</td><td id="provRate" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr><td style="padding:3px 4px;">Total marriages</td><td id="provCount" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+    </table>
+    <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Marriage rate over time</h5>
+    <div><canvas id="seriesChart" style="max-height:240px;"></canvas></div>
+    <div style="margin-top:0.75rem;font-size:0.9rem;">
+      <a href="../data/marriages/marriages_panel.csv" download>marriages_panel.csv</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA_URL = '../data/marriages/marriages_panel.csv';
+const COUNT_FIELD = 'marriages';
+const RATE_FIELD = 'nuptiality';
+const COLORS = ['#f7fbff','#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'];
+const GEO_AVAILABLE = [1861, 1871, 1881, 1901, 1911, 1921, 1931];
+
+const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
+  scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
+  touchZoom:false}).setView([41.5, 12.5], 6);
+
+let YEARS = [];
+let panel = {};      // year -> COD_PROV -> {den, count, rate}
+let geojsonCache = {};
+let currentLayer = null, currentBreaks = null, seriesChart = null;
+
+function getField() { return document.getElementById('indSelect').value === RATE_FIELD ? 'rate' : 'count'; }
+function getYear() { return YEARS[document.getElementById('yearSlider').value]; }
+function geoYear(y) {
+  return GEO_AVAILABLE.reduce((a, b) => Math.abs(b - y) < Math.abs(a - y) ? b : a);
+}
+function fmt(n) { return (n == null || n === '') ? 'N/A' : Number(n).toLocaleString('en-US'); }
+
+async function init() {
+  let text = null;
+  try {
+    const resp = await fetch(DATA_URL);
+    if (resp.ok) text = await resp.text();
+  } catch (e) { /* missing file */ }
+  if (!text || text.trim().startsWith('<')) {
+    document.getElementById('noData').style.display = 'block';
+    return;
+  }
+  Papa.parse(text, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+    if (!panel[r.year]) panel[r.year] = {};
+    panel[r.year][r.COD_PROV] = {den: r.DEN_PROV,
+      count: r[COUNT_FIELD] || null, rate: r[RATE_FIELD] || null};
+  });
+  YEARS = Object.keys(panel).map(Number).sort((a, b) => a - b);
+  const slider = document.getElementById('yearSlider');
+  slider.max = YEARS.length - 1;
+  document.getElementById('yearTicks').innerHTML = YEARS.map(y => '<span>' + y + '</span>').join('');
+  slider.addEventListener('input', updateMap);
+  document.getElementById('indSelect').addEventListener('change', updateMap);
+  updateMap();
+}
+
+function computeBreaks() {
+  const field = getField();
+  const base = panel[YEARS[0]] || {};
+  const values = Object.values(base).map(p => p[field]).filter(v => v != null && v > 0);
+  if (!values.length) return [0, 1];
+  values.sort((a, b) => a - b);
+  const breaks = [];
+  for (let i = 1; i <= 7; i++) {
+    breaks.push(values[Math.min(Math.floor(values.length * i / 8), values.length - 1)]);
+  }
+  return [...new Set(breaks)].sort((a, b) => a - b);
+}
+
+function getColor(v, breaks) {
+  if (v == null) return '#e5e7eb';
+  for (let i = breaks.length - 1; i >= 0; i--) {
+    if (v > breaks[i]) return COLORS[Math.min(i + 1, COLORS.length - 1)];
+  }
+  return COLORS[0];
+}
+
+function style(feature) {
+  const prov = (panel[getYear()] || {})[feature.properties.COD_PROV];
+  return {fillColor: getColor(prov ? prov[getField()] : null, currentBreaks),
+          weight: 0.8, opacity: 1, color: '#94a3b8', fillOpacity: 0.85};
+}
+
+function showProvince(cod, name) {
+  const prov = (panel[getYear()] || {})[cod];
+  document.getElementById('provinceInfo').style.display = 'block';
+  document.getElementById('provName').textContent = name + ' (' + getYear() + ')';
+  document.getElementById('provRate').textContent = prov ? fmt(prov.rate) : 'N/A';
+  document.getElementById('provCount').textContent = prov ? fmt(prov.count) : 'N/A';
+  const ctx = document.getElementById('seriesChart').getContext('2d');
+  if (seriesChart) seriesChart.destroy();
+  const data = YEARS.map(y => {
+    const p = (panel[y] || {})[cod];
+    return {x: y, y: p ? p.rate : null};
+  }).filter(d => d.y != null);
+  seriesChart = new Chart(ctx, {
+    type: 'line',
+    data: {datasets: [{label: '‰', data: data, borderColor: '#2171b5',
+      backgroundColor: '#2171b5', pointRadius: 3, borderWidth: 1.5}]},
+    options: {responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false},
+        title: {display: true, text: name + ' — marriages per 1,000 pop.', font: {size: 12}}},
+      scales: {x: {type: 'linear', ticks: {callback: v => v}}, y: {beginAtZero: true}}}
+  });
+}
+
+function onEachFeature(feature, layer) {
+  layer.on({
+    mouseover: function(e) { e.target.setStyle({weight: 2, color: '#1e3a8a', fillOpacity: 1}); e.target.bringToFront(); },
+    mouseout: function(e) { if (currentLayer) currentLayer.resetStyle(e.target); },
+    click: function() { showProvince(feature.properties.COD_PROV, feature.properties.DEN_PROV); }
+  });
+}
+
+async function updateMap() {
+  const year = getYear();
+  document.getElementById('yearDisplay').textContent = year;
+  const gy = geoYear(year);
+  if (!geojsonCache[gy]) {
+    geojsonCache[gy] = await fetch('../data/geojson/province_' + gy + '.geojson').then(r => r.json());
+  }
+  currentBreaks = computeBreaks();
+  if (currentLayer) map.removeLayer(currentLayer);
+  currentLayer = L.geoJSON(geojsonCache[gy], {style: style, onEachFeature: onEachFeature}).addTo(map);
+  map.fitBounds(currentLayer.getBounds(), {padding: [10, 10]});
+  updateLegend();
+}
+
+document.getElementById('legendToggle').addEventListener('click', function() {
+  const hidden = document.getElementById('legendWrapper').classList.toggle('legend-hidden');
+  this.textContent = hidden ? 'Show' : 'Hide';
+});
+
+function updateLegend() {
+  const div = document.getElementById('legendContent');
+  if (!div || !currentBreaks) return;
+  const label = document.getElementById('indSelect').selectedOptions[0].text;
+  let html = '<strong>' + label + '</strong>';
+  html += '<div class="legend-row"><i style="background:' + COLORS[0] + '"></i><span>&lt; ' + fmt(currentBreaks[0]) + '</span></div>';
+  for (let i = 0; i < currentBreaks.length; i++) {
+    const next = currentBreaks[i + 1];
+    const clr = COLORS[Math.min(i + 1, COLORS.length - 1)];
+    html += next
+      ? '<div class="legend-row"><i style="background:' + clr + '"></i><span>' + fmt(currentBreaks[i]) + '–' + fmt(next) + '</span></div>'
+      : '<div class="legend-row"><i style="background:' + clr + '"></i><span>&gt; ' + fmt(currentBreaks[i]) + '</span></div>';
+  }
+  html += '<div class="legend-row"><i style="background:#e5e7eb"></i><span>no data</span></div>';
+  div.innerHTML = html;
+}
+
+init();
+</script>
+
+<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
+<p><strong>Sources.</strong> Marriages: ISTAT/MAIC, <em>Movimento dello stato civile</em> (1862–1936) and
+<em>Annuario di Statistiche Demografiche</em> (1951–1961). Map shows the nearest available historical boundaries.</p>
+<p>Preliminary — test environment.</p>
+</div>
+```

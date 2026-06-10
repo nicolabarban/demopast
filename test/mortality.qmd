@@ -1,0 +1,336 @@
+---
+title: "Mortality — DEMOPAST (test)"
+page-layout: full
+format:
+  html:
+    toc: false
+    include-in-header:
+      text: |
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+---
+
+```{=html}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+<div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
+  <strong>Test section</strong> — preliminary data extracted from ISTAT <em>Movimento dello stato civile</em> volumes (1863–1936).
+  <a href="index.html">← back to test home</a>
+</div>
+
+<div class="slider-container">
+  <label for="yearSlider" class="year-label">Year: <span id="yearDisplay">1871</span></label><br>
+  <input type="range" id="yearSlider" min="0" max="6" step="1" value="0" style="width:60%;max-width:500px;">
+  <div style="display:flex;justify-content:space-between;max-width:500px;margin:0 auto;">
+    <span>1871</span><span>1881</span><span>1901</span><span>1911</span><span>1921</span><span>1931</span><span>1936</span>
+  </div>
+</div>
+
+<div style="text-align:center;margin:1rem 0;">
+  <label for="indSelect" style="font-weight:bold;">Indicator: </label>
+  <select id="indSelect" style="padding:4px 8px;font-size:1rem;">
+    <option value="cdr">Crude Death Rate (deaths / 1,000 pop.)</option>
+    <option value="imr">Infant Mortality Rate (deaths &lt;1yr / 1,000 births)</option>
+    <option value="deaths">Total deaths</option>
+    <option value="e0">Life expectancy at birth, 1881 (years)</option>
+  </select>
+</div>
+
+<div style="display:flex;gap:1.5rem;align-items:flex-start;">
+  <div style="flex:0 0 38%;display:flex;flex-direction:column;gap:0.75rem;">
+    <div id="map" style="width:100%;height:560px;"></div>
+    <div id="legendWrapper">
+      <div class="legend-header">
+        <span class="legend-title">Legend</span>
+        <button id="legendToggle" type="button">Hide</button>
+      </div>
+      <div id="legendContent" class="map-legend"></div>
+    </div>
+  </div>
+  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:780px;overflow-y:auto;">
+    <h4 id="provName" style="margin-top:0;"></h4>
+
+    <h5 style="margin-top:0;margin-bottom:0.5rem;">Mortality indicators</h5>
+    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+      <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Crude Death Rate (‰)</td><td id="provCDR" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Infant Mortality Rate (‰)</td><td id="provIMR" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Total deaths</td><td id="provDeaths" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr><td style="padding:3px 4px;">Life expectancy at birth 1881 (years)</td><td id="provE0" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+    </table>
+
+    <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Infant Mortality Rate over time</h5>
+    <div><canvas id="imrChart" style="max-height:220px;"></canvas></div>
+
+    <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Deaths by age and sex <span id="pyramidYearNote" style="font-weight:normal;color:#777;font-size:0.85rem;"></span></h5>
+    <div><canvas id="pyramidChart"></canvas></div>
+
+    <div style="margin-top:0.75rem;font-size:0.9rem;">
+      <a href="../data/mortality/mortality_panel.csv" download>mortality_panel.csv</a> ·
+      <a href="../data/mortality/imr_annual.csv" download>imr_annual.csv</a> ·
+      <a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
+const GEO_YEAR = {1871:1871, 1881:1881, 1901:1901, 1911:1911, 1921:1921, 1931:1931, 1936:1936};
+const COLORS = ['#fff5f0','#fee0d2','#fcbba1','#fc9272','#fb6a4a','#ef3b2c','#cb181d','#99000d'];
+// breaks are pinned to the first year in which the indicator is observed
+const FIELD_BASE_YEAR = {cdr: 1871, imr: 1871, deaths: 1871, e0: 1881};
+
+const PYR_GROUPS = [
+  {label:'0', col:'0', width:1}, {label:'1–4', col:'1_4', width:4},
+  {label:'5–9', col:'5_9', width:5}, {label:'10–14', col:'10_14', width:5},
+  {label:'15–19', col:'15_19', width:5}, {label:'20–24', col:'20_24', width:5},
+  {label:'25–29', col:'25_29', width:5}, {label:'30–34', col:'30_34', width:5},
+  {label:'35–39', col:'35_39', width:5}, {label:'40–44', col:'40_44', width:5},
+  {label:'45–49', col:'45_49', width:5}, {label:'50–54', col:'50_54', width:5},
+  {label:'55–59', col:'55_59', width:5}, {label:'60–64', col:'60_64', width:5},
+  {label:'65–69', col:'65_69', width:5}, {label:'70–74', col:'70_74', width:5},
+  {label:'75–79', col:'75_79', width:5}, {label:'80–84', col:'80_84', width:5},
+  {label:'85+', col:'85plus', width:5},
+];
+
+const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
+  scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
+  touchZoom:false}).setView([41.5, 12.5], 6);
+
+let currentLayer = null;
+let panel = {};          // year -> COD_PROV -> {deaths, cdr, imr, e0, den}
+let imrSeries = {};      // COD_PROV -> [{year, imr}]
+let agesex = {};         // COD_PROV -> year -> sex -> {age_group: deaths}
+let geojsonCache = {};
+let currentBreaks = null;
+let pyramidChart = null;
+let imrChart = null;
+let dataReady = false;
+
+function getField() { return document.getElementById('indSelect').value; }
+function getYear() { return YEARS[document.getElementById('yearSlider').value]; }
+
+async function loadAll() {
+  if (dataReady) return;
+  const [pTxt, iTxt, aTxt] = await Promise.all([
+    fetch('../data/mortality/mortality_panel.csv').then(r => r.text()),
+    fetch('../data/mortality/imr_annual.csv').then(r => r.text()),
+    fetch('../data/mortality/deaths_agesex.csv').then(r => r.text()),
+  ]);
+  Papa.parse(pTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+    if (!panel[r.year]) panel[r.year] = {};
+    panel[r.year][r.COD_PROV] = {den: r.DEN_PROV, deaths: r.deaths || null,
+      cdr: r.cdr || null, imr: r.imr || null, e0: r.e0 || null};
+  });
+  Papa.parse(iTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+    if (!imrSeries[r.COD_PROV]) imrSeries[r.COD_PROV] = [];
+    imrSeries[r.COD_PROV].push({year: r.year, imr: r.imr});
+  });
+  Papa.parse(aTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+    const c = r.COD_PROV;
+    if (!agesex[c]) agesex[c] = {};
+    if (!agesex[c][r.year]) agesex[c][r.year] = {M:{}, F:{}, T:{}};
+    if (agesex[c][r.year][r.sex]) agesex[c][r.year][r.sex][r.age_group] = r.deaths;
+  });
+  dataReady = true;
+}
+
+function computeBreaks() {
+  const field = getField();
+  const base = panel[FIELD_BASE_YEAR[field]] || {};
+  const values = Object.values(base).map(p => p[field]).filter(v => v != null && v > 0);
+  if (values.length === 0) return [0, 1, 10, 100];
+  values.sort((a, b) => a - b);
+  const breaks = [];
+  for (let i = 1; i <= 7; i++) {
+    breaks.push(values[Math.min(Math.floor(values.length * i / 8), values.length - 1)]);
+  }
+  return [...new Set(breaks)].sort((a, b) => a - b);
+}
+
+function getColor(v, breaks) {
+  if (v == null) return '#e5e7eb';
+  for (let i = breaks.length - 1; i >= 0; i--) {
+    if (v > breaks[i]) return COLORS[Math.min(i + 1, COLORS.length - 1)];
+  }
+  return COLORS[0];
+}
+
+function style(feature) {
+  const prov = (panel[getYear()] || {})[feature.properties.COD_PROV];
+  const v = prov ? prov[getField()] : null;
+  return {fillColor: getColor(v, currentBreaks), weight: 0.8, opacity: 1,
+          color: '#94a3b8', fillOpacity: 0.85};
+}
+
+function fmt(n) {
+  return (n == null || n === '') ? 'N/A' : Number(n).toLocaleString('en-US');
+}
+
+function nearestPyramidYear(cod, year) {
+  const ys = Object.keys(agesex[cod] || {}).map(Number);
+  if (!ys.length) return null;
+  return ys.reduce((a, b) => Math.abs(b - year) < Math.abs(a - year) ? b : a);
+}
+
+function showProvince(cod, name) {
+  const year = getYear();
+  const prov = (panel[year] || {})[cod];
+  document.getElementById('provinceInfo').style.display = 'block';
+  document.getElementById('provName').textContent = name + ' (' + year + ')';
+  document.getElementById('provCDR').textContent = prov ? fmt(prov.cdr) : 'N/A';
+  document.getElementById('provIMR').textContent = prov ? fmt(prov.imr) : 'N/A';
+  document.getElementById('provDeaths').textContent = prov ? fmt(prov.deaths) : 'N/A';
+  const e0row = (panel[1881] || {})[cod];
+  document.getElementById('provE0').textContent = e0row ? fmt(e0row.e0) : 'N/A';
+  drawIMRSeries(cod, name);
+  const py = nearestPyramidYear(cod, year);
+  document.getElementById('pyramidYearNote').textContent =
+    py ? '(' + py + ', nearest available)' : '(not available for this province)';
+  drawPyramid(cod, name, py);
+}
+
+function onEachFeature(feature, layer) {
+  layer.on({
+    mouseover: function(e) {
+      e.target.setStyle({weight: 2, color: '#7f1d1d', fillOpacity: 1});
+      e.target.bringToFront();
+    },
+    mouseout: function(e) { if (currentLayer) currentLayer.resetStyle(e.target); },
+    click: function() {
+      showProvince(feature.properties.COD_PROV, feature.properties.DEN_PROV);
+    }
+  });
+}
+
+async function loadGeoJSON(year) {
+  const gy = GEO_YEAR[year];
+  if (geojsonCache[gy]) return geojsonCache[gy];
+  const data = await fetch('../data/geojson/province_' + gy + '.geojson').then(r => r.json());
+  geojsonCache[gy] = data;
+  return data;
+}
+
+async function updateMap() {
+  await loadAll();
+  const year = getYear();
+  document.getElementById('yearDisplay').textContent = year;
+  const geojson = await loadGeoJSON(year);
+  currentBreaks = computeBreaks();
+  if (currentLayer) map.removeLayer(currentLayer);
+  currentLayer = L.geoJSON(geojson, {style: style, onEachFeature: onEachFeature}).addTo(map);
+  map.fitBounds(currentLayer.getBounds(), {padding: [10, 10]});
+  updateLegend();
+  showNational(year);
+}
+
+document.getElementById('legendToggle').addEventListener('click', function() {
+  const hidden = document.getElementById('legendWrapper').classList.toggle('legend-hidden');
+  this.textContent = hidden ? 'Show' : 'Hide';
+});
+
+function updateLegend() {
+  const div = document.getElementById('legendContent');
+  if (!div || !currentBreaks) return;
+  const label = document.getElementById('indSelect').selectedOptions[0].text;
+  let html = '<strong>' + label + '</strong>';
+  html += '<div class="legend-row"><i style="background:' + COLORS[0] + '"></i><span>&lt; ' + fmt(currentBreaks[0]) + '</span></div>';
+  for (let i = 0; i < currentBreaks.length; i++) {
+    const next = currentBreaks[i + 1];
+    const clr = COLORS[Math.min(i + 1, COLORS.length - 1)];
+    html += next
+      ? '<div class="legend-row"><i style="background:' + clr + '"></i><span>' + fmt(currentBreaks[i]) + '–' + fmt(next) + '</span></div>'
+      : '<div class="legend-row"><i style="background:' + clr + '"></i><span>&gt; ' + fmt(currentBreaks[i]) + '</span></div>';
+  }
+  html += '<div class="legend-row"><i style="background:#e5e7eb"></i><span>no data</span></div>';
+  div.innerHTML = html;
+}
+
+function showNational(year) {
+  const yearData = panel[year] || {};
+  const provs = Object.values(yearData);
+  document.getElementById('provinceInfo').style.display = 'block';
+  document.getElementById('provName').textContent = 'Italy (' + year + ')';
+  const deaths = provs.reduce((s, p) => s + (p.deaths || 0), 0);
+  const cdrs = provs.map(p => p.cdr).filter(v => v != null);
+  const imrs = provs.map(p => p.imr).filter(v => v != null);
+  const med = a => a.length ? a.sort((x, y) => x - y)[Math.floor(a.length / 2)] : null;
+  document.getElementById('provCDR').textContent = cdrs.length ? fmt(Math.round(med(cdrs) * 10) / 10) + ' (median prov.)' : 'N/A';
+  document.getElementById('provIMR').textContent = imrs.length ? fmt(Math.round(med(imrs))) + ' (median prov.)' : 'N/A';
+  document.getElementById('provDeaths').textContent = deaths ? fmt(deaths) : 'N/A';
+  const e0s = Object.values(panel[1881] || {}).map(p => p.e0).filter(v => v != null);
+  document.getElementById('provE0').textContent = e0s.length ? fmt(Math.round(med(e0s) * 10) / 10) + ' (median prov.)' : 'N/A';
+  document.getElementById('pyramidYearNote').textContent = '(click a province)';
+  if (pyramidChart) { pyramidChart.destroy(); pyramidChart = null; }
+  if (imrChart) { imrChart.destroy(); imrChart = null; }
+}
+
+function drawIMRSeries(cod, name) {
+  const ctx = document.getElementById('imrChart').getContext('2d');
+  if (imrChart) imrChart.destroy();
+  const series = (imrSeries[cod] || []).slice().sort((a, b) => a.year - b.year);
+  imrChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'IMR (‰)',
+        data: series.map(d => ({x: d.year, y: d.imr})),
+        borderColor: '#cb181d', backgroundColor: '#cb181d',
+        pointRadius: 2.5, borderWidth: 1.5, spanGaps: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false},
+        title: {display: true, text: name + ' — infant deaths per 1,000 births', font: {size: 12}}},
+      scales: {x: {type: 'linear', min: 1860, max: 1940, ticks: {stepSize: 10, callback: v => v}},
+               y: {beginAtZero: true}}
+    }
+  });
+}
+
+function drawPyramid(cod, name, year) {
+  const ctx = document.getElementById('pyramidChart').getContext('2d');
+  if (pyramidChart) pyramidChart.destroy();
+  if (!year) return;
+  const d = agesex[cod][year];
+  const reversed = [...PYR_GROUPS].reverse();
+  const labels = reversed.map(g => g.label);
+  const male = reversed.map(g => -(((d.M || {})[g.col] || 0) / g.width));
+  const female = reversed.map(g => (((d.F || {})[g.col] || 0) / g.width));
+  const maxVal = Math.max(Math.max(...male.map(Math.abs)), Math.max(...female), 1);
+  pyramidChart = new Chart(ctx, {
+    type: 'bar',
+    data: {labels: labels, datasets: [
+      {label: 'Male', data: male, backgroundColor: 'rgba(30,64,175,0.85)', borderWidth: 0, borderRadius: 2},
+      {label: 'Female', data: female, backgroundColor: 'rgba(190,24,93,0.85)', borderWidth: 0, borderRadius: 2}
+    ]},
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: true,
+      plugins: {
+        title: {display: true, text: 'Deaths by age — ' + name + ' (' + year + ')', font: {size: 13}},
+        tooltip: {callbacks: {label: c =>
+          c.dataset.label + ': ' + Math.round(Math.abs(c.raw)).toLocaleString('en-US') + ' / yr of age'}}
+      },
+      scales: {
+        x: {stacked: true, suggestedMin: -maxVal * 1.1, suggestedMax: maxVal * 1.1,
+            ticks: {callback: v => Math.round(Math.abs(v)).toLocaleString('en-US')}},
+        y: {stacked: true}
+      }
+    }
+  });
+}
+
+document.getElementById('yearSlider').addEventListener('input', updateMap);
+document.getElementById('indSelect').addEventListener('change', updateMap);
+updateMap();
+</script>
+
+<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
+<p><strong>Sources.</strong> Deaths and infant deaths: ISTAT/MAIC, <em>Movimento dello stato civile</em>, annual volumes 1863–1936
+(provincial tables digitised with OCR + table extraction; checksums against published provincial totals).
+Life expectancy 1881: abridged life tables (Chiang) from deaths by age and sex (average 1881–82) and the 1881 Census population.
+Population denominators: DEMOPAST census data. 1936 is displayed on 1931 boundaries.</p>
+<p>Preliminary — test environment. Cells failing checksum validation are excluded.</p>
+</div>
+```

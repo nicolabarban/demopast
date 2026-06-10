@@ -1,0 +1,66 @@
+---
+title: "DEMOPAST — Test Environment"
+page-layout: full
+format:
+  html:
+    toc: false
+---
+
+```{=html}
+<div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.75rem 1rem;margin-bottom:1.5rem;">
+  <strong>⚠ Test environment.</strong> This is a parallel preview of new DEMOPAST sections built from
+  newly digitised ISTAT historical sources. Data are preliminary and not yet validated for publication.
+  The production atlas is at <a href="../index.html">demopast.it</a>.
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-top:1rem;">
+
+  <a href="mortality.html" style="text-decoration:none;color:inherit;">
+    <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <h3 style="margin-top:0;color:#99000d;">☠ Mortality</h3>
+      <p style="font-size:0.95rem;">Crude death rates, infant mortality and life expectancy by province, 1863–1936.</p>
+      <ul style="font-size:0.85rem;color:#555;">
+        <li>CDR map, census years 1871–1936</li>
+        <li>IMR annual series 1863–1882, + 1931/1936</li>
+        <li>Provincial life expectancy (e₀), 1881</li>
+        <li>Deaths by age &amp; sex pyramids, 1867–1882</li>
+      </ul>
+      <p style="font-weight:bold;color:#16a34a;">● Data available</p>
+    </div>
+  </a>
+
+  <a href="marriages.html" style="text-decoration:none;color:inherit;">
+    <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <h3 style="margin-top:0;color:#084594;">💍 Marriages</h3>
+      <p style="font-size:0.95rem;">Marriages and crude marriage rates by province, 1862–1961.</p>
+      <ul style="font-size:0.85rem;color:#555;">
+        <li>Provincial marriage counts</li>
+        <li>Crude marriage rate (‰)</li>
+        <li>Sources: Movimento dello stato civile, Annuari Statistiche Demografiche</li>
+      </ul>
+      <p style="font-weight:bold;color:#d97706;">◐ Extraction in progress</p>
+    </div>
+  </a>
+
+  <a href="migration.html" style="text-decoration:none;color:inherit;">
+    <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <h3 style="margin-top:0;color:#005a32;">🧳 Migration</h3>
+      <p style="font-size:0.95rem;">Emigration flows and rates by province, 1876–1961.</p>
+      <ul style="font-size:0.85rem;color:#555;">
+        <li>Emigrants by province of origin</li>
+        <li>Emigration rate (‰)</li>
+        <li>Sources: Annuario Statistico Italiano, Statistica della emigrazione</li>
+      </ul>
+      <p style="font-weight:bold;color:#d97706;">◐ Extraction in progress</p>
+    </div>
+  </a>
+
+</div>
+
+<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
+<p>These sections are built from the ISTAT eBiblio historical collection
+(<em>Movimento dello stato civile</em> 1862–1936, <em>Annuari di Statistiche Demografiche</em> 1951–1961,
+<em>Annuario Statistico Italiano</em>), digitised with OCR and LLM-assisted table extraction, with checksum
+validation against published totals. Part of the <a href="https://genpop.org">GENPOP</a> project.</p>
+</div>
+```

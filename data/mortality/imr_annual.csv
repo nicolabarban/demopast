@@ -1,0 +1,863 @@
+COD_PROV,DEN_PROV,year,imr
+1,Torino,1868,208.3
+1,Torino,1869,152.1
+1,Torino,1870,241.4
+1,Torino,1871,205.2
+1,Torino,1872,201.5
+1,Torino,1873,205.5
+1,Torino,1874,187.7
+1,Torino,1875,183.6
+1,Torino,1876,185.2
+1,Torino,1877,191.7
+1,Torino,1878,190.3
+1,Torino,1879,185.8
+1,Torino,1880,179.6
+1,Torino,1881,233.5
+1,Torino,1931,91.0
+1,Torino,1936,68.0
+2,Vercelli,1931,75.0
+2,Vercelli,1936,72.0
+3,Novara,1867,206.9
+3,Novara,1868,210.5
+3,Novara,1869,210.4
+3,Novara,1872,198.5
+3,Novara,1873,203.0
+3,Novara,1874,199.7
+3,Novara,1875,191.1
+3,Novara,1876,210.1
+3,Novara,1877,181.6
+3,Novara,1878,185.6
+3,Novara,1879,196.6
+3,Novara,1880,202.9
+3,Novara,1881,187.1
+3,Novara,1931,97.0
+3,Novara,1936,70.0
+4,Cuneo,1867,233.1
+4,Cuneo,1868,232.8
+4,Cuneo,1869,213.0
+4,Cuneo,1870,220.0
+4,Cuneo,1871,225.1
+4,Cuneo,1872,211.3
+4,Cuneo,1873,211.2
+4,Cuneo,1874,201.3
+4,Cuneo,1875,196.2
+4,Cuneo,1876,205.2
+4,Cuneo,1877,229.3
+4,Cuneo,1878,175.0
+4,Cuneo,1879,201.7
+4,Cuneo,1880,190.4
+4,Cuneo,1881,177.5
+4,Cuneo,1931,111.0
+4,Cuneo,1936,89.0
+6,Alessandria,1870,212.6
+6,Alessandria,1871,201.1
+6,Alessandria,1872,204.0
+6,Alessandria,1873,193.7
+6,Alessandria,1874,202.5
+6,Alessandria,1875,186.4
+6,Alessandria,1876,191.3
+6,Alessandria,1877,188.4
+6,Alessandria,1878,318.8
+6,Alessandria,1879,188.0
+6,Alessandria,1880,197.2
+6,Alessandria,1881,168.6
+6,Alessandria,1931,75.0
+6,Alessandria,1936,58.0
+7,Aosta,1931,108.0
+7,Aosta,1936,92.0
+8,Porto Maurizio,1868,239.6
+8,Porto Maurizio,1869,223.2
+8,Porto Maurizio,1870,127.7
+8,Porto Maurizio,1871,149.3
+8,Porto Maurizio,1875,195.8
+8,Porto Maurizio,1876,214.4
+8,Porto Maurizio,1877,437.4
+8,Porto Maurizio,1878,267.6
+8,Porto Maurizio,1880,211.3
+8,Porto Maurizio,1881,204.2
+8,Imperia,1931,78.0
+8,Imperia,1936,66.0
+9,Savona,1931,67.0
+9,Savona,1936,64.0
+10,Genova,1869,179.2
+10,Genova,1870,218.4
+10,Genova,1875,179.5
+10,Genova,1876,174.9
+10,Genova,1877,176.0
+10,Genova,1878,116.9
+10,Genova,1879,175.4
+10,Genova,1880,199.0
+10,Genova,1881,164.5
+10,Genova,1931,74.0
+10,Genova,1936,59.0
+11,La Spezia,1931,75.0
+11,La Spezia,1936,59.0
+12,Varese,1931,93.0
+12,Varese,1936,81.0
+13,Como,1867,221.1
+13,Como,1868,223.5
+13,Como,1869,218.1
+13,Como,1870,252.3
+13,Como,1871,209.1
+13,Como,1875,203.8
+13,Como,1876,131.2
+13,Como,1877,188.1
+13,Como,1880,187.4
+13,Como,1881,195.6
+13,Como,1931,145.0
+13,Como,1936,102.0
+14,Sondrio,1870,147.2
+14,Sondrio,1872,212.2
+14,Sondrio,1873,226.9
+14,Sondrio,1874,195.5
+14,Sondrio,1875,195.5
+14,Sondrio,1876,198.0
+14,Sondrio,1877,209.5
+14,Sondrio,1878,176.9
+14,Sondrio,1879,201.0
+14,Sondrio,1880,220.0
+14,Sondrio,1881,370.0
+14,Sondrio,1931,131.0
+14,Sondrio,1936,94.0
+15,Milano,1869,247.0
+15,Milano,1875,223.9
+15,Milano,1876,157.5
+15,Milano,1877,208.3
+15,Milano,1880,233.5
+15,Milano,1881,207.9
+15,Milano,1931,126.0
+15,Milano,1936,102.0
+16,Bergamo,1867,238.7
+16,Bergamo,1868,220.5
+16,Bergamo,1869,235.4
+16,Bergamo,1870,259.7
+16,Bergamo,1871,227.9
+16,Bergamo,1875,225.0
+16,Bergamo,1876,213.2
+16,Bergamo,1877,211.8
+16,Bergamo,1878,201.5
+16,Bergamo,1880,223.4
+16,Bergamo,1881,198.1
+16,Bergamo,1931,194.0
+16,Bergamo,1936,170.0
+17,Brescia,1867,227.6
+17,Brescia,1868,213.6
+17,Brescia,1869,235.6
+17,Brescia,1870,240.8
+17,Brescia,1871,198.9
+17,Brescia,1872,197.3
+17,Brescia,1873,204.4
+17,Brescia,1874,226.2
+17,Brescia,1875,215.4
+17,Brescia,1876,157.3
+17,Brescia,1877,200.2
+17,Brescia,1879,207.4
+17,Brescia,1880,216.4
+17,Brescia,1881,125.3
+17,Brescia,1931,147.0
+17,Brescia,1936,134.0
+18,Pavia,1869,230.4
+18,Pavia,1870,228.3
+18,Pavia,1871,219.1
+18,Pavia,1875,199.3
+18,Pavia,1876,197.6
+18,Pavia,1877,184.3
+18,Pavia,1878,194.8
+18,Pavia,1879,194.5
+18,Pavia,1880,207.8
+18,Pavia,1881,184.7
+18,Pavia,1931,83.0
+18,Pavia,1936,69.0
+19,Cremona,1867,237.9
+19,Cremona,1868,228.1
+19,Cremona,1869,231.2
+19,Cremona,1870,228.1
+19,Cremona,1871,229.6
+19,Cremona,1872,223.8
+19,Cremona,1873,220.4
+19,Cremona,1874,248.2
+19,Cremona,1875,225.5
+19,Cremona,1876,210.8
+19,Cremona,1877,220.3
+19,Cremona,1878,209.3
+19,Cremona,1879,237.7
+19,Cremona,1880,267.6
+19,Cremona,1881,198.3
+19,Cremona,1931,118.0
+19,Cremona,1936,103.0
+20,Mantova,1867,206.9
+20,Mantova,1868,233.8
+20,Mantova,1869,203.3
+20,Mantova,1870,144.3
+20,Mantova,1871,208.9
+20,Mantova,1875,210.8
+20,Mantova,1876,139.9
+20,Mantova,1877,178.3
+20,Mantova,1878,195.9
+20,Mantova,1879,139.0
+20,Mantova,1880,200.4
+20,Mantova,1881,155.4
+20,Mantova,1931,81.0
+20,Mantova,1936,80.0
+21,Bolzano,1931,119.0
+21,Bolzano,1936,105.0
+22,Trento,1931,108.0
+22,Trento,1936,86.0
+23,Verona,1875,205.5
+23,Verona,1876,197.1
+23,Verona,1877,194.9
+23,Verona,1878,199.8
+23,Verona,1879,192.3
+23,Verona,1880,214.1
+23,Verona,1881,172.6
+23,Verona,1931,90.0
+23,Verona,1936,78.0
+24,Vicenza,1875,250.2
+24,Vicenza,1876,226.2
+24,Vicenza,1877,234.0
+24,Vicenza,1878,219.5
+24,Vicenza,1879,219.5
+24,Vicenza,1880,233.1
+24,Vicenza,1881,203.2
+24,Vicenza,1931,86.0
+24,Vicenza,1936,87.0
+25,Belluno,1868,118.5
+25,Belluno,1870,474.0
+25,Belluno,1875,213.0
+25,Belluno,1876,210.7
+25,Belluno,1877,202.0
+25,Belluno,1878,194.7
+25,Belluno,1880,184.6
+25,Belluno,1881,197.6
+25,Belluno,1931,87.0
+25,Belluno,1936,76.0
+26,Treviso,1869,167.7
+26,Treviso,1871,236.4
+26,Treviso,1876,207.8
+26,Treviso,1877,216.6
+26,Treviso,1878,178.9
+26,Treviso,1879,189.6
+26,Treviso,1880,206.6
+26,Treviso,1881,174.1
+26,Treviso,1931,75.0
+26,Treviso,1936,66.0
+27,Venezia,1875,276.8
+27,Venezia,1876,214.9
+27,Venezia,1877,233.8
+27,Venezia,1878,203.0
+27,Venezia,1879,198.3
+27,Venezia,1880,215.8
+27,Venezia,1881,176.1
+27,Venezia,1931,93.0
+27,Venezia,1936,73.0
+28,Padova,1867,289.0
+28,Padova,1868,285.0
+28,Padova,1869,292.7
+28,Padova,1870,290.2
+28,Padova,1871,275.6
+28,Padova,1872,253.5
+28,Padova,1873,254.2
+28,Padova,1874,294.6
+28,Padova,1875,267.8
+28,Padova,1876,260.8
+28,Padova,1877,279.3
+28,Padova,1878,244.8
+28,Padova,1879,250.7
+28,Padova,1880,335.7
+28,Padova,1881,222.9
+28,Padova,1931,86.0
+28,Padova,1936,77.0
+29,Rovigo,1867,312.4
+29,Rovigo,1868,334.6
+29,Rovigo,1869,335.1
+29,Rovigo,1870,336.6
+29,Rovigo,1871,319.0
+29,Rovigo,1877,284.1
+29,Rovigo,1880,276.7
+29,Rovigo,1881,243.8
+29,Rovigo,1931,110.0
+29,Rovigo,1936,96.0
+30,Udine,1871,202.7
+30,Udine,1875,173.8
+30,Udine,1876,164.8
+30,Udine,1877,173.3
+30,Udine,1878,156.3
+30,Udine,1879,162.8
+30,Udine,1880,163.5
+30,Udine,1881,155.5
+30,Udine,1931,80.0
+30,Udine,1936,75.0
+31,Gorizia,1931,94.0
+31,Gorizia,1936,77.0
+32,Fiume,1931,120.0
+32,Fiume,1936,93.0
+33,Piacenza,1868,263.4
+33,Piacenza,1869,254.2
+33,Piacenza,1870,153.8
+33,Piacenza,1871,174.8
+33,Piacenza,1875,244.7
+33,Piacenza,1876,220.2
+33,Piacenza,1877,203.5
+33,Piacenza,1878,164.4
+33,Piacenza,1880,245.1
+33,Piacenza,1881,187.3
+33,Piacenza,1931,91.0
+33,Piacenza,1936,87.0
+34,Parma,1867,221.5
+34,Parma,1868,238.2
+34,Parma,1869,257.8
+34,Parma,1870,245.4
+34,Parma,1871,250.4
+34,Parma,1872,233.2
+34,Parma,1873,230.3
+34,Parma,1874,234.7
+34,Parma,1875,241.6
+34,Parma,1876,209.3
+34,Parma,1877,238.5
+34,Parma,1878,223.4
+34,Parma,1879,204.9
+34,Parma,1880,224.5
+34,Parma,1881,167.1
+34,Parma,1931,87.0
+34,Parma,1936,86.0
+35,Reggio nell'Emilia,1867,214.9
+35,Reggio nell'Emilia,1868,232.7
+35,Reggio nell'Emilia,1869,206.7
+35,Reggio nell'Emilia,1870,240.8
+35,Reggio nell'Emilia,1871,237.3
+35,Reggio nell'Emilia,1872,258.5
+35,Reggio nell'Emilia,1873,227.4
+35,Reggio nell'Emilia,1874,205.2
+35,Reggio nell'Emilia,1875,222.1
+35,Reggio nell'Emilia,1876,165.2
+35,Reggio nell'Emilia,1877,255.2
+35,Reggio nell'Emilia,1878,185.5
+35,Reggio nell'Emilia,1880,233.8
+35,Reggio nell'Emilia,1881,197.6
+35,ReggioE,1931,104.0
+35,ReggioE,1936,98.0
+36,Modena,1869,255.7
+36,Modena,1870,230.8
+36,Modena,1875,291.2
+36,Modena,1876,195.4
+36,Modena,1877,254.8
+36,Modena,1880,303.4
+36,Modena,1881,225.0
+36,Modena,1931,107.0
+36,Modena,1936,96.0
+37,Bologna,1867,232.1
+37,Bologna,1868,270.2
+37,Bologna,1869,219.0
+37,Bologna,1870,251.4
+37,Bologna,1871,245.6
+37,Bologna,1872,238.6
+37,Bologna,1873,223.0
+37,Bologna,1874,222.6
+37,Bologna,1875,231.1
+37,Bologna,1876,174.2
+37,Bologna,1877,214.8
+37,Bologna,1879,206.5
+37,Bologna,1880,247.3
+37,Bologna,1881,187.9
+37,Bologna,1931,82.0
+37,Bologna,1936,67.0
+38,Ferrara,1869,287.2
+38,Ferrara,1870,299.1
+38,Ferrara,1871,318.1
+38,Ferrara,1872,277.1
+38,Ferrara,1873,226.5
+38,Ferrara,1875,240.9
+38,Ferrara,1876,199.6
+38,Ferrara,1877,234.1
+38,Ferrara,1878,249.3
+38,Ferrara,1879,235.9
+38,Ferrara,1880,325.3
+38,Ferrara,1881,240.7
+38,Ferrara,1931,100.0
+38,Ferrara,1936,94.0
+39,Ravenna,1871,311.2
+39,Ravenna,1872,238.7
+39,Ravenna,1873,213.6
+39,Ravenna,1875,243.3
+39,Ravenna,1876,176.2
+39,Ravenna,1877,237.0
+39,Ravenna,1878,190.4
+39,Ravenna,1880,251.5
+39,Ravenna,1881,211.9
+39,Ravenna,1931,65.0
+39,Ravenna,1936,56.0
+40,Forlì,1869,254.9
+40,Forlì,1870,293.4
+40,Forlì,1875,278.9
+40,Forlì,1876,239.0
+40,Forlì,1877,258.6
+40,Forlì,1878,224.3
+40,Forlì,1879,249.3
+40,Forlì,1880,297.8
+40,Forlì,1881,223.8
+40,Forlì,1931,95.0
+40,Forlì,1936,76.0
+41,Pesaro e Urbino,1868,310.2
+41,Pesaro e Urbino,1869,263.8
+41,Pesaro e Urbino,1870,212.3
+41,Pesaro e Urbino,1871,229.2
+41,Pesaro e Urbino,1875,273.1
+41,Pesaro e Urbino,1876,258.5
+41,Pesaro e Urbino,1877,259.8
+41,Pesaro e Urbino,1878,210.4
+41,Pesaro e Urbino,1880,278.5
+41,Pesaro e Urbino,1881,245.6
+41,PesaroUrbino,1931,119.0
+41,PesaroUrbino,1936,105.0
+42,Ancona,1868,309.3
+42,Ancona,1870,164.3
+42,Ancona,1872,237.3
+42,Ancona,1873,243.6
+42,Ancona,1874,228.4
+42,Ancona,1875,225.1
+42,Ancona,1876,236.5
+42,Ancona,1877,249.8
+42,Ancona,1878,533.7
+42,Ancona,1879,219.7
+42,Ancona,1880,246.3
+42,Ancona,1881,201.6
+42,Ancona,1931,80.0
+42,Ancona,1936,67.0
+43,Macerata,1867,188.3
+43,Macerata,1868,289.8
+43,Macerata,1869,228.8
+43,Macerata,1870,168.7
+43,Macerata,1871,259.0
+43,Macerata,1872,273.7
+43,Macerata,1873,269.2
+43,Macerata,1874,187.3
+43,Macerata,1875,217.2
+43,Macerata,1876,161.7
+43,Macerata,1877,193.7
+43,Macerata,1878,165.8
+43,Macerata,1879,186.9
+43,Macerata,1880,223.3
+43,Macerata,1881,182.9
+43,Macerata,1931,74.0
+43,Macerata,1936,72.0
+44,Ascoli Piceno,1868,171.2
+44,Ascoli Piceno,1870,134.5
+44,Ascoli Piceno,1875,191.8
+44,Ascoli Piceno,1876,214.1
+44,Ascoli Piceno,1877,194.5
+44,Ascoli Piceno,1879,212.2
+44,Ascoli Piceno,1880,217.5
+44,Ascoli Piceno,1881,180.7
+44,AscoliPiceno,1931,77.0
+44,AscoliPiceno,1936,71.0
+45,Massa e Carrara,1869,202.1
+45,Massa e Carrara,1870,121.8
+45,Massa e Carrara,1871,237.5
+45,Massa e Carrara,1875,230.9
+45,Massa e Carrara,1876,132.2
+45,Massa e Carrara,1877,217.6
+45,Massa e Carrara,1880,194.8
+45,Massa e Carrara,1881,171.2
+45,MassaCarrara,1931,90.0
+45,MassaCarrara,1936,83.0
+46,Lucca,1867,197.3
+46,Lucca,1868,238.5
+46,Lucca,1869,231.4
+46,Lucca,1870,124.1
+46,Lucca,1871,203.0
+46,Lucca,1872,230.5
+46,Lucca,1873,233.8
+46,Lucca,1874,216.9
+46,Lucca,1875,197.8
+46,Lucca,1876,122.9
+46,Lucca,1877,183.2
+46,Lucca,1878,187.9
+46,Lucca,1879,127.2
+46,Lucca,1880,177.4
+46,Lucca,1881,165.5
+46,Lucca,1931,61.0
+46,Lucca,1936,56.0
+47,Pistoia,1931,69.0
+47,Pistoia,1936,63.0
+48,Firenze,1869,208.5
+48,Firenze,1870,212.9
+48,Firenze,1875,209.8
+48,Firenze,1876,190.4
+48,Firenze,1877,189.6
+48,Firenze,1878,213.6
+48,Firenze,1879,185.5
+48,Firenze,1880,219.5
+48,Firenze,1881,170.6
+48,Firenze,1931,65.0
+48,Firenze,1936,55.0
+49,Livorno,1867,195.9
+49,Livorno,1868,190.6
+49,Livorno,1869,162.1
+49,Livorno,1870,184.1
+49,Livorno,1872,162.9
+49,Livorno,1873,157.8
+49,Livorno,1874,135.4
+49,Livorno,1875,140.6
+49,Livorno,1876,94.3
+49,Livorno,1877,162.0
+49,Livorno,1878,121.5
+49,Livorno,1879,93.4
+49,Livorno,1880,151.3
+49,Livorno,1881,143.0
+49,Livorno,1931,64.0
+49,Livorno,1936,48.0
+50,Pisa,1870,100.0
+50,Pisa,1871,113.8
+50,Pisa,1875,200.8
+50,Pisa,1876,170.0
+50,Pisa,1880,171.8
+50,Pisa,1881,146.9
+50,Pisa,1931,58.0
+50,Pisa,1936,54.0
+51,Arezzo,1868,183.7
+51,Arezzo,1870,138.8
+51,Arezzo,1872,240.0
+51,Arezzo,1873,231.9
+51,Arezzo,1874,266.5
+51,Arezzo,1875,259.1
+51,Arezzo,1876,166.3
+51,Arezzo,1877,198.8
+51,Arezzo,1878,536.6
+51,Arezzo,1879,202.3
+51,Arezzo,1880,264.0
+51,Arezzo,1881,160.0
+51,Arezzo,1931,75.0
+51,Arezzo,1936,84.0
+52,Siena,1870,149.8
+52,Siena,1875,241.0
+52,Siena,1877,187.0
+52,Siena,1880,225.6
+52,Siena,1881,168.0
+52,Siena,1931,71.0
+52,Siena,1936,69.0
+53,Grosseto,1869,243.6
+53,Grosseto,1870,225.9
+53,Grosseto,1875,253.3
+53,Grosseto,1876,227.6
+53,Grosseto,1877,209.5
+53,Grosseto,1878,151.2
+53,Grosseto,1879,249.4
+53,Grosseto,1880,218.1
+53,Grosseto,1881,178.1
+53,Grosseto,1931,82.0
+53,Grosseto,1936,68.0
+54,Umbria,1875,226.6
+54,Umbria,1876,239.3
+54,Umbria,1877,211.5
+54,Umbria,1878,152.3
+54,Umbria,1880,251.3
+54,Umbria,1881,194.5
+54,Perugia,1931,88.0
+54,Perugia,1936,74.0
+55,Terni,1931,90.0
+55,Terni,1936,82.0
+56,Viterbo,1931,92.0
+56,Viterbo,1936,72.0
+57,Rieti,1931,95.0
+57,Rieti,1936,98.0
+58,Roma,1875,217.3
+58,Roma,1876,142.9
+58,Roma,1877,170.9
+58,Roma,1878,131.6
+58,Roma,1880,237.4
+58,Roma,1881,195.0
+58,Roma,1931,83.0
+58,Roma,1936,78.0
+60,Frosinone,1931,114.0
+60,Frosinone,1936,121.0
+61,Caserta,1870,79.6
+61,Caserta,1875,198.8
+61,Caserta,1876,104.1
+61,Caserta,1877,221.0
+61,Caserta,1880,239.9
+61,Caserta,1881,198.6
+62,Benevento,1867,202.3
+62,Benevento,1868,214.8
+62,Benevento,1869,169.2
+62,Benevento,1870,161.1
+62,Benevento,1875,220.2
+62,Benevento,1876,213.8
+62,Benevento,1877,214.6
+62,Benevento,1878,226.1
+62,Benevento,1880,292.6
+62,Benevento,1881,198.3
+62,Benevento,1931,127.0
+62,Benevento,1936,111.0
+63,Napoli,1869,212.0
+63,Napoli,1875,229.3
+63,Napoli,1876,117.1
+63,Napoli,1877,202.6
+63,Napoli,1880,215.1
+63,Napoli,1881,199.1
+63,Napoli,1931,118.0
+63,Napoli,1936,117.0
+64,Avellino,1867,214.8
+64,Avellino,1868,239.1
+64,Avellino,1869,201.0
+64,Avellino,1870,93.9
+64,Avellino,1875,169.9
+64,Avellino,1876,134.1
+64,Avellino,1877,172.6
+64,Avellino,1878,206.6
+64,Avellino,1880,216.1
+64,Avellino,1881,219.8
+64,Avellino,1931,129.0
+64,Avellino,1936,122.0
+65,Salerno,1868,228.9
+65,Salerno,1869,171.5
+65,Salerno,1870,91.3
+65,Salerno,1875,210.3
+65,Salerno,1877,210.8
+65,Salerno,1880,231.5
+65,Salerno,1881,211.1
+65,Salerno,1931,120.0
+65,Salerno,1936,109.0
+66,Aquila degli Abruzzi,1867,104.5
+66,Aquila degli Abruzzi,1868,129.1
+66,Aquila degli Abruzzi,1869,118.6
+66,Aquila degli Abruzzi,1870,154.6
+66,Aquila degli Abruzzi,1871,169.7
+66,Aquila degli Abruzzi,1872,192.2
+66,Aquila degli Abruzzi,1873,186.0
+66,Aquila degli Abruzzi,1874,157.8
+66,Aquila degli Abruzzi,1875,229.4
+66,Aquila degli Abruzzi,1876,164.2
+66,Aquila degli Abruzzi,1877,175.2
+66,Aquila degli Abruzzi,1878,367.1
+66,Aquila degli Abruzzi,1879,177.6
+66,Aquila degli Abruzzi,1880,196.2
+66,Aquila degli Abruzzi,1881,170.1
+66,Aquila,1931,125.0
+66,Aquila,1936,121.0
+67,Teramo,1870,170.2
+67,Teramo,1871,186.0
+67,Teramo,1872,220.0
+67,Teramo,1873,196.9
+67,Teramo,1874,205.1
+67,Teramo,1875,152.5
+67,Teramo,1876,180.2
+67,Teramo,1877,177.6
+67,Teramo,1878,157.8
+67,Teramo,1879,188.8
+67,Teramo,1880,220.1
+67,Teramo,1881,155.5
+67,Teramo,1931,96.0
+67,Teramo,1936,88.0
+68,Pescara,1931,106.0
+68,Pescara,1936,99.0
+69,Chieti,1870,208.4
+69,Chieti,1871,287.5
+69,Chieti,1875,219.5
+69,Chieti,1876,136.1
+69,Chieti,1877,255.3
+69,Chieti,1880,275.8
+69,Chieti,1881,191.7
+69,Chieti,1931,116.0
+69,Chieti,1936,125.0
+70,Campobasso,1869,198.7
+70,Campobasso,1875,242.2
+70,Campobasso,1876,128.0
+70,Campobasso,1877,237.0
+70,Campobasso,1879,225.4
+70,Campobasso,1880,309.4
+70,Campobasso,1881,206.6
+70,Capobasso,1931,164.0
+70,Capobasso,1936,133.0
+71,Foggia,1869,231.5
+71,Foggia,1870,116.7
+71,Foggia,1875,231.1
+71,Foggia,1876,153.6
+71,Foggia,1877,190.4
+71,Foggia,1878,126.0
+71,Foggia,1879,213.3
+71,Foggia,1880,295.6
+71,Foggia,1881,201.2
+71,Foggia,1931,177.0
+71,Foggia,1936,140.0
+72,Bari delle Puglie,1870,102.7
+72,Bari delle Puglie,1875,219.6
+72,Bari delle Puglie,1876,208.8
+72,Bari delle Puglie,1877,216.6
+72,Bari delle Puglie,1878,216.1
+72,Bari delle Puglie,1880,201.1
+72,Bari delle Puglie,1881,210.4
+72,Bari,1931,146.0
+72,Bari,1936,140.0
+73,Taranto,1931,122.0
+73,Taranto,1936,127.0
+74,Brindisi,1931,146.0
+74,Brindisi,1936,149.0
+75,Lecce,1868,193.5
+75,Lecce,1869,84.9
+75,Lecce,1870,103.7
+75,Lecce,1872,228.1
+75,Lecce,1873,173.2
+75,Lecce,1874,220.3
+75,Lecce,1875,218.0
+75,Lecce,1876,109.9
+75,Lecce,1877,196.8
+75,Lecce,1878,177.2
+75,Lecce,1879,105.4
+75,Lecce,1880,198.5
+75,Lecce,1881,166.6
+75,Lecce,1931,114.0
+75,Lecce,1936,136.0
+76,Potenza,1872,246.7
+76,Potenza,1873,285.6
+76,Potenza,1875,252.9
+76,Potenza,1876,141.3
+76,Potenza,1877,227.1
+76,Potenza,1878,148.0
+76,Potenza,1880,244.0
+76,Potenza,1881,204.4
+76,Potenza,1931,162.0
+76,Potenza,1936,147.0
+77,Matera,1931,206.0
+77,Matera,1936,169.0
+78,Cosenza,1869,201.4
+78,Cosenza,1870,107.9
+78,Cosenza,1872,219.6
+78,Cosenza,1873,208.6
+78,Cosenza,1874,200.4
+78,Cosenza,1875,224.5
+78,Cosenza,1876,198.1
+78,Cosenza,1877,192.0
+78,Cosenza,1878,189.8
+78,Cosenza,1879,194.2
+78,Cosenza,1880,217.5
+78,Cosenza,1881,193.5
+78,Cosenza,1931,114.0
+78,Cosenza,1936,102.0
+79,Catanzaro,1869,198.1
+79,Catanzaro,1870,115.3
+79,Catanzaro,1875,279.6
+79,Catanzaro,1876,177.3
+79,Catanzaro,1877,223.4
+79,Catanzaro,1880,250.9
+79,Catanzaro,1881,199.5
+79,Catanzaro,1931,130.0
+79,Catanzaro,1936,125.0
+80,Reggio di Calabria,1869,192.4
+80,Reggio di Calabria,1870,102.2
+80,Reggio di Calabria,1872,311.6
+80,Reggio di Calabria,1873,186.6
+80,Reggio di Calabria,1874,228.4
+80,Reggio di Calabria,1875,154.1
+80,Reggio di Calabria,1876,130.7
+80,Reggio di Calabria,1877,202.7
+80,Reggio di Calabria,1878,138.6
+80,Reggio di Calabria,1880,211.2
+80,Reggio di Calabria,1881,196.1
+80,ReggioCalabria,1931,118.0
+80,ReggioCalabria,1936,107.0
+81,Trapani,1868,232.9
+81,Trapani,1869,102.9
+81,Trapani,1870,220.2
+81,Trapani,1871,188.8
+81,Trapani,1872,263.5
+81,Trapani,1873,182.7
+81,Trapani,1874,199.2
+81,Trapani,1875,215.5
+81,Trapani,1876,187.2
+81,Trapani,1877,205.6
+81,Trapani,1878,183.5
+81,Trapani,1879,192.6
+81,Trapani,1880,205.2
+81,Trapani,1881,196.7
+81,Trapani,1931,128.0
+81,Trapani,1936,94.0
+82,Palermo,1867,204.0
+82,Palermo,1868,224.6
+82,Palermo,1869,201.5
+82,Palermo,1870,192.7
+82,Palermo,1871,189.7
+82,Palermo,1872,188.6
+82,Palermo,1873,179.3
+82,Palermo,1874,199.7
+82,Palermo,1875,196.6
+82,Palermo,1876,173.2
+82,Palermo,1877,190.9
+82,Palermo,1878,188.5
+82,Palermo,1879,186.2
+82,Palermo,1880,205.7
+82,Palermo,1881,186.5
+82,Palermo,1931,125.0
+82,Palermo,1936,103.0
+83,Messina,1869,181.8
+83,Messina,1875,217.3
+83,Messina,1876,137.4
+83,Messina,1877,199.4
+83,Messina,1880,197.0
+83,Messina,1881,188.9
+83,Messina,1931,110.0
+83,Messina,1936,92.0
+84,Girgenti,1869,245.1
+84,Girgenti,1870,232.8
+84,Girgenti,1875,239.0
+84,Girgenti,1876,222.0
+84,Girgenti,1877,250.3
+84,Girgenti,1878,131.2
+84,Girgenti,1879,238.6
+84,Girgenti,1880,268.2
+84,Girgenti,1881,203.8
+84,Agrigento,1931,155.0
+84,Agrigento,1936,126.0
+85,Caltanissetta,1869,266.5
+85,Caltanissetta,1870,143.9
+85,Caltanissetta,1872,234.5
+85,Caltanissetta,1873,237.1
+85,Caltanissetta,1875,238.9
+85,Caltanissetta,1876,132.0
+85,Caltanissetta,1877,234.7
+85,Caltanissetta,1879,212.6
+85,Caltanissetta,1880,248.9
+85,Caltanissetta,1881,237.6
+85,Caltanissetta,1931,162.0
+85,Caltanissetta,1936,126.0
+86,Enna,1931,178.0
+86,Enna,1936,141.0
+87,Catania,1867,316.9
+87,Catania,1868,319.9
+87,Catania,1869,251.5
+87,Catania,1870,140.1
+87,Catania,1875,214.5
+87,Catania,1876,155.4
+87,Catania,1877,244.5
+87,Catania,1880,273.1
+87,Catania,1881,233.8
+87,Catania,1931,155.0
+87,Catania,1936,128.0
+88,Ragusa,1931,147.0
+88,Ragusa,1936,109.0
+89,Siracusa,1870,59.5
+89,Siracusa,1875,252.7
+89,Siracusa,1877,210.2
+89,Siracusa,1880,267.9
+89,Siracusa,1881,246.8
+89,Siracusa,1931,157.0
+89,Siracusa,1936,122.0
+90,Sassari,1870,212.2
+90,Sassari,1871,218.0
+90,Sassari,1875,186.8
+90,Sassari,1877,167.8
+90,Sassari,1880,210.5
+90,Sassari,1881,156.2
+90,Sassari,1931,104.0
+90,Sassari,1936,96.0
+91,Nuoro,1931,122.0
+91,Nuoro,1936,82.0
+92,Cagliari,1872,218.0
+92,Cagliari,1873,128.6
+92,Cagliari,1875,182.5
+92,Cagliari,1876,116.0
+92,Cagliari,1877,179.8
+92,Cagliari,1879,139.8
+92,Cagliari,1880,189.9
+92,Cagliari,1881,190.0
+92,Cagliari,1931,122.0
+92,Cagliari,1936,89.0
