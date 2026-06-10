@@ -23,7 +23,7 @@ format:
         <li>CDR map, census years 1871–1936</li>
         <li>IMR annual series 1863–1882, + 1931/1936</li>
         <li>Provincial life expectancy (e₀), 1881</li>
-        <li>Deaths by age &amp; sex pyramids, 1867–1882</li>
+        <li>Deaths by age &amp; sex pyramids, 1867–1882 and 1921</li>
       </ul>
       <p style="font-weight:bold;color:#16a34a;">● Data available</p>
     </div>

@@ -121,6 +121,17 @@ def main() -> None:
         if g is None or not r["COD_PROV"]:
             continue
         acc[(int(r["COD_PROV"]), int(r["year"]), r["sex"], g)] += float(r["deaths"])
+    # 1921 TAVOLA X (age_lo/age_hi schema, checksum-validated detail rows)
+    f1921 = SRC / "deaths_prov_agesex_1921.csv"
+    if f1921.exists():
+        for r in csv.DictReader(f1921.open()):
+            lo = fnum(r["age_lo"])
+            if lo is None or r["age"] == "TOTALE" or not r["COD_PROV"]:
+                continue  # skip TOTALE and età ignota
+            g = tidy_age_group(r["age"], lo)
+            if g is None:
+                continue
+            acc[(int(r["COD_PROV"]), int(r["year"]), r["sex"], g)] += float(r["deaths"])
     ag_rows = [{"COD_PROV": c, "year": y, "sex": s, "age_group": g,
                 "deaths": int(v)}
                for (c, y, s, g), v in sorted(acc.items())]
