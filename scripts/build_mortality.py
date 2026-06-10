@@ -96,11 +96,16 @@ def main() -> None:
 
     imr, imr_annual = load_imr()
 
-    e0 = {}
-    for r in csv.DictReader((SRC / "e0_province_1881.csv").open()):
-        v = fnum(r["e0_T"])
-        if v:
-            e0[int(r["COD_PROV"])] = v
+    e0 = {}  # (COD_PROV, year) -> e0_T
+    for fname, yr in (("e0_province_1881.csv", 1881),
+                      ("e0_province_1921.csv", 1921)):
+        f = SRC / fname
+        if not f.exists():
+            continue
+        for r in csv.DictReader(f.open()):
+            v = fnum(r["e0_T"])
+            if v:
+                e0[(int(r["COD_PROV"]), yr)] = v
 
     # --- mortality_panel ---
     rows = []
@@ -110,7 +115,7 @@ def main() -> None:
             "COD_PROV": cod, "DEN_PROV": r["DEN_PROV"], "year": year,
             "deaths": r["deaths_total"], "cdr": r["cdr"],
             "imr": imr.get((cod, year), ""),
-            "e0": e0.get(cod, "") if year == 1881 else "",
+            "e0": e0.get((cod, year), ""),
         })
     with (OUT / "mortality_panel.csv").open("w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=["COD_PROV", "DEN_PROV", "year",
@@ -153,8 +158,10 @@ def main() -> None:
     years = sorted({r["year"] for r in ag_rows})
     print(f"deaths_agesex.csv: {len(ag_rows)} rows, years {years}")
 
-    shutil.copy(SRC / "lifetables_1881.csv", OUT / "lifetables_1881.csv")
-    print("lifetables_1881.csv copied")
+    for lt in ("lifetables_1881.csv", "lifetables_1921.csv"):
+        if (SRC / lt).exists():
+            shutil.copy(SRC / lt, OUT / lt)
+            print(f"{lt} copied")
 
 
 if __name__ == "__main__":

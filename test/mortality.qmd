@@ -33,7 +33,7 @@ format:
     <option value="cdr">Crude Death Rate (deaths / 1,000 pop.)</option>
     <option value="imr">Infant Mortality Rate (deaths &lt;1yr / 1,000 births)</option>
     <option value="deaths">Total deaths</option>
-    <option value="e0">Life expectancy at birth, 1881 (years)</option>
+    <option value="e0">Life expectancy at birth, 1881 &amp; 1921 (years)</option>
   </select>
 </div>
 
@@ -56,7 +56,7 @@ format:
       <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Crude Death Rate (‰)</td><td id="provCDR" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
       <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Infant Mortality Rate (‰)</td><td id="provIMR" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
       <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Total deaths</td><td id="provDeaths" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
-      <tr><td style="padding:3px 4px;">Life expectancy at birth 1881 (years)</td><td id="provE0" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr><td style="padding:3px 4px;">Life expectancy at birth (years)</td><td id="provE0" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
     </table>
 
     <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Infant Mortality Rate over time</h5>
@@ -68,7 +68,8 @@ format:
     <div style="margin-top:0.75rem;font-size:0.9rem;">
       <a href="../data/mortality/mortality_panel.csv" download>mortality_panel.csv</a> ·
       <a href="../data/mortality/imr_annual.csv" download>imr_annual.csv</a> ·
-      <a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a>
+      <a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a> ·
+    <a href="../data/mortality/lifetables_1921.csv" download>lifetables_1921.csv</a>
     </div>
   </div>
 </div>
@@ -181,8 +182,18 @@ function showProvince(cod, name) {
   document.getElementById('provCDR').textContent = prov ? fmt(prov.cdr) : 'N/A';
   document.getElementById('provIMR').textContent = prov ? fmt(prov.imr) : 'N/A';
   document.getElementById('provDeaths').textContent = prov ? fmt(prov.deaths) : 'N/A';
-  const e0row = (panel[1881] || {})[cod];
-  document.getElementById('provE0').textContent = e0row ? fmt(e0row.e0) : 'N/A';
+  // e0: current year if available (1881/1921), else nearest year with a value
+  let e0v = prov ? prov.e0 : null, e0y = year;
+  if (e0v == null) {
+    for (const y of [1881, 1921]) {
+      const row = (panel[y] || {})[cod];
+      if (row && row.e0 != null && (e0v == null || Math.abs(y - year) < Math.abs(e0y - year))) {
+        e0v = row.e0; e0y = y;
+      }
+    }
+  }
+  document.getElementById('provE0').textContent =
+    e0v != null ? fmt(e0v) + (e0y !== year ? ' (' + e0y + ')' : '') : 'N/A';
   drawIMRSeries(cod, name);
   const py = nearestPyramidYear(cod, year);
   document.getElementById('pyramidYearNote').textContent =
@@ -258,8 +269,9 @@ function showNational(year) {
   document.getElementById('provCDR').textContent = cdrs.length ? fmt(Math.round(med(cdrs) * 10) / 10) + ' (median prov.)' : 'N/A';
   document.getElementById('provIMR').textContent = imrs.length ? fmt(Math.round(med(imrs))) + ' (median prov.)' : 'N/A';
   document.getElementById('provDeaths').textContent = deaths ? fmt(deaths) : 'N/A';
-  const e0s = Object.values(panel[1881] || {}).map(p => p.e0).filter(v => v != null);
-  document.getElementById('provE0').textContent = e0s.length ? fmt(Math.round(med(e0s) * 10) / 10) + ' (median prov.)' : 'N/A';
+  const e0Year = (getYear() === 1921) ? 1921 : 1881;
+  const e0s = Object.values(panel[e0Year] || {}).map(p => p.e0).filter(v => v != null);
+  document.getElementById('provE0').textContent = e0s.length ? fmt(Math.round(med(e0s) * 10) / 10) + ' (' + e0Year + ', median prov.)' : 'N/A';
   document.getElementById('pyramidYearNote').textContent = '(click a province)';
   if (pyramidChart) { pyramidChart.destroy(); pyramidChart = null; }
   if (imrChart) { imrChart.destroy(); imrChart = null; }
@@ -330,6 +342,7 @@ updateMap();
 <p><strong>Sources.</strong> Deaths and infant deaths: ISTAT/MAIC, <em>Movimento dello stato civile</em>, annual volumes 1863–1936
 (provincial tables digitised with OCR + table extraction; checksums against published provincial totals).
 Life expectancy 1881: abridged life tables (Chiang) from deaths by age and sex (average 1881–82) and the 1881 Census population.
+Life expectancy 1921: same method, from TAVOLA X deaths by age and sex and the 1921 Census population (checksum-validated columns only).
 Infant mortality 1921: under-1 deaths (TAVOLA X) over live births (TAVOLA I), <em>Movimento</em> 1919–1923 volume.
 Population denominators: DEMOPAST census data.</p>
 <p>Preliminary — test environment. Cells failing checksum validation are excluded.</p>
