@@ -330,7 +330,8 @@ updateMap();
 <p><strong>Sources.</strong> Deaths and infant deaths: ISTAT/MAIC, <em>Movimento dello stato civile</em>, annual volumes 1863–1936
 (provincial tables digitised with OCR + table extraction; checksums against published provincial totals).
 Life expectancy 1881: abridged life tables (Chiang) from deaths by age and sex (average 1881–82) and the 1881 Census population.
-Population denominators: DEMOPAST census data. 1936 is displayed on 1931 boundaries.</p>
+Infant mortality 1921: under-1 deaths (TAVOLA X) over live births (TAVOLA I), <em>Movimento</em> 1919–1923 volume.
+Population denominators: DEMOPAST census data.</p>
 <p>Preliminary — test environment. Cells failing checksum validation are excluded.</p>
 </div>
 ```

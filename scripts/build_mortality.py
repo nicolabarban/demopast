@@ -58,6 +58,17 @@ def load_imr() -> dict:
         imr[key] = v
         annual.append({"COD_PROV": key[0], "DEN_PROV": r["DEN_PROV"],
                        "year": key[1], "imr": v})
+    # 1921 (TAVOLA X under-1 deaths / TAVOLA I births)
+    f1921 = SRC / "imr_province_1921.csv"
+    if f1921.exists():
+        for r in csv.DictReader(f1921.open()):
+            v = fnum(r["imr"])
+            if v is None or not r["COD_PROV"]:
+                continue
+            key = (int(r["COD_PROV"]), int(r["year"]))
+            imr[key] = v
+            annual.append({"COD_PROV": key[0], "DEN_PROV": r["DEN_PROV"],
+                           "year": key[1], "imr": v})
     return imr, annual
 
 

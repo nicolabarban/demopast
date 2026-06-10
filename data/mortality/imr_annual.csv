@@ -13,6 +13,7 @@ COD_PROV,DEN_PROV,year,imr
 1,Torino,1879,185.8
 1,Torino,1880,179.6
 1,Torino,1881,233.5
+1,Torino,1921,121.7
 1,Torino,1931,91.0
 1,Torino,1936,68.0
 2,Vercelli,1931,75.0
@@ -30,6 +31,7 @@ COD_PROV,DEN_PROV,year,imr
 3,Novara,1879,196.6
 3,Novara,1880,202.9
 3,Novara,1881,187.1
+3,Novara,1921,94.4
 3,Novara,1931,97.0
 3,Novara,1936,70.0
 4,Cuneo,1867,233.1
@@ -47,6 +49,7 @@ COD_PROV,DEN_PROV,year,imr
 4,Cuneo,1879,201.7
 4,Cuneo,1880,190.4
 4,Cuneo,1881,177.5
+4,Cuneo,1921,130.1
 4,Cuneo,1931,111.0
 4,Cuneo,1936,89.0
 6,Alessandria,1870,212.6
@@ -61,6 +64,7 @@ COD_PROV,DEN_PROV,year,imr
 6,Alessandria,1879,188.0
 6,Alessandria,1880,197.2
 6,Alessandria,1881,168.6
+6,Alessandria,1921,90.5
 6,Alessandria,1931,75.0
 6,Alessandria,1936,58.0
 7,Aosta,1931,108.0
@@ -75,6 +79,7 @@ COD_PROV,DEN_PROV,year,imr
 8,Porto Maurizio,1878,267.6
 8,Porto Maurizio,1880,211.3
 8,Porto Maurizio,1881,204.2
+8,Porto Maurizio,1921,105.7
 8,Imperia,1931,78.0
 8,Imperia,1936,66.0
 9,Savona,1931,67.0
@@ -88,6 +93,7 @@ COD_PROV,DEN_PROV,year,imr
 10,Genova,1879,175.4
 10,Genova,1880,199.0
 10,Genova,1881,164.5
+10,Genova,1921,91.4
 10,Genova,1931,74.0
 10,Genova,1936,59.0
 11,La Spezia,1931,75.0
@@ -104,6 +110,7 @@ COD_PROV,DEN_PROV,year,imr
 13,Como,1877,188.1
 13,Como,1880,187.4
 13,Como,1881,195.6
+13,Como,1921,153.0
 13,Como,1931,145.0
 13,Como,1936,102.0
 14,Sondrio,1870,147.2
@@ -117,6 +124,7 @@ COD_PROV,DEN_PROV,year,imr
 14,Sondrio,1879,201.0
 14,Sondrio,1880,220.0
 14,Sondrio,1881,370.0
+14,Sondrio,1921,143.1
 14,Sondrio,1931,131.0
 14,Sondrio,1936,94.0
 15,Milano,1869,247.0
@@ -125,6 +133,7 @@ COD_PROV,DEN_PROV,year,imr
 15,Milano,1877,208.3
 15,Milano,1880,233.5
 15,Milano,1881,207.9
+15,Milano,1921,136.9
 15,Milano,1931,126.0
 15,Milano,1936,102.0
 16,Bergamo,1867,238.7
@@ -154,6 +163,7 @@ COD_PROV,DEN_PROV,year,imr
 17,Brescia,1879,207.4
 17,Brescia,1880,216.4
 17,Brescia,1881,125.3
+17,Brescia,1921,163.8
 17,Brescia,1931,147.0
 17,Brescia,1936,134.0
 18,Pavia,1869,230.4
@@ -166,6 +176,7 @@ COD_PROV,DEN_PROV,year,imr
 18,Pavia,1879,194.5
 18,Pavia,1880,207.8
 18,Pavia,1881,184.7
+18,Pavia,1921,92.8
 18,Pavia,1931,83.0
 18,Pavia,1936,69.0
 19,Cremona,1867,237.9
@@ -183,6 +194,7 @@ COD_PROV,DEN_PROV,year,imr
 19,Cremona,1879,237.7
 19,Cremona,1880,267.6
 19,Cremona,1881,198.3
+19,Cremona,1921,135.9
 19,Cremona,1931,118.0
 19,Cremona,1936,103.0
 20,Mantova,1867,206.9
@@ -197,6 +209,7 @@ COD_PROV,DEN_PROV,year,imr
 20,Mantova,1879,139.0
 20,Mantova,1880,200.4
 20,Mantova,1881,155.4
+20,Mantova,1921,114.4
 20,Mantova,1931,81.0
 20,Mantova,1936,80.0
 21,Bolzano,1931,119.0
@@ -210,6 +223,7 @@ COD_PROV,DEN_PROV,year,imr
 23,Verona,1879,192.3
 23,Verona,1880,214.1
 23,Verona,1881,172.6
+23,Verona,1921,107.6
 23,Verona,1931,90.0
 23,Verona,1936,78.0
 24,Vicenza,1875,250.2
@@ -219,6 +233,7 @@ COD_PROV,DEN_PROV,year,imr
 24,Vicenza,1879,219.5
 24,Vicenza,1880,233.1
 24,Vicenza,1881,203.2
+24,Vicenza,1921,118.3
 24,Vicenza,1931,86.0
 24,Vicenza,1936,87.0
 25,Belluno,1868,118.5
@@ -229,6 +244,7 @@ COD_PROV,DEN_PROV,year,imr
 25,Belluno,1878,194.7
 25,Belluno,1880,184.6
 25,Belluno,1881,197.6
+25,Belluno,1921,123.5
 25,Belluno,1931,87.0
 25,Belluno,1936,76.0
 26,Treviso,1869,167.7
@@ -239,6 +255,7 @@ COD_PROV,DEN_PROV,year,imr
 26,Treviso,1879,189.6
 26,Treviso,1880,206.6
 26,Treviso,1881,174.1
+26,Treviso,1921,103.4
 26,Treviso,1931,75.0
 26,Treviso,1936,66.0
 27,Venezia,1875,276.8
@@ -248,6 +265,7 @@ COD_PROV,DEN_PROV,year,imr
 27,Venezia,1879,198.3
 27,Venezia,1880,215.8
 27,Venezia,1881,176.1
+27,Venezia,1921,134.3
 27,Venezia,1931,93.0
 27,Venezia,1936,73.0
 28,Padova,1867,289.0
@@ -265,6 +283,7 @@ COD_PROV,DEN_PROV,year,imr
 28,Padova,1879,250.7
 28,Padova,1880,335.7
 28,Padova,1881,222.9
+28,Padova,1921,124.1
 28,Padova,1931,86.0
 28,Padova,1936,77.0
 29,Rovigo,1867,312.4
@@ -285,6 +304,7 @@ COD_PROV,DEN_PROV,year,imr
 30,Udine,1879,162.8
 30,Udine,1880,163.5
 30,Udine,1881,155.5
+30,Udine,1921,122.2
 30,Udine,1931,80.0
 30,Udine,1936,75.0
 31,Gorizia,1931,94.0
@@ -301,6 +321,7 @@ COD_PROV,DEN_PROV,year,imr
 33,Piacenza,1878,164.4
 33,Piacenza,1880,245.1
 33,Piacenza,1881,187.3
+33,Piacenza,1921,122.2
 33,Piacenza,1931,91.0
 33,Piacenza,1936,87.0
 34,Parma,1867,221.5
@@ -318,6 +339,7 @@ COD_PROV,DEN_PROV,year,imr
 34,Parma,1879,204.9
 34,Parma,1880,224.5
 34,Parma,1881,167.1
+34,Parma,1921,117.7
 34,Parma,1931,87.0
 34,Parma,1936,86.0
 35,Reggio nell'Emilia,1867,214.9
@@ -334,6 +356,7 @@ COD_PROV,DEN_PROV,year,imr
 35,Reggio nell'Emilia,1878,185.5
 35,Reggio nell'Emilia,1880,233.8
 35,Reggio nell'Emilia,1881,197.6
+35,Reggio nell'Emilia,1921,127.3
 35,ReggioE,1931,104.0
 35,ReggioE,1936,98.0
 36,Modena,1869,255.7
@@ -343,6 +366,7 @@ COD_PROV,DEN_PROV,year,imr
 36,Modena,1877,254.8
 36,Modena,1880,303.4
 36,Modena,1881,225.0
+36,Modena,1921,130.2
 36,Modena,1931,107.0
 36,Modena,1936,96.0
 37,Bologna,1867,232.1
@@ -359,6 +383,7 @@ COD_PROV,DEN_PROV,year,imr
 37,Bologna,1879,206.5
 37,Bologna,1880,247.3
 37,Bologna,1881,187.9
+37,Bologna,1921,102.3
 37,Bologna,1931,82.0
 37,Bologna,1936,67.0
 38,Ferrara,1869,287.2
@@ -373,6 +398,7 @@ COD_PROV,DEN_PROV,year,imr
 38,Ferrara,1879,235.9
 38,Ferrara,1880,325.3
 38,Ferrara,1881,240.7
+38,Ferrara,1921,140.5
 38,Ferrara,1931,100.0
 38,Ferrara,1936,94.0
 39,Ravenna,1871,311.2
@@ -384,6 +410,7 @@ COD_PROV,DEN_PROV,year,imr
 39,Ravenna,1878,190.4
 39,Ravenna,1880,251.5
 39,Ravenna,1881,211.9
+39,Ravenna,1921,116.3
 39,Ravenna,1931,65.0
 39,Ravenna,1936,56.0
 40,Forlì,1869,254.9
@@ -395,6 +422,7 @@ COD_PROV,DEN_PROV,year,imr
 40,Forlì,1879,249.3
 40,Forlì,1880,297.8
 40,Forlì,1881,223.8
+40,Forlì,1921,149.3
 40,Forlì,1931,95.0
 40,Forlì,1936,76.0
 41,Pesaro e Urbino,1868,310.2
@@ -421,6 +449,7 @@ COD_PROV,DEN_PROV,year,imr
 42,Ancona,1879,219.7
 42,Ancona,1880,246.3
 42,Ancona,1881,201.6
+42,Ancona,1921,113.6
 42,Ancona,1931,80.0
 42,Ancona,1936,67.0
 43,Macerata,1867,188.3
@@ -448,6 +477,7 @@ COD_PROV,DEN_PROV,year,imr
 44,Ascoli Piceno,1879,212.2
 44,Ascoli Piceno,1880,217.5
 44,Ascoli Piceno,1881,180.7
+44,Ascoli Piceno,1921,131.3
 44,AscoliPiceno,1931,77.0
 44,AscoliPiceno,1936,71.0
 45,Massa e Carrara,1869,202.1
@@ -458,6 +488,7 @@ COD_PROV,DEN_PROV,year,imr
 45,Massa e Carrara,1877,217.6
 45,Massa e Carrara,1880,194.8
 45,Massa e Carrara,1881,171.2
+45,Massa e Carrara,1921,118.5
 45,MassaCarrara,1931,90.0
 45,MassaCarrara,1936,83.0
 46,Lucca,1867,197.3
@@ -475,6 +506,7 @@ COD_PROV,DEN_PROV,year,imr
 46,Lucca,1879,127.2
 46,Lucca,1880,177.4
 46,Lucca,1881,165.5
+46,Lucca,1921,74.1
 46,Lucca,1931,61.0
 46,Lucca,1936,56.0
 47,Pistoia,1931,69.0
@@ -504,6 +536,7 @@ COD_PROV,DEN_PROV,year,imr
 49,Livorno,1879,93.4
 49,Livorno,1880,151.3
 49,Livorno,1881,143.0
+49,Livorno,1921,107.0
 49,Livorno,1931,64.0
 49,Livorno,1936,48.0
 50,Pisa,1870,100.0
@@ -512,6 +545,7 @@ COD_PROV,DEN_PROV,year,imr
 50,Pisa,1876,170.0
 50,Pisa,1880,171.8
 50,Pisa,1881,146.9
+50,Pisa,1921,79.1
 50,Pisa,1931,58.0
 50,Pisa,1936,54.0
 51,Arezzo,1868,183.7
@@ -526,6 +560,7 @@ COD_PROV,DEN_PROV,year,imr
 51,Arezzo,1879,202.3
 51,Arezzo,1880,264.0
 51,Arezzo,1881,160.0
+51,Arezzo,1921,122.6
 51,Arezzo,1931,75.0
 51,Arezzo,1936,84.0
 52,Siena,1870,149.8
@@ -544,6 +579,7 @@ COD_PROV,DEN_PROV,year,imr
 53,Grosseto,1879,249.4
 53,Grosseto,1880,218.1
 53,Grosseto,1881,178.1
+53,Grosseto,1921,108.4
 53,Grosseto,1931,82.0
 53,Grosseto,1936,68.0
 54,Umbria,1875,226.6
@@ -566,6 +602,7 @@ COD_PROV,DEN_PROV,year,imr
 58,Roma,1878,131.6
 58,Roma,1880,237.4
 58,Roma,1881,195.0
+58,Roma,1921,99.2
 58,Roma,1931,83.0
 58,Roma,1936,78.0
 60,Frosinone,1931,114.0
@@ -576,6 +613,7 @@ COD_PROV,DEN_PROV,year,imr
 61,Caserta,1877,221.0
 61,Caserta,1880,239.9
 61,Caserta,1881,198.6
+61,Caserta,1921,117.0
 62,Benevento,1867,202.3
 62,Benevento,1868,214.8
 62,Benevento,1869,169.2
@@ -586,6 +624,7 @@ COD_PROV,DEN_PROV,year,imr
 62,Benevento,1878,226.1
 62,Benevento,1880,292.6
 62,Benevento,1881,198.3
+62,Benevento,1921,122.2
 62,Benevento,1931,127.0
 62,Benevento,1936,111.0
 63,Napoli,1869,212.0
@@ -594,6 +633,7 @@ COD_PROV,DEN_PROV,year,imr
 63,Napoli,1877,202.6
 63,Napoli,1880,215.1
 63,Napoli,1881,199.1
+63,Napoli,1921,114.5
 63,Napoli,1931,118.0
 63,Napoli,1936,117.0
 64,Avellino,1867,214.8
@@ -606,6 +646,7 @@ COD_PROV,DEN_PROV,year,imr
 64,Avellino,1878,206.6
 64,Avellino,1880,216.1
 64,Avellino,1881,219.8
+64,Avellino,1921,125.8
 64,Avellino,1931,129.0
 64,Avellino,1936,122.0
 65,Salerno,1868,228.9
@@ -615,6 +656,7 @@ COD_PROV,DEN_PROV,year,imr
 65,Salerno,1877,210.8
 65,Salerno,1880,231.5
 65,Salerno,1881,211.1
+65,Salerno,1921,129.3
 65,Salerno,1931,120.0
 65,Salerno,1936,109.0
 66,Aquila degli Abruzzi,1867,104.5
@@ -632,6 +674,7 @@ COD_PROV,DEN_PROV,year,imr
 66,Aquila degli Abruzzi,1879,177.6
 66,Aquila degli Abruzzi,1880,196.2
 66,Aquila degli Abruzzi,1881,170.1
+66,Aquila degli Abruzzi,1921,136.6
 66,Aquila,1931,125.0
 66,Aquila,1936,121.0
 67,Teramo,1870,170.2
@@ -646,6 +689,7 @@ COD_PROV,DEN_PROV,year,imr
 67,Teramo,1879,188.8
 67,Teramo,1880,220.1
 67,Teramo,1881,155.5
+67,Teramo,1921,121.6
 67,Teramo,1931,96.0
 67,Teramo,1936,88.0
 68,Pescara,1931,106.0
@@ -657,6 +701,7 @@ COD_PROV,DEN_PROV,year,imr
 69,Chieti,1877,255.3
 69,Chieti,1880,275.8
 69,Chieti,1881,191.7
+69,Chieti,1921,134.4
 69,Chieti,1931,116.0
 69,Chieti,1936,125.0
 70,Campobasso,1869,198.7
@@ -666,6 +711,7 @@ COD_PROV,DEN_PROV,year,imr
 70,Campobasso,1879,225.4
 70,Campobasso,1880,309.4
 70,Campobasso,1881,206.6
+70,Campobasso,1921,159.6
 70,Capobasso,1931,164.0
 70,Capobasso,1936,133.0
 71,Foggia,1869,231.5
@@ -677,6 +723,7 @@ COD_PROV,DEN_PROV,year,imr
 71,Foggia,1879,213.3
 71,Foggia,1880,295.6
 71,Foggia,1881,201.2
+71,Foggia,1921,160.1
 71,Foggia,1931,177.0
 71,Foggia,1936,140.0
 72,Bari delle Puglie,1870,102.7
@@ -686,6 +733,7 @@ COD_PROV,DEN_PROV,year,imr
 72,Bari delle Puglie,1878,216.1
 72,Bari delle Puglie,1880,201.1
 72,Bari delle Puglie,1881,210.4
+72,Bari delle Puglie,1921,160.7
 72,Bari,1931,146.0
 72,Bari,1936,140.0
 73,Taranto,1931,122.0
@@ -715,6 +763,7 @@ COD_PROV,DEN_PROV,year,imr
 76,Potenza,1878,148.0
 76,Potenza,1880,244.0
 76,Potenza,1881,204.4
+76,Potenza,1921,160.9
 76,Potenza,1931,162.0
 76,Potenza,1936,147.0
 77,Matera,1931,206.0
@@ -731,6 +780,7 @@ COD_PROV,DEN_PROV,year,imr
 78,Cosenza,1879,194.2
 78,Cosenza,1880,217.5
 78,Cosenza,1881,193.5
+78,Cosenza,1921,123.5
 78,Cosenza,1931,114.0
 78,Cosenza,1936,102.0
 79,Catanzaro,1869,198.1
@@ -740,6 +790,7 @@ COD_PROV,DEN_PROV,year,imr
 79,Catanzaro,1877,223.4
 79,Catanzaro,1880,250.9
 79,Catanzaro,1881,199.5
+79,Catanzaro,1921,136.1
 79,Catanzaro,1931,130.0
 79,Catanzaro,1936,125.0
 80,Reggio di Calabria,1869,192.4
@@ -753,6 +804,7 @@ COD_PROV,DEN_PROV,year,imr
 80,Reggio di Calabria,1878,138.6
 80,Reggio di Calabria,1880,211.2
 80,Reggio di Calabria,1881,196.1
+80,Reggio di Calabria,1921,125.8
 80,ReggioCalabria,1931,118.0
 80,ReggioCalabria,1936,107.0
 81,Trapani,1868,232.9
@@ -786,6 +838,7 @@ COD_PROV,DEN_PROV,year,imr
 82,Palermo,1879,186.2
 82,Palermo,1880,205.7
 82,Palermo,1881,186.5
+82,Palermo,1921,126.3
 82,Palermo,1931,125.0
 82,Palermo,1936,103.0
 83,Messina,1869,181.8
@@ -794,6 +847,7 @@ COD_PROV,DEN_PROV,year,imr
 83,Messina,1877,199.4
 83,Messina,1880,197.0
 83,Messina,1881,188.9
+83,Messina,1921,129.0
 83,Messina,1931,110.0
 83,Messina,1936,92.0
 84,Girgenti,1869,245.1
@@ -805,6 +859,7 @@ COD_PROV,DEN_PROV,year,imr
 84,Girgenti,1879,238.6
 84,Girgenti,1880,268.2
 84,Girgenti,1881,203.8
+84,Girgenti,1921,174.0
 84,Agrigento,1931,155.0
 84,Agrigento,1936,126.0
 85,Caltanissetta,1869,266.5
@@ -817,6 +872,7 @@ COD_PROV,DEN_PROV,year,imr
 85,Caltanissetta,1879,212.6
 85,Caltanissetta,1880,248.9
 85,Caltanissetta,1881,237.6
+85,Caltanissetta,1921,190.0
 85,Caltanissetta,1931,162.0
 85,Caltanissetta,1936,126.0
 86,Enna,1931,178.0
@@ -830,6 +886,7 @@ COD_PROV,DEN_PROV,year,imr
 87,Catania,1877,244.5
 87,Catania,1880,273.1
 87,Catania,1881,233.8
+87,Catania,1921,166.8
 87,Catania,1931,155.0
 87,Catania,1936,128.0
 88,Ragusa,1931,147.0
@@ -839,6 +896,7 @@ COD_PROV,DEN_PROV,year,imr
 89,Siracusa,1877,210.2
 89,Siracusa,1880,267.9
 89,Siracusa,1881,246.8
+89,Siracusa,1921,161.8
 89,Siracusa,1931,157.0
 89,Siracusa,1936,122.0
 90,Sassari,1870,212.2
@@ -859,5 +917,6 @@ COD_PROV,DEN_PROV,year,imr
 92,Cagliari,1879,139.8
 92,Cagliari,1880,189.9
 92,Cagliari,1881,190.0
+92,Cagliari,1921,128.5
 92,Cagliari,1931,122.0
 92,Cagliari,1936,89.0
