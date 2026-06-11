@@ -59,6 +59,8 @@ format:
     <div><canvas id="pyramidChart" style="max-height:380px;"></canvas></div>
     <div style="margin-top:0.75rem;font-size:0.9rem;">
       <a id="dlLink" href="#" download>census CSV (this year)</a>
+      <span id="scanLinkWrap" style="display:none;"> ·
+        <a id="scanLink" href="#" download>original scan, TAVOLA II 1861 (PDF)</a></span>
     </div>
   </div>
 </div>
@@ -71,6 +73,28 @@ const AGES = ['0','1_4','5_9','10_14','15_19','20_24','25_29','30_34','35_39',
               '40_44','45_49','50_54','55_59','60_64','65_69','70_74','75_79','80_84','85plus'];
 const AGE_LABELS = ['0','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39',
                     '40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80-84','85+'];
+// per-province original scans (TAVOLA II, Censimento 1861) from L. Lionello's selections
+const SCANS_1861 = {1:'001_Torino_1861.pdf', 3:'003_Novara_1861.pdf', 4:'004_Cuneo_1861.pdf',
+  6:'006_Alessandria_1861.pdf', 8:'008_PortoMaurizio_1861.pdf', 10:'010_Genova_1861.pdf',
+  13:'013_Como_1861.pdf', 14:'014_Sondrio_1861.pdf', 15:'015_Milano_1861.pdf',
+  16:'016_Bergamo_1861.pdf', 17:'017_Brescia_1861.pdf', 18:'018_Pavia_1861.pdf',
+  19:'019_Cremona_1861.pdf', 33:'033_Piacenza_1861.pdf', 34:'034_Parma_1861.pdf',
+  35:'035_ReggioEmilia_1861.pdf', 36:'036_Modena_1861.pdf', 37:'037_Bologna_1861.pdf',
+  38:'038_Ferrara_1861.pdf', 39:'039_Ravenna_1861.pdf', 40:'040_Forlì_1861.pdf',
+  41:'041_Pesaro_1861.pdf', 42:'042_Ancona_1861.pdf', 43:'043_Macerata_1861.pdf',
+  44:'044_AscoliPiceno_1861.pdf', 45:'045_MassaCarrara_1861.pdf', 46:'046_Lucca_1861.pdf',
+  48:'048_Firenze_1861.pdf', 49:'049_Livorno_1861.pdf', 50:'050_Pisa_1861.pdf',
+  51:'051_Arezzo_1861.pdf', 52:'052_Siena_1861.pdf', 53:'053_Grosseto_1861.pdf',
+  54:'054_Umbria_1861.pdf', 61:'061_Lavoro_1861.pdf', 62:'062_Benevento_1861.pdf',
+  63:'063_Napoli_1861.pdf', 64:'064_PrincipatoUlteriore_1861.pdf',
+  65:'065_PrincipatoCiteriore_1861.pdf', 66:'066_AbruzzoUlterioreII_1861.pdf',
+  67:'067_AbruzzoUlterioreI_1861.pdf', 69:'069_AbruzzoCiteriore_1861.pdf',
+  70:'070_Molise_1861.pdf', 71:'071_Capitanata_1861.pdf', 72:'072_Bari_1861.pdf',
+  75:'075_Otranto_1861.pdf', 76:'076_Basilicata_1861.pdf', 78:'078_CalabriaCiteriore_1861.pdf',
+  79:'079_CalabriaUlterioreII_1861.pdf', 80:'080_CalabriaUlterioreI_1861.pdf',
+  81:'081_Trapani_1861.pdf', 82:'082_Palermo_1861.pdf', 83:'083_Messina_1861.pdf',
+  84:'084_Girgenti_1861.pdf', 85:'085_Caltanissetta_1861.pdf', 87:'087_Catania_1861.pdf',
+  89:'089_Noto_1861.pdf', 90:'090_Sassari_1861.pdf', 92:'092_Cagliari_1861.pdf'};
 
 const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
   scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
@@ -157,6 +181,10 @@ function showProvince(cod, name) {
   document.getElementById('provCwr').textContent = prov ? fmt(prov.cwr) : 'N/A';
   document.getElementById('pyramidNote').textContent = prov ? '— ' + year + ' census' : '(no data this year)';
   document.getElementById('dlLink').href = '../data/census/census_' + year + '.csv';
+  const scan = (year === 1861) && SCANS_1861[cod];
+  document.getElementById('scanLinkWrap').style.display = scan ? 'inline' : 'none';
+  if (scan) document.getElementById('scanLink').href =
+    '../downloads/sources/1861/provinces/' + scan;
 
   const ctx = document.getElementById('pyramidChart').getContext('2d');
   if (pyramidChart) pyramidChart.destroy();

@@ -29,7 +29,10 @@ CORR = DB / "1861_correctionsMR"
 DEMO = Path(__file__).resolve().parent.parent
 LONG = DEMO / "downloads/1861/data_census_1861_adjusted_age.csv"
 
-KEEP = {15}                       # Milano: print-exact extraction in place
+# print-exact extractions in place (parse_prov_1861.py, validated against
+# the printed TOTALE GENERALE): Milano, Como, Brescia, Siena,
+# Abruzzo Ulteriore I, Capitanata
+KEEP = {15, 13, 17, 52, 67, 71}
 
 GROUPS = ([("0", 0, 0), ("1-4", 1, 4)] +
           [(f"{lo}-{lo + 4}", lo, lo + 4) for lo in range(5, 85, 5)] +

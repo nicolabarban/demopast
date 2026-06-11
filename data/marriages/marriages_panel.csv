@@ -5,11 +5,11 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 6,Alessandria,1863,5947,9.11
 8,Porto Maurizio,1863,1115,9.1
 10,Genova,1863,6269,9.45
-13,Como,1863,3346,6.57
+13,Como,1863,3346,7.25
 14,Sondrio,1863,864,8.08
 15,Milano,1863,7587,7.9
 16,Bergamo,1863,2794,7.95
-17,Brescia,1863,4187,7.74
+17,Brescia,1863,4187,8.72
 18,Pavia,1863,3807,8.95
 19,Cremona,1863,3112,9.34
 20,Mantova,1863,1539,5.34
@@ -39,7 +39,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 49,Livorno,1863,1064,9.08
 50,Pisa,1863,2129,8.6
 51,Arezzo,1863,1904,8.55
-52,Siena,1863,1724,7.62
+52,Siena,1863,1724,8.78
 53,Grosseto,1863,851,8.36
 54,Umbria,1863,3295,6.34
 61,Caserta,1863,5982,9.09
@@ -48,10 +48,10 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 64,Avellino,1863,3371,10.46
 65,Salerno,1863,4502,8.48
 66,Aquila degli Abruzzi,1863,2676,8.51
-67,Teramo,1863,1960,6.89
+67,Teramo,1863,1960,8.4
 69,Chieti,1863,3162,9.59
 70,Campobasso,1863,3472,9.98
-71,Foggia,1863,2839,8.22
+71,Foggia,1863,2839,9.02
 72,Bari delle Puglie,1863,4374,7.74
 75,Lecce,1863,3648,7.99
 76,Potenza,1863,4940,9.95
@@ -73,11 +73,11 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 6,Alessandria,1864,5991,9.13
 8,Porto Maurizio,1864,1164,9.46
 10,Genova,1864,6147,9.18
-13,Como,1864,3348,6.62
+13,Como,1864,3348,7.22
 14,Sondrio,1864,855,7.97
 15,Milano,1864,7367,7.62
 16,Bergamo,1864,2752,7.79
-17,Brescia,1864,4137,7.8
+17,Brescia,1864,4137,8.67
 18,Pavia,1864,3910,9.13
 19,Cremona,1864,2904,8.83
 20,Mantova,1864,1430,4.97
@@ -107,7 +107,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 49,Livorno,1864,1013,8.63
 50,Pisa,1864,1801,7.21
 51,Arezzo,1864,1769,7.89
-52,Siena,1864,1588,7.1
+52,Siena,1864,1588,8.03
 53,Grosseto,1864,801,7.82
 54,Umbria,1864,3674,7.02
 61,Caserta,1864,5312,8.01
@@ -116,10 +116,10 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 64,Avellino,1864,3196,9.71
 65,Salerno,1864,3470,6.52
 66,Aquila degli Abruzzi,1864,2719,8.59
-67,Teramo,1864,1700,6.08
+67,Teramo,1864,1700,7.24
 69,Chieti,1864,2857,8.63
 70,Campobasso,1864,3118,8.94
-71,Foggia,1864,2813,8.21
+71,Foggia,1864,2813,8.91
 72,Bari delle Puglie,1864,4311,7.56
 75,Lecce,1864,3608,7.83
 76,Potenza,1864,4684,9.4
@@ -141,11 +141,11 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 6,Alessandria,1865,7054,10.68
 8,Porto Maurizio,1865,1351,10.93
 10,Genova,1865,7751,11.46
-13,Como,1865,4235,8.45
+13,Como,1865,4235,9.1
 14,Sondrio,1865,997,9.25
 15,Milano,1865,8880,9.13
 16,Bergamo,1865,3390,9.54
-17,Brescia,1865,4820,9.28
+17,Brescia,1865,4820,10.17
 18,Pavia,1865,4379,10.16
 19,Cremona,1865,3556,10.94
 20,Mantova,1865,347,1.2
@@ -175,7 +175,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 49,Livorno,1865,1206,10.27
 50,Pisa,1865,2431,9.64
 51,Arezzo,1865,2073,9.19
-52,Siena,1865,1980,8.95
+52,Siena,1865,1980,9.95
 53,Grosseto,1865,953,9.25
 54,Umbria,1865,3650,6.93
 61,Caserta,1865,6250,9.36
@@ -184,10 +184,10 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 64,Avellino,1865,3340,9.94
 65,Salerno,1865,4909,9.2
 66,Aquila degli Abruzzi,1865,2665,8.35
-67,Teramo,1865,2252,8.2
+67,Teramo,1865,2252,9.53
 69,Chieti,1865,3454,10.39
 70,Campobasso,1865,3579,10.23
-71,Foggia,1865,3087,9.08
+71,Foggia,1865,3087,9.74
 72,Bari delle Puglie,1865,5676,9.86
 75,Lecce,1865,4459,9.58
 76,Potenza,1865,5236,10.47
@@ -209,11 +209,11 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 6,Alessandria,1866,3935,5.93
 8,Porto Maurizio,1866,584,4.7
 10,Genova,1866,3288,4.82
-13,Como,1866,2519,5.06
+13,Como,1866,2519,5.39
 14,Sondrio,1866,641,5.92
 15,Milano,1866,5555,5.68
 16,Bergamo,1866,2017,5.64
-17,Brescia,1866,2715,5.34
+17,Brescia,1866,2715,5.77
 18,Pavia,1866,2714,6.25
 19,Cremona,1866,2074,6.46
 20,Mantova,1866,1385,4.81
@@ -243,7 +243,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 49,Livorno,1866,736,6.26
 50,Pisa,1866,1112,4.37
 51,Arezzo,1866,853,3.76
-52,Siena,1866,1080,4.94
+52,Siena,1866,1080,5.4
 53,Grosseto,1866,348,3.36
 54,Umbria,1866,2676,5.04
 61,Caserta,1866,4049,6.02
@@ -252,10 +252,10 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 64,Avellino,1866,2322,6.77
 65,Salerno,1866,3443,6.44
 66,Aquila degli Abruzzi,1866,1665,5.18
-67,Teramo,1866,1535,5.69
+67,Teramo,1866,1535,6.45
 69,Chieti,1866,2605,7.81
 70,Campobasso,1866,3583,10.21
-71,Foggia,1866,2275,6.75
+71,Foggia,1866,2275,7.16
 72,Bari delle Puglie,1866,4234,7.29
 75,Lecce,1866,3970,8.45
 76,Potenza,1866,4126,8.22
@@ -277,11 +277,11 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 6,Alessandria,1867,4919,7.36
 8,Porto Maurizio,1867,799,6.4
 10,Genova,1867,4915,7.13
-13,Como,1867,3209,6.5
+13,Como,1867,3209,6.83
 14,Sondrio,1867,795,7.32
 15,Milano,1867,7064,7.17
 16,Bergamo,1867,2653,7.38
-17,Brescia,1867,3748,7.52
+17,Brescia,1867,3748,8.01
 18,Pavia,1867,3301,7.56
 19,Cremona,1867,2966,9.36
 20,Mantova,1867,1664,5.78
@@ -311,7 +311,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 49,Livorno,1867,642,5.45
 50,Pisa,1867,1389,5.41
 51,Arezzo,1867,1135,4.96
-52,Siena,1867,1244,5.75
+52,Siena,1867,1244,6.18
 53,Grosseto,1867,574,5.5
 54,Umbria,1867,2655,4.97
 61,Caserta,1867,4842,7.15
@@ -320,10 +320,10 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 64,Avellino,1867,2912,8.33
 65,Salerno,1867,3996,7.45
 66,Aquila degli Abruzzi,1867,1974,6.1
-67,Teramo,1867,1576,5.95
+67,Teramo,1867,1576,6.58
 69,Chieti,1867,2637,7.87
 70,Campobasso,1867,3243,9.22
-71,Foggia,1867,2592,7.76
+71,Foggia,1867,2592,8.13
 72,Bari delle Puglie,1867,5388,9.19
 75,Lecce,1867,3392,7.16
 76,Potenza,1867,4765,9.46
@@ -345,11 +345,11 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 6,Alessandria,1868,5244,7.81
 8,Porto Maurizio,1868,816,6.51
 10,Genova,1868,5013,7.2
-13,Como,1868,3767,7.7
+13,Como,1868,3767,7.99
 14,Sondrio,1868,802,7.35
 15,Milano,1868,8116,8.19
 16,Bergamo,1868,3127,8.65
-17,Brescia,1868,4165,8.54
+17,Brescia,1868,4165,8.96
 18,Pavia,1868,3756,8.54
 19,Cremona,1868,3459,11.06
 20,Mantova,1868,1597,5.55
@@ -379,7 +379,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 49,Livorno,1868,840,7.13
 50,Pisa,1868,1347,5.2
 51,Arezzo,1868,1142,4.96
-52,Siena,1868,1125,5.26
+52,Siena,1868,1125,5.55
 53,Grosseto,1868,557,5.31
 54,Umbria,1868,2592,4.82
 61,Caserta,1868,4717,6.91
@@ -388,10 +388,10 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 64,Avellino,1868,2814,7.89
 65,Salerno,1868,3868,7.2
 66,Aquila degli Abruzzi,1868,2036,6.24
-67,Teramo,1868,1948,7.48
+67,Teramo,1868,1948,8.08
 69,Chieti,1868,2840,8.45
 70,Campobasso,1868,3148,8.92
-71,Foggia,1868,2776,8.38
+71,Foggia,1868,2776,8.68
 72,Bari delle Puglie,1868,5803,9.81
 75,Lecce,1868,4193,8.77
 76,Potenza,1868,4642,9.19
@@ -413,11 +413,11 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 6,Alessandria,1869,5588,8.27
 8,Porto Maurizio,1869,742,5.89
 10,Genova,1869,5251,7.48
-13,Como,1869,3929,8.09
+13,Como,1869,3929,8.3
 14,Sondrio,1869,790,7.21
 15,Milano,1869,8809,8.84
 16,Bergamo,1869,3044,8.37
-17,Brescia,1869,3703,7.77
+17,Brescia,1869,3703,8.02
 18,Pavia,1869,3596,8.12
 19,Cremona,1869,2687,8.7
 20,Mantova,1869,2567,8.91
@@ -447,7 +447,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 49,Livorno,1869,827,7.01
 50,Pisa,1869,1710,6.54
 51,Arezzo,1869,1338,5.78
-52,Siena,1869,1433,6.78
+52,Siena,1869,1433,7.03
 53,Grosseto,1869,577,5.47
 54,Umbria,1869,2974,5.49
 61,Caserta,1869,6198,9.01
@@ -456,10 +456,10 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 64,Avellino,1869,3475,9.56
 65,Salerno,1869,4873,9.05
 66,Aquila degli Abruzzi,1869,2431,7.4
-67,Teramo,1869,1862,7.29
+67,Teramo,1869,1862,7.67
 69,Chieti,1869,3136,9.29
 70,Campobasso,1869,3393,9.59
-71,Foggia,1869,3330,10.14
+71,Foggia,1869,3330,10.38
 72,Bari delle Puglie,1869,5906,9.9
 75,Lecce,1869,4642,9.62
 76,Potenza,1869,4814,9.49
@@ -481,11 +481,11 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 6,Alessandria,1870,5509,8.11
 8,Porto Maurizio,1870,905,7.15
 10,Genova,1870,4915,6.93
-13,Como,1870,4058,8.43
+13,Como,1870,4058,8.53
 14,Sondrio,1870,822,7.48
 15,Milano,1870,8493,8.47
 16,Bergamo,1870,2881,7.88
-17,Brescia,1870,3305,7.09
+17,Brescia,1870,3305,7.21
 18,Pavia,1870,3572,8.02
 19,Cremona,1870,2258,7.41
 20,Mantova,1870,2367,8.22
@@ -515,7 +515,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 49,Livorno,1870,749,6.34
 50,Pisa,1870,1646,6.24
 51,Arezzo,1870,1346,5.77
-52,Siena,1870,1384,6.63
+52,Siena,1870,1384,6.75
 53,Grosseto,1870,604,5.69
 54,Umbria,1870,2670,4.89
 61,Caserta,1870,5514,7.96
@@ -524,10 +524,10 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 64,Avellino,1870,2940,7.94
 65,Salerno,1870,4212,7.8
 66,Aquila degli Abruzzi,1870,2371,7.16
-67,Teramo,1870,1615,6.44
+67,Teramo,1870,1615,6.61
 69,Chieti,1870,2563,7.57
 70,Campobasso,1870,3031,8.54
-71,Foggia,1870,2558,7.86
+71,Foggia,1870,2558,7.95
 72,Bari delle Puglie,1870,4690,7.79
 75,Lecce,1870,3174,6.52
 76,Potenza,1870,3886,7.64
