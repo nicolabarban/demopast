@@ -70,6 +70,8 @@ format:
       <a href="../data/mortality/imr_annual.csv" download>imr_annual.csv</a> ·
       <a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a> ·
     <a href="../data/mortality/lifetables_1921.csv" download>lifetables_1921.csv</a> ·
+    <a href="../data/mortality/lifetables_comp.csv" download>lifetables_comp.csv</a> ·
+    <a href="../data/mortality/e0_comp.csv" download>e0_comp.csv</a> ·
     <a href="../data/mortality/mortality_1951_1961.csv" download>mortality_1951_1961.csv</a>
     </div>
   </div>
@@ -345,6 +347,10 @@ updateMap();
 Life expectancy 1881: abridged life tables (Chiang) from deaths by age and sex (average 1881–82) and the 1881 Census population.
 Life expectancy 1921: same method, from TAVOLA X deaths by age and sex and the 1921 Census population (checksum-validated columns only).
 Infant mortality 1921: under-1 deaths (TAVOLA X) over live births (TAVOLA I), <em>Movimento</em> 1919–1923 volume.
+Compartimento life tables 1901/1911/1931/1936 (<code>lifetables_comp.csv</code>, <code>e0_comp.csv</code>): same Chiang method,
+from <em>Annuario Statistico Italiano</em> deaths by age and sex at compartimento level and census populations; where the source
+groups ages 0–4, the under-1 share is borrowed from the nearest single-year edition (flagged); Venezia Giulia e Zara excluded
+in 1931/1936 (no census exposure), with the Regno total adjusted accordingly.
 Deaths, CDR and IMR 1951–1961: ISTAT, <em>Annuari di Statistiche Demografiche</em> (full file in the downloads below;
 the per-province IMR chart shows post-war values only for provinces with unchanged historical boundaries/names).
 Population denominators: DEMOPAST census data.</p>
