@@ -45,13 +45,13 @@ format:
   <a href="migration.html" style="text-decoration:none;color:inherit;">
     <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <h3 style="margin-top:0;color:#005a32;">🧳 Migration</h3>
-      <p style="font-size:0.95rem;">Emigration flows and rates by province, 1876–1961.</p>
+      <p style="font-size:0.95rem;">Emigration flows and rates by province, 1911–1921.</p>
       <ul style="font-size:0.85rem;color:#555;">
-        <li>Emigrants by province of origin</li>
-        <li>Emigration rate (‰)</li>
-        <li>Sources: Annuario Statistico Italiano, Statistica della emigrazione</li>
+        <li>Emigrants by province of origin, annual 1911–1916 &amp; 1919–1921</li>
+        <li>Emigration rate (‰); Europe vs transoceanic split in download</li>
+        <li>Sources: Annuario Statistico Italiano (1912–1919/21 editions)</li>
       </ul>
-      <p style="font-weight:bold;color:#d97706;">◐ Extraction in progress</p>
+      <p style="font-weight:bold;color:#16a34a;">● Data available</p>
     </div>
   </a>
 

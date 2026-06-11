@@ -105,7 +105,10 @@ async function init() {
   YEARS = Object.keys(panel).map(Number).sort((a, b) => a - b);
   const slider = document.getElementById('yearSlider');
   slider.max = YEARS.length - 1;
-  document.getElementById('yearTicks').innerHTML = YEARS.map(y => '<span>' + y + '</span>').join('');
+  // thin tick labels: ~8 labels max, always keep first and last
+  const step = Math.max(1, Math.ceil(YEARS.length / 8));
+  document.getElementById('yearTicks').innerHTML = YEARS.map((y, i) =>
+    '<span>' + ((i % step === 0 || i === YEARS.length - 1) ? y : '') + '</span>').join('');
   slider.addEventListener('input', updateMap);
   document.getElementById('indSelect').addEventListener('change', updateMap);
   updateMap();
@@ -209,8 +212,18 @@ init();
 </script>
 
 <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
-<p><strong>Sources.</strong> Emigration: MAIC/ISTAT, <em>Annuario Statistico Italiano</em>, <em>Statistica della emigrazione italiana</em> (1876–1925) and
-<em>Annuario di Statistiche Demografiche</em> (1951–1961). Map shows the nearest available historical boundaries.</p>
+<p><strong>Sources.</strong> Emigration for abroad by province of departure: MAIC/ISTAT,
+<em>Annuario Statistico Italiano</em>, tables "Emigranti divisi secondo le Regioni e le Provincie dalle quali
+partirono" (editions 1912–1919/21), covering 1911–1916 and 1919–1921. Every yearly table is validated
+against its printed row sums (total = Europe/Mediterranean + transoceanic) and the REGNO column totals;
+OCR digit confusions were corrected only where a unique single-digit fix satisfies all checksums.
+The 1915 figures follow the revised 1916 edition. For 1921 the printed national total includes the
+post-WWI new territories (Venezia Tridentina, Venezia Giulia e Zara), available only as aggregates
+in the full extraction file. Emigration rate = emigrants / population × 1000, population linearly
+interpolated between flanking censuses. Map shows the nearest available historical boundaries.</p>
+<p><strong>Download:</strong> <a href="../data/migration/migration_panel.csv" download>migration_panel.csv</a> ·
+<a href="../data/migration/emigration_full_extraction.csv" download>emigration_full_extraction.csv</a>
+(incl. Europe vs transoceanic split and validation flags)</p>
 <p>Preliminary — test environment.</p>
 </div>
 ```
