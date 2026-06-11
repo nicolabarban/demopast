@@ -7,7 +7,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 10,Genova,1863,6269,19.67
 13,Como,1863,3346,5.45
 14,Sondrio,1863,864,3.21
-15,Milano,1863,7587,12.73
+15,Milano,1863,7587,7.9
 16,Bergamo,1863,2794,7.33
 17,Brescia,1863,4187,10.66
 18,Pavia,1863,3807,8.95
@@ -75,7 +75,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 10,Genova,1864,6147,16.69
 13,Como,1864,3348,5.61
 14,Sondrio,1864,855,3.43
-15,Milano,1864,7367,11.37
+15,Milano,1864,7367,7.62
 16,Bergamo,1864,2752,7.25
 17,Brescia,1864,4137,10.33
 18,Pavia,1864,3910,9.13
@@ -143,7 +143,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 10,Genova,1865,7751,18.55
 13,Como,1865,4235,7.3
 14,Sondrio,1865,997,4.35
-15,Milano,1865,8880,12.7
+15,Milano,1865,8880,9.13
 16,Bergamo,1865,3390,8.97
 17,Brescia,1865,4820,11.8
 18,Pavia,1865,4379,10.16
@@ -211,7 +211,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 10,Genova,1866,3288,7.03
 13,Como,1866,2519,4.48
 14,Sondrio,1866,641,3.06
-15,Milano,1866,5555,7.4
+15,Milano,1866,5555,5.68
 16,Bergamo,1866,2017,5.36
 17,Brescia,1866,2715,6.52
 18,Pavia,1866,2714,6.25
@@ -279,7 +279,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 10,Genova,1867,4915,9.51
 13,Como,1867,3209,5.88
 14,Sondrio,1867,795,4.19
-15,Milano,1867,7064,8.8
+15,Milano,1867,7064,7.17
 16,Bergamo,1867,2653,7.08
 17,Brescia,1867,3748,8.84
 18,Pavia,1867,3301,7.56
@@ -347,7 +347,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 10,Genova,1868,5013,8.85
 13,Como,1868,3767,7.12
 14,Sondrio,1868,802,4.72
-15,Milano,1868,8116,9.5
+15,Milano,1868,8116,8.19
 16,Bergamo,1868,3127,8.39
 17,Brescia,1868,4165,9.64
 18,Pavia,1868,3756,8.54
@@ -415,7 +415,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 10,Genova,1869,5251,8.52
 13,Como,1869,3929,7.68
 14,Sondrio,1869,790,5.27
-15,Milano,1869,8809,9.73
+15,Milano,1869,8809,8.84
 16,Bergamo,1869,3044,8.2
 17,Brescia,1869,3703,8.42
 18,Pavia,1869,3596,8.12
@@ -483,7 +483,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 10,Genova,1870,4915,7.38
 13,Como,1870,4058,8.2
 14,Sondrio,1870,822,6.31
-15,Milano,1870,8493,8.87
+15,Milano,1870,8493,8.47
 16,Bergamo,1870,2881,7.8
 17,Brescia,1870,3305,7.38
 18,Pavia,1870,3572,8.02
