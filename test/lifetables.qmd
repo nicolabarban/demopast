@@ -204,9 +204,10 @@ function showProvince() {
 
   document.getElementById('fullTable').innerHTML =
     '<tr style="border-bottom:2px solid #ccc;"><th style="text-align:left;">age</th>' +
-    ['mx','qx','lx','dx','Lx','Tx','ex'].map(h => '<th style="text-align:right;">' + h + '</th>').join('') + '</tr>' +
+    ['ax','mx','qx','lx','dx','Lx','Tx','ex'].map(h => '<th style="text-align:right;">' + h + '</th>').join('') + '</tr>' +
     tRows.map(r =>
       '<tr style="border-bottom:1px solid #eee;"><td>' + fmtAge(r.age_group) + '</td>' +
+      '<td style="text-align:right;">' + (r.ax != null ? r.ax.toFixed(2) : '—') + '</td>' +
       ['mx','qx'].map(k => '<td style="text-align:right;">' + r[k].toFixed(5) + '</td>').join('') +
       ['lx','dx','Lx','Tx'].map(k => '<td style="text-align:right;">' + Math.round(r[k]).toLocaleString('en-US') + '</td>').join('') +
       '<td style="text-align:right;font-weight:bold;">' + r.ex.toFixed(2) + '</td></tr>').join('');
@@ -254,12 +255,17 @@ updateMap();
 </script>
 
 <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
-<p><strong>Method.</strong> Abridged period life tables (Chiang) by province and sex, 19 age
+<p><strong>Method.</strong> Abridged period life tables by province and sex, 19 age
 groups (0, 1–4, then 5-year groups to 85+), computed from deaths by age and sex
 (<em>Movimento dello stato civile</em>) and census populations: <strong>1881</strong> (deaths
 1879–1881 averaged around the 1881 census) and <strong>1921</strong> (deaths 1921, census 1921).
-a₀ = 0.3, ₄a₁ = 1.5, ₙaₓ = n/2, open interval 85+ closed with L = l/m. Provincial tables are
-preliminary: small-province death counts make single-year mₓ noisy at old ages.</p>
+Methodology follows the <a href="https://www.mortality.org/Data/MethodsProtocol">Human
+Mortality Database Methods Protocol</a> (v6): a₀ from the Andreev–Kingkade (2015)
+sex-specific formulas as a function of m₀ (total sex: death-weighted average of the
+male and female values); ₄a₁ = 1.5, ₙaₓ = n/2 elsewhere;
+qₓ = n·mₓ / (1 + (n − aₓ)·mₓ); open interval 85+ closed with q = 1, a = 1/m, L = l/m.
+Provincial tables are preliminary: small-province death counts make single-year mₓ
+noisy at old ages.</p>
 <p>Compartimento-level tables for 1901, 1911, 1931 and 1936 are available below; national
 e₀ from these tables matches the official ISTAT period tables (43.4 / 44.4 / 54.9 / 56.8).</p>
 <p><strong>Download:</strong>
