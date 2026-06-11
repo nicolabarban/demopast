@@ -57,6 +57,27 @@ format:
     </table>
     <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Population pyramid <span id="pyramidNote" style="font-weight:normal;color:#777;font-size:0.85rem;"></span></h5>
     <div><canvas id="pyramidChart" style="max-height:380px;"></canvas></div>
+
+    <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Population by age</h5>
+    <table id="ageTable" style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+      <thead>
+        <tr style="border-bottom:2px solid #ddd;">
+          <th style="text-align:left;padding:3px;">Age</th>
+          <th style="text-align:right;padding:3px;">Male</th>
+          <th style="text-align:right;padding:3px;">Female</th>
+          <th style="text-align:right;padding:3px;">Total</th>
+        </tr>
+      </thead>
+      <tbody id="ageTableBody"></tbody>
+      <tfoot>
+        <tr style="border-top:2px solid #ddd;font-weight:bold;">
+          <td style="padding:3px;">Total</td>
+          <td id="ageTotM" style="text-align:right;padding:3px;"></td>
+          <td id="ageTotF" style="text-align:right;padding:3px;"></td>
+          <td id="ageTotT" style="text-align:right;padding:3px;"></td>
+        </tr>
+      </tfoot>
+    </table>
     <div style="margin-top:0.75rem;font-size:0.9rem;">
       <a id="dlLink" href="#" download>census CSV (this year)</a>
       <span id="scanLinkWrap" style="display:none;"> ·
@@ -73,6 +94,9 @@ const AGES = ['0','1_4','5_9','10_14','15_19','20_24','25_29','30_34','35_39',
               '40_44','45_49','50_54','55_59','60_64','65_69','70_74','75_79','80_84','85plus'];
 const AGE_LABELS = ['0','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39',
                     '40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80-84','85+'];
+// single years of age per group: the pyramid divides counts by this so each
+// bar shows people per single year of age (same convention as the main atlas)
+const AGE_WIDTHS = [1,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5];
 // per-province original scans (TAVOLA II, Censimento 1861) from L. Lionello's selections
 const SCANS_1861 = {1:'001_Torino_1861.pdf', 3:'003_Novara_1861.pdf', 4:'004_Cuneo_1861.pdf',
   6:'006_Alessandria_1861.pdf', 8:'008_PortoMaurizio_1861.pdf', 10:'010_Genova_1861.pdf',
@@ -186,23 +210,58 @@ function showProvince(cod, name) {
   if (scan) document.getElementById('scanLink').href =
     '../downloads/sources/1861/provinces/' + scan;
 
+  fillAgeTable(prov);
+
   const ctx = document.getElementById('pyramidChart').getContext('2d');
   if (pyramidChart) pyramidChart.destroy();
   if (!prov) return;
-  const males = AGES.map(a => -(prov['m_' + a] || 0));
-  const females = AGES.map(a => prov['f_' + a] || 0);
+  // people per single year of age, oldest group on top (as in the main atlas)
+  const idx = AGES.map((a, i) => i).reverse();
+  const labels = idx.map(i => AGE_LABELS[i]);
+  const maleData = idx.map(i => -((prov['m_' + AGES[i]] || 0) / AGE_WIDTHS[i]));
+  const femaleData = idx.map(i => (prov['f_' + AGES[i]] || 0) / AGE_WIDTHS[i]);
+  const maxVal = Math.max(Math.max(...maleData.map(Math.abs)), Math.max(...femaleData));
   pyramidChart = new Chart(ctx, {
     type: 'bar',
-    data: {labels: AGE_LABELS,
+    data: {labels: labels,
       datasets: [
-        {label: 'Males', data: males, backgroundColor: '#6a51a3'},
-        {label: 'Females', data: females, backgroundColor: '#c994c7'}]},
+        {label: 'Male', data: maleData, backgroundColor: 'rgba(30, 64, 175, 0.85)',
+         borderColor: 'rgba(30, 64, 175, 1)', borderWidth: 0, borderRadius: 2},
+        {label: 'Female', data: femaleData, backgroundColor: 'rgba(190, 24, 93, 0.85)',
+         borderColor: 'rgba(190, 24, 93, 1)', borderWidth: 0, borderRadius: 2}]},
     options: {indexAxis: 'y', responsive: true, maintainAspectRatio: false,
       plugins: {legend: {position: 'bottom'},
-        tooltip: {callbacks: {label: c => c.dataset.label + ': ' + fmt(Math.abs(c.parsed.x))}}},
-      scales: {x: {stacked: true, ticks: {callback: v => fmt(Math.abs(v))}},
-               y: {stacked: true, reverse: true, ticks: {font: {size: 10}}}}}
+        title: {display: true, text: name + ' — ' + year, font: {size: 13}},
+        tooltip: {callbacks: {label: c =>
+          c.dataset.label + ': ' + fmt(Math.round(Math.abs(c.raw))) + ' / yr of age'}}},
+      scales: {x: {stacked: true, ticks: {callback: v => fmt(Math.round(Math.abs(v)))},
+                   suggestedMin: -maxVal * 1.1, suggestedMax: maxVal * 1.1},
+               y: {stacked: true, ticks: {font: {size: 10}}}}}
   });
+}
+
+function fillAgeTable(prov) {
+  const tbody = document.getElementById('ageTableBody');
+  tbody.innerHTML = '';
+  if (!prov) {
+    document.getElementById('ageTotM').textContent = '';
+    document.getElementById('ageTotF').textContent = '';
+    document.getElementById('ageTotT').textContent = '';
+    return;
+  }
+  AGES.forEach(function(a, i) {
+    const m = prov['m_' + a] || 0, f = prov['f_' + a] || 0, t = prov['t_' + a] || (m + f);
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid #eee';
+    tr.innerHTML = '<td style="padding:2px 4px;">' + AGE_LABELS[i] + '</td>' +
+      '<td style="text-align:right;padding:2px 4px;">' + fmt(m) + '</td>' +
+      '<td style="text-align:right;padding:2px 4px;">' + fmt(f) + '</td>' +
+      '<td style="text-align:right;padding:2px 4px;">' + fmt(t) + '</td>';
+    tbody.appendChild(tr);
+  });
+  document.getElementById('ageTotM').textContent = fmt(prov.male_pop);
+  document.getElementById('ageTotF').textContent = fmt(prov.female_pop);
+  document.getElementById('ageTotT').textContent = fmt(prov.total_pop);
 }
 
 function onEachFeature(feature, layer) {
