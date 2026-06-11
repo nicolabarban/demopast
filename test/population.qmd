@@ -234,6 +234,12 @@ structural dependency = (0-14 plus 65+) / 15-64; mean age from group midpoints.
 Map shows the historical provincial boundaries of each census year.</p>
 <p><strong>Download:</strong> per-year wide CSVs from the panel above, or the long-format
 source files on the production atlas.</p>
+<p><strong>Original source scans (1861):</strong> scanned tables from the
+<em>Censimento generale della popolazione del Regno d'Italia, 1861</em> (ed. 1864, Vol. II) —
+<a href="../downloads/sources/1861/censimento_1861_pop_eta_sesso_province_ed1864.pdf" download>
+population by age and sex, by province (PDF, 15&nbsp;MB)</a> ·
+<a href="../downloads/sources/1861/censimento_1861_riepilogo_eta_province_ed1864.pdf" download>
+summary by age group, by province (PDF, 0.8&nbsp;MB)</a>.</p>
 <p>Preliminary — test environment.</p>
 </div>
 ```
