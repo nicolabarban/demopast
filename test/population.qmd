@@ -1,0 +1,239 @@
+---
+title: "Population — DEMOPAST (test)"
+page-layout: full
+format:
+  html:
+    toc: false
+    include-in-header:
+      text: |
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+---
+
+```{=html}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+<div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
+  <strong>Test section</strong> — population by age and sex from the historical censuses (same data as the production atlas).
+  <a href="index.html">← back to test home</a>
+</div>
+
+<div class="slider-container">
+  <label for="yearSlider" class="year-label">Census year: <span id="yearDisplay">—</span></label><br>
+  <input type="range" id="yearSlider" min="0" max="0" step="1" value="0" style="width:60%;max-width:500px;">
+  <div id="yearTicks" style="display:flex;justify-content:space-between;max-width:500px;margin:0 auto;"></div>
+</div>
+
+<div style="text-align:center;margin:1rem 0;">
+  <label for="indSelect" style="font-weight:bold;">Indicator: </label>
+  <select id="indSelect" style="padding:4px 8px;font-size:1rem;">
+    <option value="total_pop">Total population</option>
+    <option value="mean_age">Mean age</option>
+    <option value="cwr">Child-woman ratio (0-4 / women 15-44, x1000)</option>
+    <option value="struct_dep">Structural dependency ratio (%)</option>
+    <option value="sex_ratio">Sex ratio (males per 100 females)</option>
+  </select>
+</div>
+
+<div style="display:flex;gap:1.5rem;align-items:flex-start;">
+  <div style="flex:0 0 38%;display:flex;flex-direction:column;gap:0.75rem;">
+    <div id="map" style="width:100%;height:560px;"></div>
+    <div id="legendWrapper">
+      <div class="legend-header">
+        <span class="legend-title">Legend</span>
+        <button id="legendToggle" type="button">Hide</button>
+      </div>
+      <div id="legendContent" class="map-legend"></div>
+    </div>
+  </div>
+  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:760px;overflow-y:auto;">
+    <h4 id="provName" style="margin-top:0;"></h4>
+    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+      <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Total population</td><td id="provTotal" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Males / Females</td><td id="provMF" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Mean age</td><td id="provMeanAge" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr><td style="padding:3px 4px;">Child-woman ratio</td><td id="provCwr" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+    </table>
+    <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Population pyramid <span id="pyramidNote" style="font-weight:normal;color:#777;font-size:0.85rem;"></span></h5>
+    <div><canvas id="pyramidChart" style="max-height:380px;"></canvas></div>
+    <div style="margin-top:0.75rem;font-size:0.9rem;">
+      <a id="dlLink" href="#" download>census CSV (this year)</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936];
+const GEO_AVAILABLE = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936];
+const COLORS = ['#fcfbfd','#efedf5','#dadaeb','#bcbddc','#9e9ac8','#807dba','#6a51a3','#4a1486'];
+const AGES = ['0','1_4','5_9','10_14','15_19','20_24','25_29','30_34','35_39',
+              '40_44','45_49','50_54','55_59','60_64','65_69','70_74','75_79','80_84','85plus'];
+const AGE_LABELS = ['0','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39',
+                    '40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80-84','85+'];
+
+const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
+  scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
+  touchZoom:false}).setView([41.5, 12.5], 6);
+
+let panel = {};      // year -> COD_PROV -> row object
+let geojsonCache = {};
+let currentLayer = null, currentBreaks = null, pyramidChart = null;
+let selected = null; // {cod, name}
+
+function getField() { return document.getElementById('indSelect').value; }
+function getYear() { return YEARS[document.getElementById('yearSlider').value]; }
+function geoYear(y) {
+  return GEO_AVAILABLE.reduce((a, b) => Math.abs(b - y) < Math.abs(a - y) ? b : a);
+}
+function fmt(n) { return (n == null || n === '') ? 'N/A' : Number(n).toLocaleString('en-US'); }
+
+function getValue(prov, field) {
+  if (!prov) return null;
+  if (field === 'sex_ratio') {
+    return prov.female_pop > 0 ? Math.round(prov.male_pop / prov.female_pop * 1000) / 10 : null;
+  }
+  return prov[field] != null && prov[field] !== '' ? prov[field] : null;
+}
+
+async function loadYear(y) {
+  const resp = await fetch('../data/census/census_' + y + '.csv');
+  if (!resp.ok) return;
+  const text = await resp.text();
+  panel[y] = {};
+  Papa.parse(text, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+    panel[y][r.COD_PROV] = r;
+  });
+}
+
+async function init() {
+  await Promise.all(YEARS.map(loadYear));
+  const slider = document.getElementById('yearSlider');
+  slider.max = YEARS.length - 1;
+  document.getElementById('yearTicks').innerHTML =
+    YEARS.map(y => '<span>' + y + '</span>').join('');
+  slider.addEventListener('input', updateMap);
+  document.getElementById('indSelect').addEventListener('change', updateMap);
+  updateMap();
+}
+
+function computeBreaks() {
+  const field = getField();
+  const base = panel[YEARS[0]] || {};
+  const values = Object.values(base).map(p => getValue(p, field)).filter(v => v != null && v > 0);
+  if (!values.length) return [0, 1];
+  values.sort((a, b) => a - b);
+  const breaks = [];
+  for (let i = 1; i <= 7; i++) {
+    breaks.push(values[Math.min(Math.floor(values.length * i / 8), values.length - 1)]);
+  }
+  return [...new Set(breaks)].sort((a, b) => a - b);
+}
+
+function getColor(v, breaks) {
+  if (v == null) return '#e5e7eb';
+  for (let i = breaks.length - 1; i >= 0; i--) {
+    if (v > breaks[i]) return COLORS[Math.min(i + 1, COLORS.length - 1)];
+  }
+  return COLORS[0];
+}
+
+function style(feature) {
+  const prov = (panel[getYear()] || {})[feature.properties.COD_PROV];
+  return {fillColor: getColor(getValue(prov, getField()), currentBreaks),
+          weight: 0.8, opacity: 1, color: '#94a3b8', fillOpacity: 0.85};
+}
+
+function showProvince(cod, name) {
+  selected = {cod: cod, name: name};
+  const year = getYear();
+  const prov = (panel[year] || {})[cod];
+  document.getElementById('provinceInfo').style.display = 'block';
+  document.getElementById('provName').textContent = name + ' (' + year + ')';
+  document.getElementById('provTotal').textContent = prov ? fmt(prov.total_pop) : 'N/A';
+  document.getElementById('provMF').textContent = prov ?
+    fmt(prov.male_pop) + ' / ' + fmt(prov.female_pop) : 'N/A';
+  document.getElementById('provMeanAge').textContent = prov ? fmt(prov.mean_age) : 'N/A';
+  document.getElementById('provCwr').textContent = prov ? fmt(prov.cwr) : 'N/A';
+  document.getElementById('pyramidNote').textContent = prov ? '— ' + year + ' census' : '(no data this year)';
+  document.getElementById('dlLink').href = '../data/census/census_' + year + '.csv';
+
+  const ctx = document.getElementById('pyramidChart').getContext('2d');
+  if (pyramidChart) pyramidChart.destroy();
+  if (!prov) return;
+  const males = AGES.map(a => -(prov['m_' + a] || 0));
+  const females = AGES.map(a => prov['f_' + a] || 0);
+  pyramidChart = new Chart(ctx, {
+    type: 'bar',
+    data: {labels: AGE_LABELS,
+      datasets: [
+        {label: 'Males', data: males, backgroundColor: '#6a51a3'},
+        {label: 'Females', data: females, backgroundColor: '#c994c7'}]},
+    options: {indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {position: 'bottom'},
+        tooltip: {callbacks: {label: c => c.dataset.label + ': ' + fmt(Math.abs(c.parsed.x))}}},
+      scales: {x: {stacked: true, ticks: {callback: v => fmt(Math.abs(v))}},
+               y: {stacked: true, reverse: true, ticks: {font: {size: 10}}}}}
+  });
+}
+
+function onEachFeature(feature, layer) {
+  layer.on({
+    mouseover: function(e) { e.target.setStyle({weight: 2, color: '#3f007d', fillOpacity: 1}); e.target.bringToFront(); },
+    mouseout: function(e) { if (currentLayer) currentLayer.resetStyle(e.target); },
+    click: function() { showProvince(feature.properties.COD_PROV, feature.properties.DEN_PROV); }
+  });
+}
+
+async function updateMap() {
+  const year = getYear();
+  document.getElementById('yearDisplay').textContent = year;
+  const gy = geoYear(year);
+  if (!geojsonCache[gy]) {
+    geojsonCache[gy] = await fetch('../data/geojson/province_' + gy + '.geojson').then(r => r.json());
+  }
+  currentBreaks = computeBreaks();
+  if (currentLayer) map.removeLayer(currentLayer);
+  currentLayer = L.geoJSON(geojsonCache[gy], {style: style, onEachFeature: onEachFeature}).addTo(map);
+  map.fitBounds(currentLayer.getBounds(), {padding: [10, 10]});
+  updateLegend();
+  if (selected) showProvince(selected.cod, selected.name);
+}
+
+document.getElementById('legendToggle').addEventListener('click', function() {
+  const hidden = document.getElementById('legendWrapper').classList.toggle('legend-hidden');
+  this.textContent = hidden ? 'Show' : 'Hide';
+});
+
+function updateLegend() {
+  const div = document.getElementById('legendContent');
+  if (!div || !currentBreaks) return;
+  const label = document.getElementById('indSelect').selectedOptions[0].text;
+  let html = '<strong>' + label + '</strong>';
+  html += '<div class="legend-row"><i style="background:' + COLORS[0] + '"></i><span>&lt; ' + fmt(currentBreaks[0]) + '</span></div>';
+  for (let i = 0; i < currentBreaks.length; i++) {
+    const next = currentBreaks[i + 1];
+    const clr = COLORS[Math.min(i + 1, COLORS.length - 1)];
+    html += next
+      ? '<div class="legend-row"><i style="background:' + clr + '"></i><span>' + fmt(currentBreaks[i]) + '–' + fmt(next) + '</span></div>'
+      : '<div class="legend-row"><i style="background:' + clr + '"></i><span>&gt; ' + fmt(currentBreaks[i]) + '</span></div>';
+  }
+  html += '<div class="legend-row"><i style="background:#e5e7eb"></i><span>no data</span></div>';
+  div.innerHTML = html;
+}
+
+init();
+</script>
+
+<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
+<p><strong>Sources.</strong> Population by age and sex: Italian historical censuses
+(1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936), age-adjusted province-level data
+already published on the production DEMOPAST atlas. 19 age groups (0, 1-4, then five-year
+groups to 85+). Derived indicators: child-woman ratio = population 0-4 per 1,000 women 15-44;
+structural dependency = (0-14 plus 65+) / 15-64; mean age from group midpoints.
+Map shows the historical provincial boundaries of each census year.</p>
+<p><strong>Download:</strong> per-year wide CSVs from the panel above, or the long-format
+source files on the production atlas.</p>
+<p>Preliminary — test environment.</p>
+</div>
+```

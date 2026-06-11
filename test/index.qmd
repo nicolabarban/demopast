@@ -15,6 +15,32 @@ format:
 
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-top:1rem;">
 
+  <a href="population.html" style="text-decoration:none;color:inherit;">
+    <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <h3 style="margin-top:0;color:#4a1486;">👥 Population</h3>
+      <p style="font-size:0.95rem;">Population by age and sex by province, censuses 1861–1936.</p>
+      <ul style="font-size:0.85rem;color:#555;">
+        <li>Eight censuses: 1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936</li>
+        <li>Age pyramids, 19 age groups (0, 1–4, 5–9, … 85+)</li>
+        <li>Derived indicators: mean age, sex ratio, child-woman ratio, dependency</li>
+      </ul>
+      <p style="font-weight:bold;color:#16a34a;">● Data available</p>
+    </div>
+  </a>
+
+  <a href="fertility.html" style="text-decoration:none;color:inherit;">
+    <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <h3 style="margin-top:0;color:#d94801;">👶 Fertility</h3>
+      <p style="font-size:0.95rem;">Live births and crude birth rates by province, 1863–1931.</p>
+      <ul style="font-size:0.85rem;color:#555;">
+        <li>Annual series 1863–1881; benchmarks 1901, 1911, 1921, 1931</li>
+        <li>Crude birth rate (‰), census-interpolated denominators</li>
+        <li>Sources: Movimento dello stato civile</li>
+      </ul>
+      <p style="font-weight:bold;color:#16a34a;">● Data available</p>
+    </div>
+  </a>
+
   <a href="mortality.html" style="text-decoration:none;color:inherit;">
     <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <h3 style="margin-top:0;color:#99000d;">☠ Mortality</h3>
