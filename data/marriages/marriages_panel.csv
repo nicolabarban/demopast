@@ -618,7 +618,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1872,840,6.58
 10,Genova,1872,5690,7.9
 13,Como,1872,4329,8.99
-14,Sondrio,1872,837,7.5
+14,Sondrio,1872,837,7.55
 15,Milano,1872,9370,9.19
 16,Bergamo,1872,2730,7.38
 17,Brescia,1872,3552,7.77
@@ -687,7 +687,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1873,986,7.7
 10,Genova,1873,5585,7.71
 13,Como,1873,4259,8.78
-14,Sondrio,1873,815,7.23
+14,Sondrio,1873,815,7.32
 15,Milano,1873,9198,8.93
 16,Bergamo,1873,2772,7.44
 17,Brescia,1873,3757,8.19
@@ -756,7 +756,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1874,899,6.99
 10,Genova,1874,5574,7.65
 13,Como,1874,4308,8.81
-14,Sondrio,1874,809,7.1
+14,Sondrio,1874,809,7.23
 15,Milano,1874,8636,8.3
 16,Bergamo,1874,2903,7.75
 17,Brescia,1874,3587,7.79
@@ -825,7 +825,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1875,1070,8.29
 10,Genova,1875,5772,7.87
 13,Como,1875,4574,9.29
-14,Sondrio,1875,883,7.67
+14,Sondrio,1875,883,7.86
 15,Milano,1875,9558,9.09
 16,Bergamo,1875,3074,8.15
 17,Brescia,1875,3633,7.87
@@ -894,7 +894,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1876,995,7.67
 10,Genova,1876,5606,7.6
 13,Como,1876,4723,9.52
-14,Sondrio,1876,938,8.06
+14,Sondrio,1876,938,8.31
 15,Milano,1876,9580,9.02
 16,Bergamo,1876,3184,8.4
 17,Brescia,1876,3771,8.14
@@ -963,7 +963,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1877,910,6.99
 10,Genova,1877,5296,7.14
 13,Como,1877,3965,7.93
-14,Sondrio,1877,843,7.17
+14,Sondrio,1877,843,7.43
 15,Milano,1877,8601,8.02
 16,Bergamo,1877,2919,7.65
 17,Brescia,1877,3485,7.49
@@ -1032,7 +1032,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1878,949,7.26
 10,Genova,1878,4868,6.52
 13,Como,1878,3747,7.44
-14,Sondrio,1878,880,7.41
+14,Sondrio,1878,880,7.73
 15,Milano,1878,8534,7.88
 16,Bergamo,1878,2847,7.42
 17,Brescia,1878,3232,6.92
@@ -1101,7 +1101,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1879,858,6.54
 10,Genova,1879,5261,7.0
 13,Como,1879,3900,7.68
-14,Sondrio,1879,767,6.4
+14,Sondrio,1879,767,6.7
 15,Milano,1879,8940,8.17
 16,Bergamo,1879,2813,7.28
 17,Brescia,1879,3346,7.14
@@ -1170,7 +1170,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1880,951,7.22
 10,Genova,1880,4903,6.49
 13,Como,1880,3629,7.1
-14,Sondrio,1880,713,5.89
+14,Sondrio,1880,713,6.21
 15,Milano,1880,8132,7.36
 16,Bergamo,1880,2738,7.05
 17,Brescia,1880,3195,6.8
@@ -1239,7 +1239,7 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 8,Porto Maurizio,1881,943,7.13
 10,Genova,1881,5390,7.09
 13,Como,1881,3791,7.36
-14,Sondrio,1881,663,5.42
+14,Sondrio,1881,663,5.75
 15,Milano,1881,8928,8.01
 16,Bergamo,1881,2782,7.12
 17,Brescia,1881,3403,7.22
@@ -1301,75 +1301,75 @@ COD_PROV,DEN_PROV,year,marriages,nuptiality
 89,Siracusa,1881,3008,8.81
 90,Sassari,1881,1987,7.61
 92,Cagliari,1881,3006,7.15
-1,Torino,1901,7884,7.27
-3,Novara,1901,5698,7.92
-4,Cuneo,1901,4880,7.91
-6,Alessandria,1901,6241,7.93
-8,Porto Maurizio,1901,968,6.2
-10,Genova,1901,6039,6.65
-13,Como,1901,4649,8.24
-14,Sondrio,1901,938,6.42
-15,Milano,1901,11276,8.16
-16,Bergamo,1901,3510,7.46
-17,Brescia,1901,3824,7.34
-18,Pavia,1901,3769,7.52
-19,Cremona,1901,2334,6.94
-20,Mantova,1901,2340,7.29
-23,Verona,1901,2953,7.16
-24,Vicenza,1901,3248,7.27
-25,Belluno,1901,1685,8.49
-26,Treviso,1901,2985,7.21
-27,Venezia,1901,2640,6.62
-28,Padova,1901,2994,6.67
-29,Rovigo,1901,1613,7.15
-30,Udine,1901,4625,7.91
-33,Piacenza,1901,1768,6.94
-34,Parma,1901,2082,6.61
-35,Reggio nell'Emilia,1901,2021,7.36
-36,Modena,1901,2306,7.1
-37,Bologna,1901,3713,7.24
-38,Ferrara,1901,2297,8.06
-39,Ravenna,1901,1581,6.64
-40,Forlì,1901,2335,8.18
+1,Torino,1901,7884,7.02
+3,Novara,1901,5698,7.67
+4,Cuneo,1901,4880,7.66
+6,Alessandria,1901,6241,7.7
+8,Porto Maurizio,1901,968,6.78
+10,Genova,1901,6039,6.47
+13,Como,1901,4649,8.02
+14,Sondrio,1901,938,7.48
+15,Milano,1901,11276,7.82
+16,Bergamo,1901,3510,7.65
+17,Brescia,1901,3824,7.11
+18,Pavia,1901,3769,7.59
+19,Cremona,1901,2334,7.12
+20,Mantova,1901,2340,7.51
+23,Verona,1901,2953,6.99
+24,Vicenza,1901,3248,7.26
+25,Belluno,1901,1685,8.74
+26,Treviso,1901,2985,7.25
+27,Venezia,1901,2640,6.57
+28,Padova,1901,2994,6.76
+29,Rovigo,1901,1613,7.27
+30,Udine,1901,4625,7.81
+33,Piacenza,1901,1768,7.22
+34,Parma,1901,2082,7.08
+35,Reggio nell'Emilia,1901,2021,7.37
+36,Modena,1901,2306,7.3
+37,Bologna,1901,3713,7.04
+38,Ferrara,1901,2297,8.46
+39,Ravenna,1901,1581,6.72
+40,Forlì,1901,2335,8.32
 41,Pesaro e Urbino,1901,1772,6.98
-42,Ancona,1901,2204,6.92
-43,Macerata,1901,1815,6.96
-44,Ascoli Piceno,1901,1586,6.17
-45,Massa e Carrara,1901,1599,8.11
-46,Lucca,1901,2318,6.91
-48,Firenze,1901,6829,7.56
-49,Livorno,1901,882,5.94
-50,Pisa,1901,2449,7.51
-51,Arezzo,1901,1884,6.08
-52,Siena,1901,1604,6.84
-53,Grosseto,1901,957,5.37
-54,Umbria,1901,4685,6.97
-58,Roma,1901,7932,6.85
-61,Caserta,1901,5668,7.51
-62,Benevento,1901,1783,6.15
-63,Napoli,1901,7660,6.92
-64,Avellino,1901,2877,7.23
-65,Salerno,1901,4028,7.35
-66,Aquila degli Abruzzi,1901,3389,8.17
-67,Teramo,1901,2143,6.9
-69,Chieti,1901,2874,7.16
-70,Campobasso,1901,3076,8.22
-71,Foggia,1901,2979,7.18
-72,Bari delle Puglie,1901,5129,6.27
-75,Lecce,1901,3837,5.22
-76,Potenza,1901,3548,6.94
-78,Cosenza,1901,3476,7.45
-79,Catanzaro,1901,3381,6.79
-80,Reggio di Calabria,1901,2983,6.91
-81,Trapani,1901,2420,6.69
-82,Palermo,1901,5878,7.7
-83,Messina,1901,3620,6.41
-84,Girgenti,1901,3226,8.75
-85,Caltanissetta,1901,2806,8.53
-87,Catania,1901,5300,7.75
-89,Siracusa,1901,3400,7.95
+42,Ancona,1901,2204,7.3
+43,Macerata,1901,1815,7.0
+44,Ascoli Piceno,1901,1586,6.48
+45,Massa e Carrara,1901,1599,8.19
+46,Lucca,1901,2318,7.26
+48,Firenze,1901,6829,7.28
+49,Livorno,1901,882,7.12
+50,Pisa,1901,2449,7.64
+51,Arezzo,1901,1884,6.94
+52,Siena,1901,1604,6.86
+53,Grosseto,1901,957,6.62
+54,Umbria,1901,4685,7.02
+58,Roma,1901,7932,6.63
+61,Caserta,1901,5668,7.22
+62,Benevento,1901,1783,6.96
+63,Napoli,1901,7660,6.66
+64,Avellino,1901,2877,7.15
+65,Salerno,1901,4028,7.14
+66,Aquila degli Abruzzi,1901,3389,8.55
+67,Teramo,1901,2143,6.98
+69,Chieti,1901,2874,7.76
+70,Campobasso,1901,3076,8.4
+71,Foggia,1901,2979,7.01
+72,Bari delle Puglie,1901,5129,6.21
+75,Lecce,1901,3837,5.44
+76,Potenza,1901,3548,7.24
+78,Cosenza,1901,3476,7.48
+79,Catanzaro,1901,3381,7.1
+80,Reggio di Calabria,1901,2983,6.96
+81,Trapani,1901,2420,6.58
+82,Palermo,1901,5878,7.5
+83,Messina,1901,3620,6.66
+84,Girgenti,1901,3226,8.7
+85,Caltanissetta,1901,2806,8.57
+87,Catania,1901,5300,7.53
+89,Siracusa,1901,3400,7.97
 90,Sassari,1901,2091,6.8
-92,Cagliari,1901,3585,7.56
+92,Cagliari,1901,3585,7.42
 1,Torino,1911,8416,6.95
 3,Novara,1911,5969,7.9
 4,Cuneo,1911,4484,6.94
