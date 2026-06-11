@@ -1,0 +1,272 @@
+---
+title: "Life tables — DEMOPAST (test)"
+page-layout: full
+format:
+  html:
+    toc: false
+    include-in-header:
+      text: |
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+---
+
+```{=html}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+<div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
+  <strong>Test section</strong> — provincial abridged life tables computed from
+  deaths by age &amp; sex and census populations.
+  <a href="index.html">← back to test home</a>
+</div>
+
+<div style="text-align:center;margin:1rem 0;">
+  <label style="font-weight:bold;">Year: </label>
+  <select id="yearSelect" style="padding:4px 8px;font-size:1rem;">
+    <option value="1881">1881</option>
+    <option value="1921">1921</option>
+  </select>
+  &nbsp;&nbsp;
+  <label style="font-weight:bold;">Sex (map): </label>
+  <select id="sexSelect" style="padding:4px 8px;font-size:1rem;">
+    <option value="T">Total</option>
+    <option value="M">Males</option>
+    <option value="F">Females</option>
+  </select>
+  &nbsp;&nbsp;
+  <span style="font-size:0.95rem;color:#555;">Map shows life expectancy at birth (e₀)</span>
+</div>
+
+<div style="display:flex;gap:1.5rem;align-items:flex-start;">
+  <div style="flex:0 0 38%;display:flex;flex-direction:column;gap:0.75rem;">
+    <div id="map" style="width:100%;height:560px;"></div>
+    <div id="legendWrapper">
+      <div class="legend-header">
+        <span class="legend-title">Legend</span>
+        <button id="legendToggle" type="button">Hide</button>
+      </div>
+      <div id="legendContent" class="map-legend"></div>
+    </div>
+  </div>
+  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:760px;overflow-y:auto;">
+    <h4 id="provName" style="margin-top:0;"></h4>
+    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin-bottom:0.75rem;">
+      <thead><tr style="border-bottom:2px solid #ccc;">
+        <th style="text-align:left;padding:3px 4px;">Life expectancy at age…</th>
+        <th style="text-align:right;padding:3px 4px;">0</th>
+        <th style="text-align:right;padding:3px 4px;">1</th>
+        <th style="text-align:right;padding:3px 4px;">5</th>
+        <th style="text-align:right;padding:3px 4px;">15</th>
+        <th style="text-align:right;padding:3px 4px;">30</th>
+        <th style="text-align:right;padding:3px 4px;">50</th>
+        <th style="text-align:right;padding:3px 4px;">65</th>
+        <th style="text-align:right;padding:3px 4px;">80</th>
+      </tr></thead>
+      <tbody id="exTable"></tbody>
+    </table>
+    <h5 style="margin-bottom:0.25rem;">Survival curve l<sub>x</sub> (per 100,000 born)</h5>
+    <div><canvas id="lxChart" style="max-height:260px;"></canvas></div>
+    <h5 style="margin-top:1rem;margin-bottom:0.25rem;">Death probability q<sub>x</sub> (log scale)</h5>
+    <div><canvas id="qxChart" style="max-height:220px;"></canvas></div>
+    <details style="margin-top:0.75rem;font-size:0.85rem;">
+      <summary>Full life table (total population)</summary>
+      <table id="fullTable" style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-top:0.5rem;"></table>
+    </details>
+  </div>
+</div>
+
+<script>
+const FILES = {1881: '../data/mortality/lifetables_1881.csv',
+               1921: '../data/mortality/lifetables_1921.csv'};
+const COLORS = ['#fff7fb','#ece2f0','#d0d1e6','#a6bddb','#67a9cf','#3690c0','#02818a','#016450'];
+const SEXCLR = {M: '#1d4ed8', F: '#be123c', T: '#475569'};
+const AGE_PTS = [0, 1, 5, 15, 30, 50, 65, 80];
+
+const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
+  scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
+  touchZoom:false}).setView([41.5, 12.5], 6);
+
+let lt = {};          // year -> sex -> cod -> [rows by age_lo]
+let geojsonCache = {}, currentLayer = null, currentBreaks = null;
+let lxChart = null, qxChart = null, selected = null;
+
+const getYear = () => +document.getElementById('yearSelect').value;
+const getSex = () => document.getElementById('sexSelect').value;
+
+function e0(year, sex, cod) {
+  const rows = ((lt[year] || {})[sex] || {})[cod];
+  return rows ? rows[0].ex : null;
+}
+
+async function loadYear(year) {
+  if (lt[year]) return;
+  lt[year] = {T: {}, M: {}, F: {}};
+  const text = await fetch(FILES[year]).then(r => r.text());
+  Papa.parse(text, {header:true, skipEmptyLines:true, dynamicTyping:true}).data
+    .forEach(function(r) {
+      const bySex = lt[year][r.sex];
+      if (!bySex) return;
+      (bySex[r.COD_PROV] = bySex[r.COD_PROV] || []).push(r);
+    });
+  for (const s of ['T','M','F'])
+    Object.values(lt[year][s]).forEach(a => a.sort((x, y) => x.age_lo - y.age_lo));
+}
+
+function computeBreaks() {
+  const values = Object.values(lt[getYear()][getSex()])
+    .map(rows => rows[0].ex).filter(v => v != null).sort((a, b) => a - b);
+  if (!values.length) return [0, 1];
+  const breaks = [];
+  for (let i = 1; i <= 7; i++)
+    breaks.push(values[Math.min(Math.floor(values.length * i / 8), values.length - 1)]);
+  return [...new Set(breaks)].sort((a, b) => a - b);
+}
+
+function getColor(v, breaks) {
+  if (v == null) return '#e5e7eb';
+  for (let i = breaks.length - 1; i >= 0; i--)
+    if (v > breaks[i]) return COLORS[Math.min(i + 1, COLORS.length - 1)];
+  return COLORS[0];
+}
+
+function style(feature) {
+  const v = e0(getYear(), getSex(), feature.properties.COD_PROV);
+  return {fillColor: getColor(v, currentBreaks), weight: 0.8, opacity: 1,
+          color: '#94a3b8', fillOpacity: 0.85};
+}
+
+function onEachFeature(feature, layer) {
+  layer.on({
+    mouseover: function(e) { e.target.setStyle({weight: 2, color: '#0f766e', fillOpacity: 1}); e.target.bringToFront(); },
+    mouseout: function(e) { if (currentLayer) currentLayer.resetStyle(e.target); },
+    click: function() {
+      selected = {cod: feature.properties.COD_PROV, name: feature.properties.DEN_PROV};
+      showProvince();
+    }
+  });
+}
+
+function fmtAge(g) { return g === '0' ? '0' : g === '1_4' ? '1–4' : g === '85plus' ? '85+' : String(g).replace('_', '–'); }
+
+function showProvince() {
+  if (!selected) return;
+  const year = getYear(), cod = selected.cod;
+  const data = lt[year];
+  const tRows = (data.T || {})[cod];
+  document.getElementById('provinceInfo').style.display = 'block';
+  document.getElementById('provName').textContent = selected.name + ' — life table ' + year;
+  if (!tRows) {
+    document.getElementById('exTable').innerHTML =
+      '<tr><td colspan="9">No life table for this province in ' + year + '</td></tr>';
+    if (lxChart) lxChart.destroy(); if (qxChart) qxChart.destroy();
+    lxChart = qxChart = null;
+    document.getElementById('fullTable').innerHTML = '';
+    return;
+  }
+  // ex summary table for T / M / F
+  let html = '';
+  for (const s of ['T','M','F']) {
+    const rows = (data[s] || {})[cod];
+    if (!rows) continue;
+    const label = {T:'Total', M:'Males', F:'Females'}[s];
+    html += '<tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;color:' +
+      SEXCLR[s] + ';font-weight:bold;">' + label + '</td>' +
+      AGE_PTS.map(a => {
+        const r = rows.find(x => x.age_lo === a);
+        return '<td style="text-align:right;padding:3px 4px;">' + (r ? r.ex.toFixed(1) : '—') + '</td>';
+      }).join('') + '</tr>';
+  }
+  document.getElementById('exTable').innerHTML = html;
+
+  const mkDatasets = field => ['M','F'].map(s => {
+    const rows = (data[s] || {})[cod] || [];
+    return {label: {M:'Males', F:'Females'}[s],
+            data: rows.map(r => ({x: r.age_lo, y: r[field]})),
+            borderColor: SEXCLR[s], backgroundColor: SEXCLR[s],
+            pointRadius: 2, borderWidth: 1.5, tension: 0.2};
+  });
+  if (lxChart) lxChart.destroy();
+  lxChart = new Chart(document.getElementById('lxChart').getContext('2d'), {
+    type: 'line', data: {datasets: mkDatasets('lx')},
+    options: {responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {position: 'bottom'}},
+      scales: {x: {type: 'linear', min: 0, max: 90, title: {display: true, text: 'age'}},
+               y: {min: 0, max: 100000}}}
+  });
+  if (qxChart) qxChart.destroy();
+  qxChart = new Chart(document.getElementById('qxChart').getContext('2d'), {
+    type: 'line', data: {datasets: mkDatasets('qx')},
+    options: {responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {position: 'bottom'}},
+      scales: {x: {type: 'linear', min: 0, max: 90, title: {display: true, text: 'age'}},
+               y: {type: 'logarithmic'}}}
+  });
+
+  document.getElementById('fullTable').innerHTML =
+    '<tr style="border-bottom:2px solid #ccc;"><th style="text-align:left;">age</th>' +
+    ['mx','qx','lx','dx','Lx','Tx','ex'].map(h => '<th style="text-align:right;">' + h + '</th>').join('') + '</tr>' +
+    tRows.map(r =>
+      '<tr style="border-bottom:1px solid #eee;"><td>' + fmtAge(r.age_group) + '</td>' +
+      ['mx','qx'].map(k => '<td style="text-align:right;">' + r[k].toFixed(5) + '</td>').join('') +
+      ['lx','dx','Lx','Tx'].map(k => '<td style="text-align:right;">' + Math.round(r[k]).toLocaleString('en-US') + '</td>').join('') +
+      '<td style="text-align:right;font-weight:bold;">' + r.ex.toFixed(2) + '</td></tr>').join('');
+}
+
+async function updateMap() {
+  const year = getYear();
+  await loadYear(year);
+  if (!geojsonCache[year]) {
+    geojsonCache[year] = await fetch('../data/geojson/province_' + year + '.geojson').then(r => r.json());
+  }
+  currentBreaks = computeBreaks();
+  if (currentLayer) map.removeLayer(currentLayer);
+  currentLayer = L.geoJSON(geojsonCache[year], {style: style, onEachFeature: onEachFeature}).addTo(map);
+  map.fitBounds(currentLayer.getBounds(), {padding: [10, 10]});
+  updateLegend();
+  showProvince();
+}
+
+document.getElementById('yearSelect').addEventListener('change', updateMap);
+document.getElementById('sexSelect').addEventListener('change', updateMap);
+document.getElementById('legendToggle').addEventListener('click', function() {
+  const hidden = document.getElementById('legendWrapper').classList.toggle('legend-hidden');
+  this.textContent = hidden ? 'Show' : 'Hide';
+});
+
+function updateLegend() {
+  const div = document.getElementById('legendContent');
+  if (!div || !currentBreaks) return;
+  const sexLabel = document.getElementById('sexSelect').selectedOptions[0].text;
+  let html = '<strong>e₀ (' + sexLabel + '), years</strong>';
+  html += '<div class="legend-row"><i style="background:' + COLORS[0] + '"></i><span>&lt; ' + currentBreaks[0].toFixed(1) + '</span></div>';
+  for (let i = 0; i < currentBreaks.length; i++) {
+    const next = currentBreaks[i + 1];
+    const clr = COLORS[Math.min(i + 1, COLORS.length - 1)];
+    html += next
+      ? '<div class="legend-row"><i style="background:' + clr + '"></i><span>' + currentBreaks[i].toFixed(1) + '–' + next.toFixed(1) + '</span></div>'
+      : '<div class="legend-row"><i style="background:' + clr + '"></i><span>&gt; ' + currentBreaks[i].toFixed(1) + '</span></div>';
+  }
+  html += '<div class="legend-row"><i style="background:#e5e7eb"></i><span>no data</span></div>';
+  div.innerHTML = html;
+}
+
+updateMap();
+</script>
+
+<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
+<p><strong>Method.</strong> Abridged period life tables (Chiang) by province and sex, 19 age
+groups (0, 1–4, then 5-year groups to 85+), computed from deaths by age and sex
+(<em>Movimento dello stato civile</em>) and census populations: <strong>1881</strong> (deaths
+1879–1881 averaged around the 1881 census) and <strong>1921</strong> (deaths 1921, census 1921).
+a₀ = 0.3, ₄a₁ = 1.5, ₙaₓ = n/2, open interval 85+ closed with L = l/m. Provincial tables are
+preliminary: small-province death counts make single-year mₓ noisy at old ages.</p>
+<p>Compartimento-level tables for 1901, 1911, 1931 and 1936 are available below; national
+e₀ from these tables matches the official ISTAT period tables (43.4 / 44.4 / 54.9 / 56.8).</p>
+<p><strong>Download:</strong>
+<a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a> ·
+<a href="../data/mortality/lifetables_1921.csv" download>lifetables_1921.csv</a> ·
+<a href="../data/mortality/lifetables_comp.csv" download>lifetables_comp.csv</a> ·
+<a href="../data/mortality/e0_comp.csv" download>e0_comp.csv</a></p>
+<p>Preliminary — test environment.</p>
+</div>
+```
