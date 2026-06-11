@@ -1,19 +1,13 @@
 # DEMOPAST data plausibility report
 
-Flags: **83 ERROR**, 501 WARNING, 412 INFO
+Flags: **67 ERROR**, 471 WARNING, 412 INFO
 
-## ERROR (83)
+## ERROR (67)
 
 | dataset | where | check | detail |
 |---|---|---|---|
-| census | Alessandria 1861->1871 | intercensal_jump | 208,760 -> 683,360 (x3.27) |
-| census | Cuneo 1861->1871 | intercensal_jump | 260,671 -> 617,860 (x2.37) |
-| census | Genova 1861->1871 | intercensal_jump | 219,544 -> 715,378 (x3.26) |
 | census | Grosseto 1881->1901 | intercensal_jump | 114,289 -> 178,102 (x1.56) |
-| census | Novara 1861->1871 | intercensal_jump | 256,023 -> 624,985 (x2.44) |
-| census | PortoMaurizio 1861->1871 | intercensal_jump | 227,359 -> 127,053 (x0.56) |
-| census | Sondrio 1861->1871 | intercensal_jump | 308,576 -> 110,374 (x0.36) |
-| census | Torino 1861->1871 | intercensal_jump | 562,287 -> 973,016 (x1.73) |
+| census | Palermo 1861->1871 | intercensal_jump | 384,526 -> 617,618 (x1.61) |
 | census | AscoliPiceno 1931 | t_0!=m+f | 7,641 != 3,765+3,696 (off 180) |
 | census | Messina 1871 | t_0!=m+f | 10,385 != 5,297+5,034 (off 54) |
 | census | Imperia 1936 | t_10_14!=m+f | 11,855 != 6,148+6,007 (off 300) |
@@ -66,22 +60,12 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | census | ReggioCalabria 1911 | total!=M+F | 443,611 != 212,964+231,647 (off 1,000) |
 | census | Roma 1931 | total!=M+F | 1,575,277 != 795,089+772,900 (off 7,288) |
 | census | Terni 1936 | total!=M+F | 191,547 != 97,260+94,787 (off 500) |
-| fertility | Alessandria 1863 | cbr_implausible | cbr=82.55 |
-| fertility | Alessandria 1864 | cbr_implausible | cbr=70.35 |
 | fertility | Fiume 1931 | cbr_implausible | cbr=5.8 |
-| fertility | Genova 1863 | cbr_implausible | cbr=77.25 |
 | fertility | Mantova 1865 | cbr_implausible | cbr=5.16 |
-| marriages | Alessandria 1863 | nuptiality_implausible | nuptiality=19.58 |
-| marriages | Alessandria 1864 | nuptiality_implausible | nuptiality=17.06 |
-| marriages | Alessandria 1865 | nuptiality_implausible | nuptiality=17.7 |
 | marriages | Ferrara 1866 | nuptiality_implausible | nuptiality=1.68 |
 | marriages | Fiume 1931 | nuptiality_implausible | nuptiality=1.93 |
-| marriages | Genova 1863 | nuptiality_implausible | nuptiality=19.67 |
-| marriages | Genova 1864 | nuptiality_implausible | nuptiality=16.69 |
-| marriages | Genova 1865 | nuptiality_implausible | nuptiality=18.55 |
-| marriages | Girgenti 1866 | nuptiality_implausible | nuptiality=2.92 |
+| marriages | Girgenti 1866 | nuptiality_implausible | nuptiality=2.53 |
 | marriages | Mantova 1865 | nuptiality_implausible | nuptiality=1.2 |
-| marriages | Novara 1865 | nuptiality_implausible | nuptiality=16.29 |
 | marriages | Pesaro e Urbino 1866 | nuptiality_implausible | nuptiality=2.94 |
 | marriages | Roma 1872 | nuptiality_implausible | nuptiality=2.98 |
 | migration | Belluno 1911 | emig_rate_implausible | emig_rate=87.24 |
@@ -90,17 +74,18 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | migration | Belluno 1914 | emig_rate_implausible | emig_rate=82.21 |
 | mortality | Trapani 1881 | cdr_implausible | cdr=0.95 |
 
-## WARNING (501)
+## WARNING (471)
 
 | dataset | where | check | detail |
 |---|---|---|---|
 | census | AbruzzoUlterioreI 1861->1871 | intercensal_growth | -1.77%/yr (293,870 -> 245,881) |
+| census | Brescia 1861->1871 | intercensal_growth | -2.08%/yr (562,287 -> 455,470) |
 | census | Catania 1921->1931 | intercensal_growth | -2.35%/yr (869,684 -> 685,369) |
-| census | Como 1861->1871 | intercensal_growth | -3.00%/yr (647,943 -> 477,646) |
 | census | Como 1921->1931 | intercensal_growth | -2.52%/yr (628,980 -> 487,186) |
 | census | Cremona 1931->1936 | intercensal_growth | -1.62%/yr (400,834 -> 369,466) |
 | census | Firenze 1921->1931 | intercensal_growth | -2.07%/yr (1,035,968 -> 840,043) |
 | census | Genova 1921->1931 | intercensal_growth | -3.38%/yr (1,171,838 -> 831,269) |
+| census | Girgenti 1861->1871 | intercensal_growth | -2.66%/yr (376,957 -> 287,763) |
 | census | Grosseto 1901->1911 | intercensal_growth | -1.93%/yr (178,102 -> 146,634) |
 | census | MassaCarrara 1921->1931 | intercensal_growth | -1.62%/yr (223,346 -> 189,622) |
 | census | Napoli 1921->1931 | intercensal_growth | +3.56%/yr (1,461,112 -> 2,073,825) |
@@ -116,15 +101,13 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | census | Novara 1921->1931 | intercensal_jump | 723,269 -> 389,312 (x0.54) (possible 1927/1935 boundary change) |
 | census | Siracusa 1921->1931 | intercensal_jump | 526,953 -> 284,193 (x0.54) (possible 1927/1935 boundary change) |
 | census | AbruzzoUlterioreI 1861 | mean_age | 39.4 |
-| census | Brescia 1861 | mean_age | 42.7 |
+| census | Girgenti 1861 | mean_age | 42.7 |
 | census | COD_PROV 14 1881 | province_missing | present in 1871 and 1901, absent in 1881 (Sondrio) |
 | census | Aquila 1881 | sex_ratio | M/F = 87.0 per 100 |
 | census | Aquila 1911 | sex_ratio | M/F = 86.9 per 100 |
 | census | AquiladegliAbruzzi 1871 | sex_ratio | M/F = 87.8 per 100 |
 | census | Belluno 1911 | sex_ratio | M/F = 81.8 per 100 |
 | census | Belluno 1931 | sex_ratio | M/F = 86.9 per 100 |
-| census | Bergamo 1861 | sex_ratio | M/F = 298.5 per 100 |
-| census | Brescia 1861 | sex_ratio | M/F = 153.8 per 100 |
 | census | Caltanissetta 1861 | sex_ratio | M/F = 113.0 per 100 |
 | census | Campobasso 1911 | sex_ratio | M/F = 83.8 per 100 |
 | census | Capobasso 1931 | sex_ratio | M/F = 87.5 per 100 |
@@ -136,6 +119,7 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | census | Cosenza 1931 | sex_ratio | M/F = 87.8 per 100 |
 | census | Cremona 1931 | sex_ratio | M/F = 80.9 per 100 |
 | census | Firenze 1936 | sex_ratio | M/F = 85.4 per 100 |
+| census | Girgenti 1861 | sex_ratio | M/F = 153.8 per 100 |
 | census | Grosseto 1861 | sex_ratio | M/F = 135.4 per 100 |
 | census | Grosseto 1871 | sex_ratio | M/F = 130.3 per 100 |
 | census | Grosseto 1881 | sex_ratio | M/F = 129.0 per 100 |
@@ -143,6 +127,7 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | census | Lucca 1911 | sex_ratio | M/F = 87.6 per 100 |
 | census | Lucca 1931 | sex_ratio | M/F = 87.8 per 100 |
 | census | Novara 1911 | sex_ratio | M/F = 85.9 per 100 |
+| census | Palermo 1861 | sex_ratio | M/F = 298.5 per 100 |
 | census | Roma 1871 | sex_ratio | M/F = 115.9 per 100 |
 | census | Roma 1881 | sex_ratio | M/F = 113.6 per 100 |
 | census | Siena 1861 | sex_ratio | M/F = 114.9 per 100 |
@@ -150,30 +135,18 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | census | Arezzo 1901 | share_15_19 | 18.2% in one 5-year group |
 | census | Grosseto 1901 | share_15_19 | 20.3% in one 5-year group |
 | census | Livorno 1901 | share_15_19 | 16.6% in one 5-year group |
-| census | Brescia 1861 | share_50_54 | 17.0% in one 5-year group |
+| census | Girgenti 1861 | share_50_54 | 17.0% in one 5-year group |
 | census | Campobasso 1936 | share_age0 | 5.02% of population aged 0 |
 | census | Firenze 1936 | share_age0 | 1.20% of population aged 0 |
-| fertility | Alessandria 1865 | cbr_range | cbr=61.22 |
-| fertility | Alessandria 1866 | cbr_range | cbr=56.48 |
 | fertility | Alessandria 1931 | cbr_range | cbr=15.21 |
 | fertility | Aosta 1931 | cbr_range | cbr=17.81 |
 | fertility | Bologna 1931 | cbr_range | cbr=18.51 |
-| fertility | Cuneo 1863 | cbr_range | cbr=66.53 |
-| fertility | Cuneo 1864 | cbr_range | cbr=60.52 |
-| fertility | Cuneo 1865 | cbr_range | cbr=55.88 |
 | fertility | Firenze 1931 | cbr_range | cbr=16.76 |
-| fertility | Genova 1864 | cbr_range | cbr=67.27 |
-| fertility | Genova 1865 | cbr_range | cbr=63.65 |
-| fertility | Genova 1866 | cbr_range | cbr=57.11 |
 | fertility | Genova 1931 | cbr_range | cbr=14.61 |
 | fertility | La Spezia 1931 | cbr_range | cbr=18.31 |
 | fertility | Livorno 1931 | cbr_range | cbr=18.01 |
 | fertility | Lucca 1931 | cbr_range | cbr=19.59 |
 | fertility | Milano 1931 | cbr_range | cbr=19.68 |
-| fertility | Novara 1863 | cbr_range | cbr=67.11 |
-| fertility | Novara 1864 | cbr_range | cbr=60.79 |
-| fertility | Novara 1865 | cbr_range | cbr=58.56 |
-| fertility | Novara 1866 | cbr_range | cbr=55.88 |
 | fertility | Novara 1921 | cbr_range | cbr=18.76 |
 | fertility | Novara 1931 | cbr_range | cbr=16.54 |
 | fertility | Parma 1931 | cbr_range | cbr=19.45 |
@@ -185,10 +158,6 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | fertility | Porto Maurizio 1931 | cbr_range | cbr=15.78 |
 | fertility | Ravenna 1931 | cbr_range | cbr=15.84 |
 | fertility | Savona 1931 | cbr_range | cbr=16.71 |
-| fertility | Sondrio 1863 | cbr_range | cbr=14.43 |
-| fertility | Sondrio 1864 | cbr_range | cbr=15.91 |
-| fertility | Sondrio 1865 | cbr_range | cbr=18.45 |
-| fertility | Sondrio 1866 | cbr_range | cbr=19.59 |
 | fertility | Sondrio 1881 | cbr_range | cbr=18.56 |
 | fertility | Torino 1921 | cbr_range | cbr=18.62 |
 | fertility | Torino 1931 | cbr_range | cbr=15.07 |
@@ -203,7 +172,7 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | marriages | Ancona 1866 | nuptiality_range | nuptiality=4.1 |
 | marriages | Ancona 1868 | nuptiality_range | nuptiality=4.19 |
 | marriages | Ancona 1921 | nuptiality_range | nuptiality=12.26 |
-| marriages | Arezzo 1866 | nuptiality_range | nuptiality=3.64 |
+| marriages | Arezzo 1866 | nuptiality_range | nuptiality=3.76 |
 | marriages | Arezzo 1921 | nuptiality_range | nuptiality=13.39 |
 | marriages | Ascoli Piceno 1866 | nuptiality_range | nuptiality=3.33 |
 | marriages | Ascoli Piceno 1867 | nuptiality_range | nuptiality=3.87 |
@@ -221,33 +190,26 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | marriages | Campobasso 1921 | nuptiality_range | nuptiality=12.27 |
 | marriages | Catania 1866 | nuptiality_range | nuptiality=3.37 |
 | marriages | Catania 1867 | nuptiality_range | nuptiality=3.74 |
-| marriages | Como 1866 | nuptiality_range | nuptiality=4.48 |
 | marriages | Como 1921 | nuptiality_range | nuptiality=12.48 |
 | marriages | Cosenza 1921 | nuptiality_range | nuptiality=14.16 |
 | marriages | Cremona 1921 | nuptiality_range | nuptiality=12.43 |
-| marriages | Cuneo 1863 | nuptiality_range | nuptiality=15.71 |
-| marriages | Cuneo 1864 | nuptiality_range | nuptiality=14.06 |
-| marriages | Cuneo 1865 | nuptiality_range | nuptiality=15.25 |
 | marriages | Cuneo 1921 | nuptiality_range | nuptiality=12.38 |
 | marriages | Firenze 1921 | nuptiality_range | nuptiality=12.5 |
 | marriages | Forlì 1866 | nuptiality_range | nuptiality=3.13 |
 | marriages | Forlì 1867 | nuptiality_range | nuptiality=3.67 |
 | marriages | Forlì 1868 | nuptiality_range | nuptiality=4.35 |
 | marriages | Forlì 1871 | nuptiality_range | nuptiality=4.33 |
-| marriages | Girgenti 1867 | nuptiality_range | nuptiality=4.41 |
+| marriages | Girgenti 1867 | nuptiality_range | nuptiality=3.92 |
 | marriages | Grosseto 1866 | nuptiality_range | nuptiality=3.36 |
 | marriages | Grosseto 1921 | nuptiality_range | nuptiality=13.15 |
 | marriages | Lucca 1866 | nuptiality_range | nuptiality=3.77 |
 | marriages | Lucca 1921 | nuptiality_range | nuptiality=12.07 |
-| marriages | Macerata 1866 | nuptiality_range | nuptiality=4.49 |
-| marriages | Macerata 1870 | nuptiality_range | nuptiality=4.41 |
+| marriages | Macerata 1870 | nuptiality_range | nuptiality=4.42 |
 | marriages | Macerata 1921 | nuptiality_range | nuptiality=12.59 |
 | marriages | Massa e Carrara 1866 | nuptiality_range | nuptiality=3.85 |
 | marriages | Massa e Carrara 1921 | nuptiality_range | nuptiality=12.95 |
-| marriages | Novara 1863 | nuptiality_range | nuptiality=14.8 |
-| marriages | Novara 1864 | nuptiality_range | nuptiality=13.88 |
 | marriages | Novara 1921 | nuptiality_range | nuptiality=13.49 |
-| marriages | Palermo 1866 | nuptiality_range | nuptiality=3.05 |
+| marriages | Palermo 1866 | nuptiality_range | nuptiality=3.76 |
 | marriages | Pavia 1921 | nuptiality_range | nuptiality=12.9 |
 | marriages | Pesaro e Urbino 1867 | nuptiality_range | nuptiality=3.25 |
 | marriages | Pesaro e Urbino 1868 | nuptiality_range | nuptiality=3.23 |
@@ -257,11 +219,10 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | marriages | Pesaro e Urbino 1921 | nuptiality_range | nuptiality=12.75 |
 | marriages | Pisa 1866 | nuptiality_range | nuptiality=4.37 |
 | marriages | Pisa 1921 | nuptiality_range | nuptiality=12.74 |
-| marriages | Porto Maurizio 1866 | nuptiality_range | nuptiality=3.3 |
 | marriages | Potenza 1921 | nuptiality_range | nuptiality=12.6 |
-| marriages | Ravenna 1866 | nuptiality_range | nuptiality=3.43 |
-| marriages | Ravenna 1867 | nuptiality_range | nuptiality=3.94 |
-| marriages | Ravenna 1868 | nuptiality_range | nuptiality=4.37 |
+| marriages | Ravenna 1866 | nuptiality_range | nuptiality=3.53 |
+| marriages | Ravenna 1867 | nuptiality_range | nuptiality=4.03 |
+| marriages | Ravenna 1868 | nuptiality_range | nuptiality=4.44 |
 | marriages | Roma 1873 | nuptiality_range | nuptiality=3.72 |
 | marriages | Roma 1874 | nuptiality_range | nuptiality=4.45 |
 | marriages | Salerno 1921 | nuptiality_range | nuptiality=12.23 |
@@ -269,60 +230,53 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | marriages | Siena 1921 | nuptiality_range | nuptiality=14.62 |
 | marriages | Siracusa 1866 | nuptiality_range | nuptiality=3.97 |
 | marriages | Siracusa 1867 | nuptiality_range | nuptiality=3.47 |
-| marriages | Sondrio 1863 | nuptiality_range | nuptiality=3.21 |
-| marriages | Sondrio 1864 | nuptiality_range | nuptiality=3.43 |
-| marriages | Sondrio 1865 | nuptiality_range | nuptiality=4.35 |
-| marriages | Sondrio 1866 | nuptiality_range | nuptiality=3.06 |
-| marriages | Sondrio 1867 | nuptiality_range | nuptiality=4.19 |
-| marriages | Torino 1863 | nuptiality_range | nuptiality=12.39 |
-| marriages | Torino 1865 | nuptiality_range | nuptiality=12.61 |
 | marriages | Trapani 1866 | nuptiality_range | nuptiality=3.88 |
 | marriages | Treviso 1921 | nuptiality_range | nuptiality=13.35 |
 | marriages | Udine 1921 | nuptiality_range | nuptiality=12.16 |
 | marriages | Umbria 1921 | nuptiality_range | nuptiality=13.04 |
 | marriages | Verona 1921 | nuptiality_range | nuptiality=12.37 |
 | marriages | Vicenza 1921 | nuptiality_range | nuptiality=13.15 |
-| marriages | Alessandria 1865->1866 | yoy_jump | nuptiality 17.7 -> 8.82 |
+| marriages | Alessandria 1865->1866 | yoy_jump | nuptiality 10.68 -> 5.93 |
 | marriages | Ancona 1865->1866 | yoy_jump | nuptiality 8.12 -> 4.1 |
 | marriages | Aquila degli Abruzzi 1865->1866 | yoy_jump | nuptiality 8.35 -> 5.18 |
-| marriages | Arezzo 1865->1866 | yoy_jump | nuptiality 8.83 -> 3.64 |
+| marriages | Arezzo 1865->1866 | yoy_jump | nuptiality 9.19 -> 3.76 |
 | marriages | Ascoli Piceno 1865->1866 | yoy_jump | nuptiality 7.32 -> 3.33 |
 | marriages | Ascoli Piceno 1871->1872 | yoy_jump | nuptiality 3.33 -> 4.84 |
 | marriages | Benevento 1880->1881 | yoy_jump | nuptiality 6.62 -> 10.57 |
-| marriages | Bergamo 1865->1866 | yoy_jump | nuptiality 8.97 -> 5.36 |
+| marriages | Bergamo 1865->1866 | yoy_jump | nuptiality 9.54 -> 5.64 |
 | marriages | Bologna 1865->1866 | yoy_jump | nuptiality 7.97 -> 4.49 |
-| marriages | Brescia 1865->1866 | yoy_jump | nuptiality 11.8 -> 6.52 |
-| marriages | Brescia 1866->1867 | yoy_jump | nuptiality 6.52 -> 8.84 |
+| marriages | Brescia 1865->1866 | yoy_jump | nuptiality 9.28 -> 5.34 |
+| marriages | Brescia 1866->1867 | yoy_jump | nuptiality 5.34 -> 7.52 |
 | marriages | Cagliari 1865->1866 | yoy_jump | nuptiality 10.04 -> 3.63 |
 | marriages | Caltanissetta 1865->1866 | yoy_jump | nuptiality 7.93 -> 3.86 |
 | marriages | Caltanissetta 1866->1867 | yoy_jump | nuptiality 3.86 -> 5.64 |
 | marriages | Caltanissetta 1867->1868 | yoy_jump | nuptiality 5.64 -> 8.09 |
 | marriages | Caltanissetta 1868->1869 | yoy_jump | nuptiality 8.09 -> 11.09 |
 | marriages | Campobasso 1880->1881 | yoy_jump | nuptiality 8.0 -> 11.13 |
-| marriages | Caserta 1865->1866 | yoy_jump | nuptiality 8.96 -> 5.81 |
+| marriages | Caserta 1865->1866 | yoy_jump | nuptiality 9.36 -> 6.02 |
 | marriages | Catania 1865->1866 | yoy_jump | nuptiality 7.1 -> 3.37 |
 | marriages | Catania 1867->1868 | yoy_jump | nuptiality 3.74 -> 5.83 |
 | marriages | Catania 1868->1869 | yoy_jump | nuptiality 5.83 -> 8.62 |
 | marriages | Catanzaro 1865->1866 | yoy_jump | nuptiality 10.44 -> 6.14 |
 | marriages | Catanzaro 1868->1869 | yoy_jump | nuptiality 5.41 -> 8.98 |
 | marriages | Catanzaro 1880->1881 | yoy_jump | nuptiality 6.57 -> 8.99 |
-| marriages | Como 1865->1866 | yoy_jump | nuptiality 7.3 -> 4.48 |
+| marriages | Como 1865->1866 | yoy_jump | nuptiality 8.45 -> 5.06 |
 | marriages | Cosenza 1865->1866 | yoy_jump | nuptiality 10.13 -> 6.33 |
 | marriages | Cosenza 1868->1869 | yoy_jump | nuptiality 6.59 -> 9.11 |
 | marriages | Cremona 1865->1866 | yoy_jump | nuptiality 10.94 -> 6.46 |
 | marriages | Cremona 1866->1867 | yoy_jump | nuptiality 6.46 -> 9.36 |
-| marriages | Cuneo 1865->1866 | yoy_jump | nuptiality 15.25 -> 8.93 |
+| marriages | Cuneo 1865->1866 | yoy_jump | nuptiality 10.16 -> 6.45 |
 | marriages | Ferrara 1865->1866 | yoy_jump | nuptiality 10.08 -> 1.68 |
 | marriages | Ferrara 1866->1867 | yoy_jump | nuptiality 1.68 -> 5.5 |
 | marriages | Firenze 1865->1866 | yoy_jump | nuptiality 10.21 -> 5.07 |
 | marriages | Forlì 1865->1866 | yoy_jump | nuptiality 7.27 -> 3.13 |
 | marriages | Forlì 1878->1879 | yoy_jump | nuptiality 5.22 -> 7.15 |
-| marriages | Genova 1865->1866 | yoy_jump | nuptiality 18.55 -> 7.03 |
-| marriages | Genova 1866->1867 | yoy_jump | nuptiality 7.03 -> 9.51 |
-| marriages | Girgenti 1865->1866 | yoy_jump | nuptiality 6.99 -> 2.92 |
-| marriages | Girgenti 1866->1867 | yoy_jump | nuptiality 2.92 -> 4.41 |
-| marriages | Girgenti 1867->1868 | yoy_jump | nuptiality 4.41 -> 7.37 |
-| marriages | Girgenti 1868->1869 | yoy_jump | nuptiality 7.37 -> 10.03 |
+| marriages | Genova 1865->1866 | yoy_jump | nuptiality 11.46 -> 4.82 |
+| marriages | Genova 1866->1867 | yoy_jump | nuptiality 4.82 -> 7.13 |
+| marriages | Girgenti 1865->1866 | yoy_jump | nuptiality 5.9 -> 2.53 |
+| marriages | Girgenti 1866->1867 | yoy_jump | nuptiality 2.53 -> 3.92 |
+| marriages | Girgenti 1867->1868 | yoy_jump | nuptiality 3.92 -> 6.74 |
+| marriages | Girgenti 1868->1869 | yoy_jump | nuptiality 6.74 -> 9.45 |
 | marriages | Girgenti 1880->1881 | yoy_jump | nuptiality 7.35 -> 9.94 |
 | marriages | Grosseto 1865->1866 | yoy_jump | nuptiality 9.25 -> 3.36 |
 | marriages | Grosseto 1866->1867 | yoy_jump | nuptiality 3.36 -> 5.5 |
@@ -330,7 +284,7 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | marriages | Livorno 1865->1866 | yoy_jump | nuptiality 10.27 -> 6.26 |
 | marriages | Lucca 1865->1866 | yoy_jump | nuptiality 9.72 -> 3.77 |
 | marriages | Lucca 1866->1867 | yoy_jump | nuptiality 3.77 -> 5.21 |
-| marriages | Macerata 1865->1866 | yoy_jump | nuptiality 6.91 -> 4.49 |
+| marriages | Macerata 1865->1866 | yoy_jump | nuptiality 7.08 -> 4.58 |
 | marriages | Mantova 1864->1865 | yoy_jump | nuptiality 4.97 -> 1.2 |
 | marriages | Mantova 1865->1866 | yoy_jump | nuptiality 1.2 -> 4.81 |
 | marriages | Mantova 1868->1869 | yoy_jump | nuptiality 5.55 -> 8.91 |
@@ -341,17 +295,17 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | marriages | Messina 1865->1866 | yoy_jump | nuptiality 7.44 -> 4.61 |
 | marriages | Messina 1880->1881 | yoy_jump | nuptiality 5.68 -> 8.01 |
 | marriages | Milano 1865->1866 | yoy_jump | nuptiality 9.13 -> 5.68 |
-| marriages | Modena 1865->1866 | yoy_jump | nuptiality 8.52 -> 4.78 |
+| marriages | Modena 1865->1866 | yoy_jump | nuptiality 8.77 -> 4.9 |
 | marriages | Napoli 1865->1866 | yoy_jump | nuptiality 8.66 -> 5.38 |
-| marriages | Novara 1865->1866 | yoy_jump | nuptiality 16.29 -> 9.33 |
-| marriages | Palermo 1865->1866 | yoy_jump | nuptiality 6.6 -> 3.05 |
-| marriages | Palermo 1866->1867 | yoy_jump | nuptiality 3.05 -> 4.89 |
+| marriages | Novara 1865->1866 | yoy_jump | nuptiality 11.01 -> 6.83 |
+| marriages | Palermo 1865->1866 | yoy_jump | nuptiality 8.54 -> 3.76 |
+| marriages | Palermo 1866->1867 | yoy_jump | nuptiality 3.76 -> 5.76 |
 | marriages | Pavia 1865->1866 | yoy_jump | nuptiality 10.16 -> 6.25 |
 | marriages | Pesaro e Urbino 1865->1866 | yoy_jump | nuptiality 7.25 -> 2.94 |
 | marriages | Pisa 1865->1866 | yoy_jump | nuptiality 9.64 -> 4.37 |
-| marriages | Porto Maurizio 1865->1866 | yoy_jump | nuptiality 7.22 -> 3.3 |
-| marriages | Porto Maurizio 1866->1867 | yoy_jump | nuptiality 3.3 -> 4.78 |
-| marriages | Ravenna 1865->1866 | yoy_jump | nuptiality 7.46 -> 3.43 |
+| marriages | Porto Maurizio 1865->1866 | yoy_jump | nuptiality 10.93 -> 4.7 |
+| marriages | Porto Maurizio 1866->1867 | yoy_jump | nuptiality 4.7 -> 6.4 |
+| marriages | Ravenna 1865->1866 | yoy_jump | nuptiality 7.71 -> 3.53 |
 | marriages | Reggio di Calabria 1865->1866 | yoy_jump | nuptiality 8.89 -> 5.2 |
 | marriages | Reggio di Calabria 1868->1869 | yoy_jump | nuptiality 5.3 -> 8.56 |
 | marriages | Reggio di Calabria 1872->1873 | yoy_jump | nuptiality 7.09 -> 9.67 |
@@ -367,8 +321,8 @@ Flags: **83 ERROR**, 501 WARNING, 412 INFO
 | marriages | Siracusa 1865->1866 | yoy_jump | nuptiality 7.6 -> 3.97 |
 | marriages | Siracusa 1867->1868 | yoy_jump | nuptiality 3.47 -> 5.6 |
 | marriages | Siracusa 1868->1869 | yoy_jump | nuptiality 5.6 -> 9.65 |
-| marriages | Sondrio 1866->1867 | yoy_jump | nuptiality 3.06 -> 4.19 |
-| marriages | Torino 1865->1866 | yoy_jump | nuptiality 12.61 -> 7.35 |
+| marriages | Sondrio 1865->1866 | yoy_jump | nuptiality 9.25 -> 5.92 |
+| marriages | Torino 1865->1866 | yoy_jump | nuptiality 9.6 -> 5.89 |
 | marriages | Trapani 1865->1866 | yoy_jump | nuptiality 7.46 -> 3.88 |
 | marriages | Trapani 1867->1868 | yoy_jump | nuptiality 4.73 -> 6.81 |
 | marriages | Venezia 1866->1867 | yoy_jump | nuptiality 6.38 -> 11.66 |
