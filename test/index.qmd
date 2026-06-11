@@ -32,13 +32,13 @@ format:
   <a href="marriages.html" style="text-decoration:none;color:inherit;">
     <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <h3 style="margin-top:0;color:#084594;">💍 Marriages</h3>
-      <p style="font-size:0.95rem;">Marriages and crude marriage rates by province, 1862–1961.</p>
+      <p style="font-size:0.95rem;">Marriages and crude marriage rates by province, 1863–1931.</p>
       <ul style="font-size:0.85rem;color:#555;">
-        <li>Provincial marriage counts</li>
-        <li>Crude marriage rate (‰)</li>
-        <li>Sources: Movimento dello stato civile, Annuari Statistiche Demografiche</li>
+        <li>Annual series 1863–1881; benchmarks 1901, 1911, 1921, 1931</li>
+        <li>Crude marriage rate (‰), census-interpolated denominators</li>
+        <li>Sources: Movimento dello stato civile</li>
       </ul>
-      <p style="font-weight:bold;color:#d97706;">◐ Extraction in progress</p>
+      <p style="font-weight:bold;color:#16a34a;">● Data available</p>
     </div>
   </a>
 

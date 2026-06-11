@@ -105,7 +105,10 @@ async function init() {
   YEARS = Object.keys(panel).map(Number).sort((a, b) => a - b);
   const slider = document.getElementById('yearSlider');
   slider.max = YEARS.length - 1;
-  document.getElementById('yearTicks').innerHTML = YEARS.map(y => '<span>' + y + '</span>').join('');
+  // thin tick labels: ~8 labels max, always keep first and last
+  const step = Math.max(1, Math.ceil(YEARS.length / 8));
+  document.getElementById('yearTicks').innerHTML = YEARS.map((y, i) =>
+    '<span>' + ((i % step === 0 || i === YEARS.length - 1) ? y : '') + '</span>').join('');
   slider.addEventListener('input', updateMap);
   document.getElementById('indSelect').addEventListener('change', updateMap);
   updateMap();
@@ -209,8 +212,14 @@ init();
 </script>
 
 <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
-<p><strong>Sources.</strong> Marriages: ISTAT/MAIC, <em>Movimento dello stato civile</em> (1862–1936) and
-<em>Annuario di Statistiche Demografiche</em> (1951–1961). Map shows the nearest available historical boundaries.</p>
+<p><strong>Sources.</strong> Marriages: ISTAT/MAIC, <em>Movimento dello stato civile</em> —
+annual series 1863–1881 (TAVOLA VI of the 1881 volume, cross-validated against the
+checksum-validated births/deaths panel) and the 1901, 1911, 1921 and 1931 volumes.
+Crude marriage rate = marriages / population × 1000, with population linearly interpolated
+between flanking censuses. Pola, Trieste and Zara (1931) lack census denominators and are
+included only in the full extraction file. Map shows the nearest available historical boundaries.</p>
+<p><strong>Download:</strong> <a href="../data/marriages/marriages_panel.csv" download>marriages_panel.csv</a> ·
+<a href="../data/marriages/marriages_full_extraction.csv" download>marriages_full_extraction.csv</a></p>
 <p>Preliminary — test environment.</p>
 </div>
 ```
