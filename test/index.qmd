@@ -21,7 +21,7 @@ format:
       <p style="font-size:0.95rem;">Crude death rates, infant mortality and life expectancy by province, 1863–1936.</p>
       <ul style="font-size:0.85rem;color:#555;">
         <li>CDR map, census years 1871–1936</li>
-        <li>IMR annual series 1863–1882, + 1921/1931/1936</li>
+        <li>IMR annual series 1863–1882, 1921/1931/1936, 1951–1961</li>
         <li>Provincial life expectancy (e₀), 1881 and 1921</li>
         <li>Deaths by age &amp; sex pyramids, 1867–1882 and 1921</li>
       </ul>

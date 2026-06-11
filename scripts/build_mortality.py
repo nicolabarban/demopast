@@ -18,7 +18,9 @@ Outputs (data/mortality/):
 """
 
 import csv
+import re
 import shutil
+import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
@@ -29,6 +31,23 @@ OUT = HERE / "data/mortality"
 
 # pyramid age groups: map TIDY detail rows -> census-style groups
 PYR_GROUPS = (["0", "1_4"] + [f"{a}_{a+4}" for a in range(5, 85, 5)] + ["85plus"])
+
+# post-war (1951-61) province names -> historical crosswalk names (renames only;
+# split-off provinces have no historical COD_PROV and stay download-only)
+POSTWAR_ALIASES = {
+    "agrigento": "girgenti",
+    "bari": "baridellepuglie",
+    "laquila": "aquiladegliabruzzi",
+    "massacarrara": "massaecarrara",
+    "imperia": "portomaurizio",
+    "reggiocalabria": "reggiodicalabria",
+    "reggioemilia": "reggionellemilia",
+}
+
+
+def normname(s: str) -> str:
+    s = unicodedata.normalize("NFD", s.lower())
+    return re.sub(r"[^a-z]", "", s)
 
 
 def fnum(v):
@@ -122,6 +141,27 @@ def main() -> None:
                                            "deaths", "cdr", "imr", "e0"])
         w.writeheader(); w.writerows(rows)
     print(f"mortality_panel.csv: {len(rows)} rows")
+
+    # --- 1951-61 Annuari: extend IMR series for renamed/unchanged provinces,
+    #     ship the full file as a download ---
+    f5161 = SRC / "mortality_province_1951_1961.csv"
+    if f5161.exists():
+        cw = {}
+        for r in csv.DictReader((SRC / "province_crosswalk_demopast.csv").open()):
+            cw[normname(r["province_istat"])] = (int(r["COD_PROV"]),
+                                                 r["DEN_PROV_demopast"])
+        n_series = 0
+        for r in csv.DictReader(f5161.open()):
+            key = normname(r["name_source"])
+            key = POSTWAR_ALIASES.get(key, key)
+            v = fnum(r["imr"])
+            if key in cw and v is not None:
+                cod, den = cw[key]
+                imr_annual.append({"COD_PROV": cod, "DEN_PROV": den,
+                                   "year": int(r["year"]), "imr": v})
+                n_series += 1
+        shutil.copy(f5161, OUT / "mortality_1951_1961.csv")
+        print(f"1951-61: {n_series} IMR series points added; full CSV copied")
 
     # --- imr_annual ---
     imr_annual.sort(key=lambda r: (r["COD_PROV"], r["year"]))

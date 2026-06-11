@@ -69,7 +69,8 @@ format:
       <a href="../data/mortality/mortality_panel.csv" download>mortality_panel.csv</a> ·
       <a href="../data/mortality/imr_annual.csv" download>imr_annual.csv</a> ·
       <a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a> ·
-    <a href="../data/mortality/lifetables_1921.csv" download>lifetables_1921.csv</a>
+    <a href="../data/mortality/lifetables_1921.csv" download>lifetables_1921.csv</a> ·
+    <a href="../data/mortality/mortality_1951_1961.csv" download>mortality_1951_1961.csv</a>
     </div>
   </div>
 </div>
@@ -344,6 +345,8 @@ updateMap();
 Life expectancy 1881: abridged life tables (Chiang) from deaths by age and sex (average 1881–82) and the 1881 Census population.
 Life expectancy 1921: same method, from TAVOLA X deaths by age and sex and the 1921 Census population (checksum-validated columns only).
 Infant mortality 1921: under-1 deaths (TAVOLA X) over live births (TAVOLA I), <em>Movimento</em> 1919–1923 volume.
+Deaths, CDR and IMR 1951–1961: ISTAT, <em>Annuari di Statistiche Demografiche</em> (full file in the downloads below;
+the per-province IMR chart shows post-war values only for provinces with unchanged historical boundaries/names).
 Population denominators: DEMOPAST census data.</p>
 <p>Preliminary — test environment. Cells failing checksum validation are excluded.</p>
 </div>
