@@ -191,18 +191,12 @@ year,severity,flag,unit,age,sex,value,detail
 1871,WARN,AGE_PROFILE,081 Trapani,70-74,F,1954.0,"ratio to neighbour avg = 1.68 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
 1871,WARN,AGE_PROFILE,081 Trapani,75-79,F,654.0,"ratio to neighbour avg = 0.44 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
 1871,WARN,AGE_PROFILE,082 Palermo,60-64,F,12200.0,"ratio to neighbour avg = 1.72 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
-1871,ERROR,ROW_SUM,083 Messina,0,T,10385.0,male+female = 10331 != total 10385
-1871,ERROR,ROW_SUM,083 Messina,15-19,T,37789.0,male+female = 37796 != total 37789
-1871,ERROR,ROW_SUM,083 Messina,35-39,T,21989.0,male+female = 22624 != total 21989
-1871,ERROR,ROW_SUM,083 Messina,40-44,T,15414.0,male+female = 27621 != total 15414
-1871,ERROR,ROW_SUM,083 Messina,45-49,T,19313.0,male+female = 19322 != total 19313
-1871,ERROR,ROW_SUM,083 Messina,50-54,T,25130.0,male+female = 25070 != total 25130
 1871,WARN,AGE_PROFILE,083 Messina,60-64,T,17146.0,"ratio to neighbour avg = 1.75 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
 1871,WARN,AGE_PROFILE,083 Messina,65-69,T,6812.0,"ratio to neighbour avg = 0.54 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
 1871,WARN,AGE_PROFILE,083 Messina,75-79,T,2977.0,"ratio to neighbour avg = 0.53 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
-1871,WARN,AGE_PROFILE,083 Messina,60-64,M,8512.0,"ratio to neighbour avg = 1.75 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
-1871,WARN,AGE_PROFILE,083 Messina,60-64,F,8634.0,"ratio to neighbour avg = 1.74 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
-1871,WARN,AGE_PROFILE,083 Messina,65-69,F,3325.0,"ratio to neighbour avg = 0.53 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
+1871,WARN,AGE_PROFILE,083 Messina,60-64,M,8452.0,"ratio to neighbour avg = 1.73 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
+1871,WARN,AGE_PROFILE,083 Messina,60-64,F,8694.0,"ratio to neighbour avg = 1.76 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
+1871,WARN,AGE_PROFILE,083 Messina,65-69,F,3325.0,"ratio to neighbour avg = 0.52 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
 1871,WARN,AGE_PROFILE,083 Messina,70-74,F,4020.0,"ratio to neighbour avg = 1.69 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
 1871,WARN,AGE_PROFILE,083 Messina,75-79,F,1433.0,"ratio to neighbour avg = 0.49 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
 1871,WARN,AGE_PROFILE,084 Girgenti,60-64,T,10815.0,"ratio to neighbour avg = 1.70 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
@@ -529,14 +523,6 @@ year,severity,flag,unit,age,sex,value,detail
 1931,WARN,SEX_RATIO,080 Reggio di Calabria,40-44,MF,0.647,"M/F outside (0.7, 1.4) (M=9907, F=15306)"
 1936,ERROR,ROW_SUM,005 Asti,50-54,T,14209.0,male+female = 14208 != total 14209
 1936,WARN,SEX_RATIO,006 Alessandria,70-74,MF,2.116,"M/F outside (0.4, 1.7) (M=10361, F=4896)"
-1936,ERROR,ROW_SUM,008 Imperia,1-4,T,8369.0,male+female = 8469 != total 8369
-1936,ERROR,ROW_SUM,008 Imperia,5-9,T,11276.0,male+female = 11366 != total 11276
-1936,ERROR,ROW_SUM,008 Imperia,10-14,T,11855.0,male+female = 12155 != total 11855
-1936,ERROR,ROW_SUM,008 Imperia,15-19,T,8443.0,male+female = 8503 != total 8443
-1936,ERROR,ROW_SUM,008 Imperia,35-39,T,11384.0,male+female = 11385 != total 11384
-1936,ERROR,ROW_SUM,008 Imperia,50-54,T,9211.0,male+female = 9371 != total 9211
-1936,ERROR,ROW_SUM,008 Imperia,55-59,T,8609.0,male+female = 8600 != total 8609
-1936,ERROR,ROW_SUM,008 Imperia,60-64,T,7410.0,male+female = 7500 != total 7410
 1936,ERROR,ROW_SUM,010 Genova,40-44,T,64767.0,male+female = 65367 != total 64767
 1936,ERROR,ROW_SUM,010 Genova,55-59,T,43832.0,male+female = 43892 != total 43832
 1936,ERROR,ROW_SUM,010 Genova,85+,T,2336.0,male+female = 2426 != total 2336
@@ -570,13 +556,6 @@ year,severity,flag,unit,age,sex,value,detail
 1936,WARN,SEX_RATIO,062 Benevento,40-44,MF,0.695,"M/F outside (0.7, 1.4) (M=6356, F=9141)"
 1936,ERROR,ROW_SUM,062 Benevento,75-79,T,5288.0,male+female = 5283 != total 5288
 1936,ERROR,ROW_SUM,062 Benevento,85+,T,1071.0,male+female = 1070 != total 1071
-1936,ERROR,ROW_SUM,063 Napoli,30-34,T,147400.0,male+female = 147360 != total 147400
-1936,ERROR,ROW_SUM,063 Napoli,70-74,T,44324.0,male+female = 89689 != total 44324
-1936,WARN,SEX_RATIO,063 Napoli,70-74,MF,0.297,"M/F outside (0.4, 1.7) (M=20561, F=69128)"
-1936,ERROR,ROW_SUM,063 Napoli,75-79,T,27888.0,male+female = 27838 != total 27888
-1936,ERROR,ROW_SUM,063 Napoli,85+,T,5150.0,male+female = 4550 != total 5150
-1936,WARN,AGE_PROFILE,063 Napoli,70-74,F,69128.0,"ratio to neighbour avg = 3.03 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
-1936,WARN,AGE_PROFILE,063 Napoli,75-79,F,15493.0,"ratio to neighbour avg = 0.40 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
 1936,WARN,SEX_RATIO,064 Avellino,40-44,MF,0.683,"M/F outside (0.7, 1.4) (M=7604, F=11137)"
 1936,WARN,SEX_RATIO,064 Avellino,45-49,MF,0.697,"M/F outside (0.7, 1.4) (M=7155, F=10259)"
 1936,WARN,SEX_RATIO,067 Teramo,40-44,MF,0.689,"M/F outside (0.7, 1.4) (M=4695, F=6818)"
@@ -603,13 +582,3 @@ year,severity,flag,unit,age,sex,value,detail
 1936,WARN,SEX_RATIO,080 Reggio di Calabria,45-49,MF,0.657,"M/F outside (0.7, 1.4) (M=9254, F=14094)"
 1936,ERROR,ROW_SUM,086 Enna,55-59,T,7278.0,male+female = 8150 != total 7278
 1936,ERROR,ROW_SUM,087 Catania,1-4,T,63096.0,male+female = 54894 != total 63096
-1936,ERROR,ROW_SUM,091 Nuoro,10-14,T,23955.0,male+female = 23905 != total 23955
-1936,ERROR,ROW_SUM,091 Nuoro,20-24,T,17912.0,male+female = 17917 != total 17912
-1936,ERROR,ROW_SUM,091 Nuoro,25-29,T,17196.0,male+female = 17191 != total 17196
-1936,ERROR,ROW_SUM,091 Nuoro,30-34,T,14844.0,male+female = 14839 != total 14844
-1936,ERROR,ROW_SUM,091 Nuoro,35-39,T,13102.0,male+female = 13602 != total 13102
-1936,ERROR,ROW_SUM,091 Nuoro,60-64,T,8422.0,male+female = 7922 != total 8422
-1936,ERROR,ROW_SUM,091 Nuoro,65-69,T,7445.0,male+female = 6940 != total 7445
-1936,ERROR,ROW_SUM,091 Nuoro,70-74,T,5387.0,male+female = 5337 != total 5387
-1936,ERROR,ROW_SUM,091 Nuoro,75-79,T,3281.0,male+female = 3231 != total 3281
-1936,ERROR,ROW_SUM,091 Nuoro,85+,T,606.0,male+female = 611 != total 606

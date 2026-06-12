@@ -50,11 +50,27 @@ frontespizio del volume.
     al corretto `032_Trieste_1931.pdf`, che è quello linkato dal sito.
 - **QC sistematico** (skill census-consistency, giu 2026): tutti gli 8 anni
   passati al controllo automatico — report in `docs/qc_flags_census.csv`
-  (614 flag: 103 ERROR, 511 WARN). Gli ERROR sono incoerenze M+F ≠ Totale
-  **ereditate dalle tavole originali / trascrizioni** (1871: 7, 1881: 10,
-  1911: 3, 1921: 17, 1931: 14, 1936: 52; es. Messina 1871 40-44 Totale
-  15 414 vs M+F 27 621); i WARN sono per lo più profili d'età o sex ratio
-  anomali spiegabili (emigrazione maschile, coorti di guerra). Non corretti
-  cella per cella: richiederebbero verifica sullo scan.
+  (583 flag: 75 ERROR, 508 WARN). Gli ERROR sono incoerenze M+F ≠ Totale
+  **ereditate dalle tavole originali / trascrizioni** (1881: 10, 1911: 3,
+  1921: 17, 1931: 14, 1936: 30, 1871: 1); i WARN sono per lo più profili
+  d'età o sex ratio anomali spiegabili (emigrazione maschile, coorti di
+  guerra). Correggerli richiede verifica cella per cella sullo scan.
+- **Verifica sullo scan dei cluster peggiori (giu 2026)** — Nuoro 1936,
+  Imperia 1936, Napoli 1936, Messina 1871 ricontrollati cella per cella
+  sulle tavole originali, riconciliando con i totali di controllo stampati
+  (Complesso, «fino a N», 15-64, 65-ω / Totale provincia), che tornano
+  **esattamente** dopo le correzioni:
+  - *Nuoro 1936*: 13 celle corrette (per lo più Totali di gruppo errati,
+    es. 65-69 «7 445» → 6 940); incluse 2 righe non flaggate perché
+    internamente coerenti ma sbagliate vs scan (55-59, 60-64 M).
+  - *Imperia 1936*: la trascrizione proveniva dalla **tavola sbagliata**
+    (somma 154 163 = popolazione presente, non Tav. X residente 158 565);
+    ritrascritti tutti i 19 gruppi dagli anni singoli dello scan.
+  - *Napoli 1936*: 4 celle (tra cui 70-74 F «69 128» → 23 763 e
+    85+ M «1 295» → 1 895, da 85-89 M = 1 615 letto «1 015»).
+  - *Messina 1871*: 13 celle; il 40-44 T «15 414» → 27 914; colonna M
+    provinciale ora riconcilia esattamente col Totale stampato (208 288).
+    Restano 3 righe internamente incoerenti nell'originale (residui ≤ ±30,
+    es. mesi 3-4 dell'età 0: T 849 vs M+F 819).
 - **Date riferimento**: popolazione *presente* fino al 1921 e nel 1931;
   *residente* nel 1936 (Tav. X) e 1951.
