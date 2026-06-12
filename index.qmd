@@ -111,7 +111,7 @@ format:
     <div style="margin-top:0.5rem;">
       <a id="downloadLink" href="#" download>Download all-province data for this year (CSV)</a>
       <span id="scanLinkWrap" style="display:none;"> ·
-        <a id="scanLink" href="#" download>original scan (PDF)</a></span>
+        <a id="scanLink" href="#" target="_blank" rel="noopener">original scan (PDF)</a></span>
     </div>
   </div>
 </div>

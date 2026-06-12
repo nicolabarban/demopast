@@ -83,7 +83,7 @@ format:
     <div style="margin-top:0.75rem;font-size:0.9rem;">
       <a id="dlLink" href="#" download>census CSV (this year)</a>
       <span id="scanLinkWrap" style="display:none;"> ·
-        <a id="scanLink" href="#" download>original scan, TAVOLA II 1861 (PDF)</a></span>
+        <a id="scanLink" href="#" target="_blank" rel="noopener">original scan, TAVOLA II 1861 (PDF)</a></span>
     </div>
   </div>
 </div>
@@ -341,9 +341,9 @@ Map shows the historical provincial boundaries of each census year.</p>
 source files on the production atlas.</p>
 <p><strong>Original source scans (1861):</strong> scanned tables from the
 <em>Censimento generale della popolazione del Regno d'Italia, 1861</em> (ed. 1864, Vol. II) —
-<a href="../downloads/sources/1861/censimento_1861_pop_eta_sesso_province_ed1864.pdf" download>
+<a href="../downloads/sources/1861/censimento_1861_pop_eta_sesso_province_ed1864.pdf" target="_blank" rel="noopener">
 population by age and sex, by province (PDF, 15&nbsp;MB)</a> ·
-<a href="../downloads/sources/1861/censimento_1861_riepilogo_eta_province_ed1864.pdf" download>
+<a href="../downloads/sources/1861/censimento_1861_riepilogo_eta_province_ed1864.pdf" target="_blank" rel="noopener">
 summary by age group, by province (PDF, 0.8&nbsp;MB)</a>.</p>
 <p>Preliminary — test environment.</p>
 </div>
