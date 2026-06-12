@@ -203,6 +203,28 @@ def main() -> None:
             shutil.copy(SRC / lt, OUT / lt)
             print(f"{lt} copied")
 
+    # unified provincial life tables, same layout as lifetables_comp.csv
+    # (provincia, year, sex, age_group, age_lo, ax, mx, qx, lx, dx, Lx, Tx, ex)
+    uni_rows = []
+    for year in (1881, 1921):
+        src = SRC / f"lifetables_{year}.csv"
+        if not src.exists():
+            continue
+        for r in csv.DictReader(src.open()):
+            uni_rows.append({"provincia": r["DEN_PROV"],
+                             "COD_PROV": r["COD_PROV"], "year": year,
+                             **{k: r[k] for k in ("sex", "age_group", "age_lo",
+                                                  "ax", "mx", "qx", "lx", "dx",
+                                                  "Lx", "Tx", "ex")}})
+    if uni_rows:
+        with (OUT / "lifetables_province.csv").open("w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=["provincia", "COD_PROV", "year",
+                                               "sex", "age_group", "age_lo",
+                                               "ax", "mx", "qx", "lx", "dx",
+                                               "Lx", "Tx", "ex"])
+            w.writeheader(); w.writerows(uni_rows)
+        print(f"lifetables_province.csv: {len(uni_rows)} rows")
+
 
 if __name__ == "__main__":
     main()

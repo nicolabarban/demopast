@@ -53,26 +53,12 @@ format:
       <h4 id="provName" style="margin-top:0;"></h4>
       <button id="resetProv" type="button" style="display:none;font-size:0.8rem;padding:2px 8px;cursor:pointer;">← Italia (nazionale)</button>
     </div>
-    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin-bottom:0.75rem;">
-      <thead><tr style="border-bottom:2px solid #ccc;">
-        <th style="text-align:left;padding:3px 4px;">Life expectancy at age…</th>
-        <th style="text-align:right;padding:3px 4px;">0</th>
-        <th style="text-align:right;padding:3px 4px;">1</th>
-        <th style="text-align:right;padding:3px 4px;">5</th>
-        <th style="text-align:right;padding:3px 4px;">15</th>
-        <th style="text-align:right;padding:3px 4px;">30</th>
-        <th style="text-align:right;padding:3px 4px;">50</th>
-        <th style="text-align:right;padding:3px 4px;">65</th>
-        <th style="text-align:right;padding:3px 4px;">80</th>
-      </tr></thead>
-      <tbody id="exTable"></tbody>
-    </table>
+    <h5 id="fullTableTitle" style="margin-top:0.25rem;margin-bottom:0.25rem;">Full life table</h5>
+    <table id="fullTable" style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-bottom:0.75rem;"></table>
     <h5 style="margin-bottom:0.25rem;">Survival curve l<sub>x</sub> (per 100,000 born)</h5>
     <div><canvas id="lxChart" style="max-height:260px;"></canvas></div>
     <h5 style="margin-top:1rem;margin-bottom:0.25rem;">Death probability q<sub>x</sub> (log scale)</h5>
     <div><canvas id="qxChart" style="max-height:220px;"></canvas></div>
-    <h5 id="fullTableTitle" style="margin-top:1rem;margin-bottom:0.25rem;">Full life table</h5>
-    <table id="fullTable" style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-top:0.5rem;"></table>
   </div>
 </div>
 
@@ -81,7 +67,6 @@ const FILES = {1881: '../data/mortality/lifetables_1881.csv',
                1921: '../data/mortality/lifetables_1921.csv'};
 const COLORS = ['#fff7fb','#ece2f0','#d0d1e6','#a6bddb','#67a9cf','#3690c0','#02818a','#016450'];
 const SEXCLR = {M: '#1d4ed8', F: '#be123c', T: '#475569'};
-const AGE_PTS = [0, 1, 5, 15, 30, 50, 65, 80];
 
 const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
   scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
@@ -162,27 +147,13 @@ function showProvince() {
   document.getElementById('provName').textContent = selected.name +
     (isNational ? ' (nazionale)' : '') + ' — life table ' + year;
   if (!tRows) {
-    document.getElementById('exTable').innerHTML =
-      '<tr><td colspan="9">No life table for this province in ' + year + '</td></tr>';
+    document.getElementById('fullTableTitle').textContent = 'Full life table';
+    document.getElementById('fullTable').innerHTML =
+      '<tr><td>No life table for this province in ' + year + '</td></tr>';
     if (lxChart) lxChart.destroy(); if (qxChart) qxChart.destroy();
     lxChart = qxChart = null;
-    document.getElementById('fullTable').innerHTML = '';
     return;
   }
-  // ex summary table for T / M / F
-  let html = '';
-  for (const s of ['T','M','F']) {
-    const rows = (data[s] || {})[cod];
-    if (!rows) continue;
-    const label = {T:'Total', M:'Males', F:'Females'}[s];
-    html += '<tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;color:' +
-      SEXCLR[s] + ';font-weight:bold;">' + label + '</td>' +
-      AGE_PTS.map(a => {
-        const r = rows.find(x => x.age_lo === a);
-        return '<td style="text-align:right;padding:3px 4px;">' + (r ? r.ex.toFixed(1) : '—') + '</td>';
-      }).join('') + '</tr>';
-  }
-  document.getElementById('exTable').innerHTML = html;
 
   const mkDatasets = field => ['M','F'].map(s => {
     const rows = (data[s] || {})[cod] || [];
@@ -286,6 +257,7 @@ tabulated provinces.</p>
 <p>Compartimento-level tables for 1901, 1911, 1931 and 1936 are available below; national
 e₀ from these tables matches the official ISTAT period tables (43.4 / 44.4 / 54.9 / 56.8).</p>
 <p><strong>Download:</strong>
+<a href="../data/mortality/lifetables_province.csv" download>lifetables_province.csv</a> (1881 + 1921 unified, incl. ITALIA) ·
 <a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a> ·
 <a href="../data/mortality/lifetables_1921.csv" download>lifetables_1921.csv</a> ·
 <a href="../data/mortality/lifetables_comp.csv" download>lifetables_comp.csv</a> ·
