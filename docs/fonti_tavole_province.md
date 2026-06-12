@@ -37,5 +37,24 @@ frontespizio del volume.
   Venezia Somma M «199 115» → 199 715 (refuso nella Somma, righe corrette).
   21 province conservano residui non allocabili ≤±50 rispetto alla Somma
   stampata (incoerenze interne della tavola originale).
+- **Correzioni giu 2026** (verifica incrociata file lunghi ↔ file sito):
+  - 1871 — il CSV scaricabile (`downloads/1871/data_census_1871_adjusted_age.csv`)
+    conteneva due volte la provincia cod 079 («Calabria Ulteriore II» +
+    «Catanzaro», blocchi identici → totale doppio 824 472). Rimosso il blocco
+    duplicato (1330 → 1311 righe); il file wide del sito era già corretto.
+  - 1931 — `data/census/census_1931.csv`: corretti tre `DEN_PROV` ereditati da
+    versioni precedenti: cod 32 «Fiume» → **Trieste** (i dati, 348 405 ab.,
+    sono di Trieste: lo confermano file lungo e geojson), cod 70 «Capobasso» →
+    Campobasso, cod 35 «ReggioE» → ReggioEmilia. Lo scan
+    `032_Fiume_1931.pdf` è numerato male (il cod 32 è Trieste); resta accanto
+    al corretto `032_Trieste_1931.pdf`, che è quello linkato dal sito.
+- **QC sistematico** (skill census-consistency, giu 2026): tutti gli 8 anni
+  passati al controllo automatico — report in `docs/qc_flags_census.csv`
+  (614 flag: 103 ERROR, 511 WARN). Gli ERROR sono incoerenze M+F ≠ Totale
+  **ereditate dalle tavole originali / trascrizioni** (1871: 7, 1881: 10,
+  1911: 3, 1921: 17, 1931: 14, 1936: 52; es. Messina 1871 40-44 Totale
+  15 414 vs M+F 27 621); i WARN sono per lo più profili d'età o sex ratio
+  anomali spiegabili (emigrazione maschile, coorti di guerra). Non corretti
+  cella per cella: richiederebbero verifica sullo scan.
 - **Date riferimento**: popolazione *presente* fino al 1921 e nel 1931;
   *residente* nel 1936 (Tav. X) e 1951.

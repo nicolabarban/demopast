@@ -13,6 +13,7 @@ format:
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="js/scans.js"></script>
 
 <div class="slider-container">
   <label for="yearSlider" class="year-label">Year: <span id="yearDisplay">1861</span></label><br>
@@ -109,6 +110,8 @@ format:
 
     <div style="margin-top:0.5rem;">
       <a id="downloadLink" href="#" download>Download all-province data for this year (CSV)</a>
+      <span id="scanLinkWrap" style="display:none;"> ·
+        <a id="scanLink" href="#" download>original scan (PDF)</a></span>
     </div>
   </div>
 </div>
@@ -267,6 +270,15 @@ function onEachFeature(feature, layer) {
       const dlLink = document.getElementById('downloadLink');
       dlLink.style.display = 'inline';
       dlLink.href = 'downloads/' + year + '/data_census_' + year + '_adjusted_age.csv';
+
+      // original scan of the printed tavola for this province & year
+      const scan = (SCANS[year] || {})[cod];
+      document.getElementById('scanLinkWrap').style.display = scan ? 'inline' : 'none';
+      if (scan) {
+        const link = document.getElementById('scanLink');
+        link.href = 'downloads/sources/' + year + '/provinces/' + scan;
+        link.textContent = 'original scan, ' + (SCAN_TAVOLE[year] || '') + ' ' + year + ' (PDF)';
+      }
     }
   });
 }
@@ -399,6 +411,7 @@ function showNationalData(year) {
   document.getElementById('provMeanAge').textContent = national.mean_age;
   drawPyramid(national, 'Italy', year);
   document.getElementById('downloadLink').style.display = 'none';
+  document.getElementById('scanLinkWrap').style.display = 'none';
 }
 
 
