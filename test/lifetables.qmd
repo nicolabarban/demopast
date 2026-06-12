@@ -48,8 +48,11 @@ format:
       <div id="legendContent" class="map-legend"></div>
     </div>
   </div>
-  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:760px;overflow-y:auto;">
-    <h4 id="provName" style="margin-top:0;"></h4>
+  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;max-height:760px;overflow-y:auto;">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;">
+      <h4 id="provName" style="margin-top:0;"></h4>
+      <button id="resetProv" type="button" style="display:none;font-size:0.8rem;padding:2px 8px;cursor:pointer;">← Italia (nazionale)</button>
+    </div>
     <table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin-bottom:0.75rem;">
       <thead><tr style="border-bottom:2px solid #ccc;">
         <th style="text-align:left;padding:3px 4px;">Life expectancy at age…</th>
@@ -68,10 +71,8 @@ format:
     <div><canvas id="lxChart" style="max-height:260px;"></canvas></div>
     <h5 style="margin-top:1rem;margin-bottom:0.25rem;">Death probability q<sub>x</sub> (log scale)</h5>
     <div><canvas id="qxChart" style="max-height:220px;"></canvas></div>
-    <details style="margin-top:0.75rem;font-size:0.85rem;">
-      <summary>Full life table (total population)</summary>
-      <table id="fullTable" style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-top:0.5rem;"></table>
-    </details>
+    <h5 id="fullTableTitle" style="margin-top:1rem;margin-bottom:0.25rem;">Full life table</h5>
+    <table id="fullTable" style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-top:0.5rem;"></table>
   </div>
 </div>
 
@@ -86,9 +87,10 @@ const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:
   scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
   touchZoom:false}).setView([41.5, 12.5], 6);
 
+const NATIONAL = {cod: 0, name: 'Italia'};
 let lt = {};          // year -> sex -> cod -> [rows by age_lo]
 let geojsonCache = {}, currentLayer = null, currentBreaks = null;
-let lxChart = null, qxChart = null, selected = null;
+let lxChart = null, qxChart = null, selected = NATIONAL;
 
 const getYear = () => +document.getElementById('yearSelect').value;
 const getSex = () => document.getElementById('sexSelect').value;
@@ -113,8 +115,9 @@ async function loadYear(year) {
 }
 
 function computeBreaks() {
-  const values = Object.values(lt[getYear()][getSex()])
-    .map(rows => rows[0].ex).filter(v => v != null).sort((a, b) => a - b);
+  const values = Object.entries(lt[getYear()][getSex()])
+    .filter(([cod]) => +cod !== 0)   // exclude national aggregate
+    .map(([, rows]) => rows[0].ex).filter(v => v != null).sort((a, b) => a - b);
   if (!values.length) return [0, 1];
   const breaks = [];
   for (let i = 1; i <= 7; i++)
@@ -149,12 +152,15 @@ function onEachFeature(feature, layer) {
 function fmtAge(g) { return g === '0' ? '0' : g === '1_4' ? '1–4' : g === '85plus' ? '85+' : String(g).replace('_', '–'); }
 
 function showProvince() {
-  if (!selected) return;
+  if (!selected) selected = NATIONAL;
   const year = getYear(), cod = selected.cod;
   const data = lt[year];
   const tRows = (data.T || {})[cod];
+  const isNational = cod === NATIONAL.cod;
   document.getElementById('provinceInfo').style.display = 'block';
-  document.getElementById('provName').textContent = selected.name + ' — life table ' + year;
+  document.getElementById('resetProv').style.display = isNational ? 'none' : 'inline-block';
+  document.getElementById('provName').textContent = selected.name +
+    (isNational ? ' (nazionale)' : '') + ' — life table ' + year;
   if (!tRows) {
     document.getElementById('exTable').innerHTML =
       '<tr><td colspan="9">No life table for this province in ' + year + '</td></tr>';
@@ -202,10 +208,15 @@ function showProvince() {
                y: {type: 'logarithmic'}}}
   });
 
+  // full table follows the sex selector (fallback to total)
+  const fSex = (data[getSex()] || {})[cod] ? getSex() : 'T';
+  const fRows = (data[fSex] || {})[cod] || tRows;
+  document.getElementById('fullTableTitle').textContent =
+    'Full life table — ' + {T:'total population', M:'males', F:'females'}[fSex];
   document.getElementById('fullTable').innerHTML =
     '<tr style="border-bottom:2px solid #ccc;"><th style="text-align:left;">age</th>' +
     ['ax','mx','qx','lx','dx','Lx','Tx','ex'].map(h => '<th style="text-align:right;">' + h + '</th>').join('') + '</tr>' +
-    tRows.map(r =>
+    fRows.map(r =>
       '<tr style="border-bottom:1px solid #eee;"><td>' + fmtAge(r.age_group) + '</td>' +
       '<td style="text-align:right;">' + (r.ax != null ? r.ax.toFixed(2) : '—') + '</td>' +
       ['mx','qx'].map(k => '<td style="text-align:right;">' + r[k].toFixed(5) + '</td>').join('') +
@@ -229,6 +240,10 @@ async function updateMap() {
 
 document.getElementById('yearSelect').addEventListener('change', updateMap);
 document.getElementById('sexSelect').addEventListener('change', updateMap);
+document.getElementById('resetProv').addEventListener('click', function() {
+  selected = NATIONAL;
+  showProvince();
+});
 document.getElementById('legendToggle').addEventListener('click', function() {
   const hidden = document.getElementById('legendWrapper').classList.toggle('legend-hidden');
   this.textContent = hidden ? 'Show' : 'Hide';
@@ -265,7 +280,9 @@ sex-specific formulas as a function of m₀ (total sex: death-weighted average o
 male and female values); ₄a₁ = 1.5, ₙaₓ = n/2 elsewhere;
 qₓ = n·mₓ / (1 + (n − aₓ)·mₓ); open interval 85+ closed with q = 1, a = 1/m, L = l/m.
 Provincial tables are preliminary: small-province death counts make single-year mₓ
-noisy at old ages.</p>
+noisy at old ages. The national table (ITALIA, shown when no province is selected;
+COD_PROV 0 in the CSVs) is computed from the sum of deaths and populations over the
+tabulated provinces.</p>
 <p>Compartimento-level tables for 1901, 1911, 1931 and 1936 are available below; national
 e₀ from these tables matches the official ISTAT period tables (43.4 / 44.4 / 54.9 / 56.8).</p>
 <p><strong>Download:</strong>
