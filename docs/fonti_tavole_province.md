@@ -50,9 +50,9 @@ frontespizio del volume.
     al corretto `032_Trieste_1931.pdf`, che è quello linkato dal sito.
 - **QC sistematico** (skill census-consistency, giu 2026): tutti gli 8 anni
   passati al controllo automatico — report in `docs/qc_flags_census.csv`
-  (583 flag: 75 ERROR, 508 WARN). Gli ERROR sono incoerenze M+F ≠ Totale
+  (566 flag: 58 ERROR, 508 WARN). Gli ERROR sono incoerenze M+F ≠ Totale
   **ereditate dalle tavole originali / trascrizioni** (1881: 10, 1911: 3,
-  1921: 17, 1931: 14, 1936: 30, 1871: 1); i WARN sono per lo più profili
+  1921: 13, 1931: 10, 1936: 21, 1871: 1); i WARN sono per lo più profili
   d'età o sex ratio anomali spiegabili (emigrazione maschile, coorti di
   guerra). Correggerli richiede verifica cella per cella sullo scan.
 - **Verifica sullo scan dei cluster peggiori (giu 2026)** — Nuoro 1936,
@@ -72,5 +72,23 @@ frontespizio del volume.
     provinciale ora riconcilia esattamente col Totale stampato (208 288).
     Restano 3 righe internamente incoerenti nell'originale (residui ≤ ±30,
     es. mesi 3-4 dell'età 0: T 849 vs M+F 819).
+  - *Bergamo 1936*: 7 celle (5-9 M «34 108» → 35 008; 4 Totali di gruppo;
+    incluse 2 righe ±1 non flaggate); Complesso esatto 605 797 / 294 107 /
+    311 690.
+  - *Genova 1936*: 5 celle, tutte −60/−600 sul T (30-34 anche M, riga non
+    flaggata perché internamente coerente); Complesso, 15-64 e 65-ω esatti
+    (867 066 / 420 873 / 446 193).
+  - *Pisa 1921* (Tav. XIV, blocco TOTALE provincia a p. 162): 6 celle
+    (60-64 T «13 921» → 13 291, trasposizione; 80-84 M/F 971/993 →
+    975/989, riga non flaggata); Complesso esatto al netto dell'età
+    ignota (360 787 − 2 045 = 358 742 / 181 473 / 179 314).
+  - *Roma 1931*: lo scan bypage contiene solo i comuni; verificata invece
+    sulla **Tavola VIII (Provincia)** del fascicolo eBiblio
+    (`IST0005915Fasc60_ROMA`, pp. 24-28): 4 celle (5-9 F «70 073» →
+    78 073; 65-69 T «39 051» → 39 851, entrambe confusioni 0↔8; 85+ F
+    via 90-94 F «104» → 194). Controlli «fino a 14», «15-64», «65-ω» e
+    In complesso (1 577 115 / 795 545 / 781 570) tornano esattamente.
+    Nota: i file 1931 (database Riccardo) escludono sistematicamente la
+    riga «100 e oltre» (Roma: 5 / 1 / 4) oltre all'età ignota.
 - **Date riferimento**: popolazione *presente* fino al 1921 e nel 1931;
   *residente* nel 1936 (Tav. X) e 1951.

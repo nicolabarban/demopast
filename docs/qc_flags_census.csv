@@ -451,10 +451,6 @@ year,severity,flag,unit,age,sex,value,detail
 1921,WARN,SEX_RATIO,044 Ascoli Piceno,25-29,MF,0.698,"M/F outside (0.7, 1.4) (M=7439, F=10657)"
 1921,ERROR,ROW_SUM,045 Massa e Carrara,5-9,T,25559.0,male+female = 26159 != total 25559
 1921,ERROR,ROW_SUM,048 Firenze,5-9,T,98983.0,male+female = 99183 != total 98983
-1921,ERROR,ROW_SUM,050 Pisa,5-9,T,34835.0,male+female = 34875 != total 34835
-1921,ERROR,ROW_SUM,050 Pisa,15-19,T,36011.0,male+female = 35921 != total 36011
-1921,ERROR,ROW_SUM,050 Pisa,40-44,T,20909.0,male+female = 20999 != total 20909
-1921,ERROR,ROW_SUM,050 Pisa,60-64,T,13921.0,male+female = 13291 != total 13921
 1921,WARN,SEX_RATIO,066 Aquila degli Abruzzi,25-29,MF,1.47,"M/F outside (0.7, 1.4) (M=14923, F=10150)"
 1921,WARN,SEX_RATIO,066 Aquila degli Abruzzi,30-34,MF,1.438,"M/F outside (0.7, 1.4) (M=13717, F=9538)"
 1921,WARN,SEX_RATIO,067 Teramo,25-29,MF,0.678,"M/F outside (0.7, 1.4) (M=8168, F=12052)"
@@ -494,10 +490,6 @@ year,severity,flag,unit,age,sex,value,detail
 1931,ERROR,ROW_SUM,044 Ascoli Piceno,0,T,7641.0,male+female = 7461 != total 7641
 1931,ERROR,ROW_SUM,044 Ascoli Piceno,1-4,T,27610.0,male+female = 27790 != total 27610
 1931,ERROR,ROW_SUM,053 Grosseto,85+,T,248.0,male+female = 250 != total 248
-1931,ERROR,ROW_SUM,058 Roma,5-9,T,158722.0,male+female = 150722 != total 158722
-1931,ERROR,ROW_SUM,058 Roma,50-54,T,65776.0,male+female = 65778 != total 65776
-1931,ERROR,ROW_SUM,058 Roma,65-69,T,39051.0,male+female = 39851 != total 39051
-1931,ERROR,ROW_SUM,058 Roma,85+,T,2313.0,male+female = 2223 != total 2313
 1931,WARN,SEX_RATIO,060 Frosinone,35-39,MF,0.626,"M/F outside (0.7, 1.4) (M=7980, F=12748)"
 1931,WARN,SEX_RATIO,060 Frosinone,40-44,MF,0.667,"M/F outside (0.7, 1.4) (M=8005, F=11995)"
 1931,WARN,SEX_RATIO,062 Benevento,35-39,MF,0.683,"M/F outside (0.7, 1.4) (M=6569, F=9615)"
@@ -523,15 +515,6 @@ year,severity,flag,unit,age,sex,value,detail
 1931,WARN,SEX_RATIO,080 Reggio di Calabria,40-44,MF,0.647,"M/F outside (0.7, 1.4) (M=9907, F=15306)"
 1936,ERROR,ROW_SUM,005 Asti,50-54,T,14209.0,male+female = 14208 != total 14209
 1936,WARN,SEX_RATIO,006 Alessandria,70-74,MF,2.116,"M/F outside (0.4, 1.7) (M=10361, F=4896)"
-1936,ERROR,ROW_SUM,010 Genova,40-44,T,64767.0,male+female = 65367 != total 64767
-1936,ERROR,ROW_SUM,010 Genova,55-59,T,43832.0,male+female = 43892 != total 43832
-1936,ERROR,ROW_SUM,010 Genova,85+,T,2336.0,male+female = 2426 != total 2336
-1936,ERROR,ROW_SUM,016 Bergamo,5-9,T,69955.0,male+female = 69055 != total 69955
-1936,ERROR,ROW_SUM,016 Bergamo,15-19,T,43873.0,male+female = 43963 != total 43873
-1936,ERROR,ROW_SUM,016 Bergamo,30-34,T,42931.0,male+female = 42982 != total 42931
-1936,ERROR,ROW_SUM,016 Bergamo,40-44,T,32369.0,male+female = 32368 != total 32369
-1936,ERROR,ROW_SUM,016 Bergamo,55-59,T,24148.0,male+female = 24142 != total 24148
-1936,ERROR,ROW_SUM,016 Bergamo,70-74,T,9268.0,male+female = 9267 != total 9268
 1936,ERROR,ROW_SUM,019 Cremona,85+,T,597.0,male+female = 601 != total 597
 1936,WARN,AGE_PROFILE,022 Trento,10-14,T,49707.0,"ratio to neighbour avg = 1.85 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
 1936,WARN,AGE_PROFILE,022 Trento,15-19,T,15971.0,"ratio to neighbour avg = 0.39 (bounds 0.55-1.65; possible band misallocation, double count or digit error)"
