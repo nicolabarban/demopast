@@ -1,64 +1,33 @@
 # DEMOPAST data plausibility report
 
-Flags: **67 ERROR**, 471 WARNING, 412 INFO
+Flags: **36 ERROR**, 465 WARNING, 314 INFO
 
-## ERROR (67)
+## ERROR (36)
 
 | dataset | where | check | detail |
 |---|---|---|---|
-| census | Grosseto 1881->1901 | intercensal_jump | 114,289 -> 178,102 (x1.56) |
 | census | Palermo 1861->1871 | intercensal_jump | 384,526 -> 617,618 (x1.61) |
 | census | AscoliPiceno 1931 | t_0!=m+f | 7,641 != 3,765+3,696 (off 180) |
-| census | Messina 1871 | t_0!=m+f | 10,385 != 5,297+5,034 (off 54) |
-| census | Imperia 1936 | t_10_14!=m+f | 11,855 != 6,148+6,007 (off 300) |
 | census | Piacenza 1921 | t_10_14!=m+f | 32,152 != 16,871+15,881 (off 600) |
 | census | Venezia 1921 | t_10_14!=m+f | 58,411 != 29,590+29,181 (off 360) |
 | census | Vicenza 1921 | t_10_14!=m+f | 66,074 != 33,580+32,994 (off 500) |
-| census | Imperia 1936 | t_15_19!=m+f | 8,443 != 4,179+4,324 (off 60) |
 | census | Rovigo 1921 | t_15_19!=m+f | 30,248 != 15,184+14,884 (off 180) |
 | census | AscoliPiceno 1931 | t_1_4!=m+f | 27,610 != 14,286+13,504 (off 180) |
 | census | Catania 1936 | t_1_4!=m+f | 63,096 != 24,025+30,869 (off 8,202) |
-| census | Imperia 1936 | t_1_4!=m+f | 8,369 != 4,207+4,262 (off 100) |
 | census | Terni 1936 | t_30_34!=m+f | 13,024 != 6,708+6,816 (off 500) |
 | census | Cosenza 1936 | t_35_39!=m+f | 25,459 != 13,311+18,278 (off 6,130) |
-| census | Messina 1871 | t_35_39!=m+f | 21,989 != 11,423+11,201 (off 635) |
-| census | Nuoro 1936 | t_35_39!=m+f | 13,102 != 6,355+7,247 (off 500) |
-| census | Genova 1936 | t_40_44!=m+f | 64,767 != 30,795+34,572 (off 600) |
-| census | Messina 1871 | t_40_44!=m+f | 15,414 != 13,721+13,900 (off 12,207) |
 | census | ReggioCalabria 1911 | t_40_44!=m+f | 22,375 != 10,818+12,557 (off 1,000) |
-| census | Imperia 1936 | t_50_54!=m+f | 9,211 != 4,577+4,794 (off 160) |
 | census | Enna 1936 | t_55_59!=m+f | 7,278 != 4,422+3,728 (off 872) |
-| census | Bergamo 1936 | t_5_9!=m+f | 69,955 != 34,108+34,947 (off 900) |
-| census | Imperia 1936 | t_5_9!=m+f | 11,276 != 5,635+5,731 (off 90) |
 | census | Massa e Carrara 1921 | t_5_9!=m+f | 25,559 != 13,271+12,888 (off 600) |
 | census | PrincipatoUlteriore 1871 | t_5_9!=m+f | 40,436 != 13,687+19,929 (off 6,820) |
-| census | Roma 1931 | t_5_9!=m+f | 158,722 != 80,649+70,073 (off 8,000) |
-| census | Imperia 1936 | t_60_64!=m+f | 7,410 != 3,722+3,778 (off 90) |
-| census | Nuoro 1936 | t_60_64!=m+f | 8,422 != 4,053+3,869 (off 500) |
-| census | Pisa 1921 | t_60_64!=m+f | 13,921 != 6,745+6,546 (off 630) |
-| census | Nuoro 1936 | t_65_69!=m+f | 7,445 != 3,568+3,372 (off 505) |
-| census | Roma 1931 | t_65_69!=m+f | 39,051 != 18,941+20,910 (off 800) |
-| census | Napoli 1936 | t_70_74!=m+f | 44,324 != 20,561+69,128 (off 45,365) |
-| census | Nuoro 1936 | t_70_74!=m+f | 5,387 != 2,744+2,593 (off 50) |
 | census | Siracusa 1921 | t_70_74!=m+f | 9,870 != 5,028+4,942 (off 100) |
-| census | Nuoro 1936 | t_75_79!=m+f | 3,281 != 1,711+1,520 (off 50) |
-| census | Genova 1936 | t_85plus!=m+f | 2,336 != 939+1,487 (off 90) |
-| census | Napoli 1936 | t_85plus!=m+f | 5,150 != 1,295+3,255 (off 600) |
-| census | Roma 1931 | t_85plus!=m+f | 2,313 != 874+1,349 (off 90) |
-| census | Bergamo 1936 | total!=M+F | 605,655 != 293,207+311,681 (off 767) |
 | census | Catania 1936 | total!=M+F | 713,108 != 343,463+361,443 (off 8,202) |
 | census | Cosenza 1936 | total!=M+F | 580,763 != 280,256+306,637 (off 6,130) |
 | census | Enna 1936 | total!=M+F | 216,240 != 110,509+106,603 (off 872) |
-| census | Imperia 1936 | total!=M+F | 154,163 != 76,985+77,970 (off 792) |
 | census | Massa e Carrara 1921 | total!=M+F | 223,346 != 110,053+113,893 (off 600) |
-| census | Messina 1871 | total!=M+F | 406,604 != 208,273+211,075 (off 12,744) |
-| census | Napoli 1936 | total!=M+F | 2,191,821 != 1,060,038+1,176,458 (off 44,675) |
-| census | Nuoro 1936 | total!=M+F | 225,796 != 113,259+111,882 (off 655) |
 | census | Piacenza 1921 | total!=M+F | 280,483 != 142,209+138,864 (off 590) |
-| census | Pisa 1921 | total!=M+F | 359,242 != 180,556+178,096 (off 590) |
 | census | PrincipatoUlteriore 1871 | total!=M+F | 377,207 != 179,187+191,200 (off 6,820) |
 | census | ReggioCalabria 1911 | total!=M+F | 443,611 != 212,964+231,647 (off 1,000) |
-| census | Roma 1931 | total!=M+F | 1,575,277 != 795,089+772,900 (off 7,288) |
 | census | Terni 1936 | total!=M+F | 191,547 != 97,260+94,787 (off 500) |
 | fertility | Fiume 1931 | cbr_implausible | cbr=5.8 |
 | fertility | Mantova 1865 | cbr_implausible | cbr=5.16 |
@@ -74,19 +43,16 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | migration | Belluno 1914 | emig_rate_implausible | emig_rate=82.21 |
 | mortality | Trapani 1881 | cdr_implausible | cdr=0.95 |
 
-## WARNING (471)
+## WARNING (465)
 
 | dataset | where | check | detail |
 |---|---|---|---|
-| census | AbruzzoUlterioreI 1861->1871 | intercensal_growth | -1.77%/yr (293,870 -> 245,881) |
-| census | Brescia 1861->1871 | intercensal_growth | -2.08%/yr (562,287 -> 455,470) |
 | census | Catania 1921->1931 | intercensal_growth | -2.35%/yr (869,684 -> 685,369) |
 | census | Como 1921->1931 | intercensal_growth | -2.52%/yr (628,980 -> 487,186) |
 | census | Cremona 1931->1936 | intercensal_growth | -1.62%/yr (400,834 -> 369,466) |
 | census | Firenze 1921->1931 | intercensal_growth | -2.07%/yr (1,035,968 -> 840,043) |
 | census | Genova 1921->1931 | intercensal_growth | -3.38%/yr (1,171,838 -> 831,269) |
 | census | Girgenti 1861->1871 | intercensal_growth | -2.66%/yr (376,957 -> 287,763) |
-| census | Grosseto 1901->1911 | intercensal_growth | -1.93%/yr (178,102 -> 146,634) |
 | census | MassaCarrara 1921->1931 | intercensal_growth | -1.62%/yr (223,346 -> 189,622) |
 | census | Napoli 1921->1931 | intercensal_growth | +3.56%/yr (1,461,112 -> 2,073,825) |
 | census | Perugia 1921->1931 | intercensal_growth | -3.48%/yr (733,696 -> 514,830) |
@@ -100,21 +66,22 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | census | Livorno 1921->1931 | intercensal_jump | 143,190 -> 245,707 (x1.72) (possible 1927/1935 boundary change) |
 | census | Novara 1921->1931 | intercensal_jump | 723,269 -> 389,312 (x0.54) (possible 1927/1935 boundary change) |
 | census | Siracusa 1921->1931 | intercensal_jump | 526,953 -> 284,193 (x0.54) (possible 1927/1935 boundary change) |
-| census | AbruzzoUlterioreI 1861 | mean_age | 39.4 |
 | census | Girgenti 1861 | mean_age | 42.7 |
 | census | COD_PROV 14 1881 | province_missing | present in 1871 and 1901, absent in 1881 (Sondrio) |
 | census | Aquila 1881 | sex_ratio | M/F = 87.0 per 100 |
+| census | Aquila 1901 | sex_ratio | M/F = 87.9 per 100 |
 | census | Aquila 1911 | sex_ratio | M/F = 86.9 per 100 |
 | census | AquiladegliAbruzzi 1871 | sex_ratio | M/F = 87.8 per 100 |
 | census | Belluno 1911 | sex_ratio | M/F = 81.8 per 100 |
 | census | Belluno 1931 | sex_ratio | M/F = 86.9 per 100 |
 | census | Caltanissetta 1861 | sex_ratio | M/F = 113.0 per 100 |
+| census | Campobasso 1901 | sex_ratio | M/F = 88.0 per 100 |
 | census | Campobasso 1911 | sex_ratio | M/F = 83.8 per 100 |
-| census | Capobasso 1931 | sex_ratio | M/F = 87.5 per 100 |
+| census | Campobasso 1931 | sex_ratio | M/F = 87.5 per 100 |
 | census | Catanzaro 1911 | sex_ratio | M/F = 85.3 per 100 |
 | census | Chieti 1911 | sex_ratio | M/F = 85.5 per 100 |
 | census | Chieti 1931 | sex_ratio | M/F = 83.9 per 100 |
-| census | Cosenza 1901 | sex_ratio | M/F = 85.4 per 100 |
+| census | Cosenza 1901 | sex_ratio | M/F = 84.8 per 100 |
 | census | Cosenza 1911 | sex_ratio | M/F = 84.1 per 100 |
 | census | Cosenza 1931 | sex_ratio | M/F = 87.8 per 100 |
 | census | Cremona 1931 | sex_ratio | M/F = 80.9 per 100 |
@@ -123,18 +90,14 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | census | Grosseto 1861 | sex_ratio | M/F = 135.4 per 100 |
 | census | Grosseto 1871 | sex_ratio | M/F = 130.3 per 100 |
 | census | Grosseto 1881 | sex_ratio | M/F = 129.0 per 100 |
-| census | Grosseto 1901 | sex_ratio | M/F = 113.0 per 100 |
+| census | Grosseto 1901 | sex_ratio | M/F = 120.1 per 100 |
 | census | Lucca 1911 | sex_ratio | M/F = 87.6 per 100 |
 | census | Lucca 1931 | sex_ratio | M/F = 87.8 per 100 |
 | census | Novara 1911 | sex_ratio | M/F = 85.9 per 100 |
 | census | Palermo 1861 | sex_ratio | M/F = 298.5 per 100 |
 | census | Roma 1871 | sex_ratio | M/F = 115.9 per 100 |
 | census | Roma 1881 | sex_ratio | M/F = 113.6 per 100 |
-| census | Siena 1861 | sex_ratio | M/F = 114.9 per 100 |
 | census | Udine 1911 | sex_ratio | M/F = 83.0 per 100 |
-| census | Arezzo 1901 | share_15_19 | 18.2% in one 5-year group |
-| census | Grosseto 1901 | share_15_19 | 20.3% in one 5-year group |
-| census | Livorno 1901 | share_15_19 | 16.6% in one 5-year group |
 | census | Girgenti 1861 | share_50_54 | 17.0% in one 5-year group |
 | census | Campobasso 1936 | share_age0 | 5.02% of population aged 0 |
 | census | Firenze 1936 | share_age0 | 1.20% of population aged 0 |
@@ -158,7 +121,7 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | fertility | Porto Maurizio 1931 | cbr_range | cbr=15.78 |
 | fertility | Ravenna 1931 | cbr_range | cbr=15.84 |
 | fertility | Savona 1931 | cbr_range | cbr=16.71 |
-| fertility | Sondrio 1881 | cbr_range | cbr=18.56 |
+| fertility | Sondrio 1881 | cbr_range | cbr=19.67 |
 | fertility | Torino 1921 | cbr_range | cbr=18.62 |
 | fertility | Torino 1931 | cbr_range | cbr=15.07 |
 | fertility | Varese 1931 | cbr_range | cbr=17.87 |
@@ -167,7 +130,7 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | fertility | Mantova 1864->1865 | yoy_jump | cbr 20.44 -> 5.16 |
 | fertility | Mantova 1865->1866 | yoy_jump | cbr 5.16 -> 21.35 |
 | fertility | Mantova 1868->1869 | yoy_jump | cbr 21.8 -> 37.53 |
-| fertility | Sondrio 1880->1881 | yoy_jump | cbr 34.94 -> 18.56 |
+| fertility | Sondrio 1880->1881 | yoy_jump | cbr 36.82 -> 19.67 |
 | marriages | Alessandria 1921 | nuptiality_range | nuptiality=13.45 |
 | marriages | Ancona 1866 | nuptiality_range | nuptiality=4.1 |
 | marriages | Ancona 1868 | nuptiality_range | nuptiality=4.19 |
@@ -245,8 +208,8 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | marriages | Benevento 1880->1881 | yoy_jump | nuptiality 6.62 -> 10.57 |
 | marriages | Bergamo 1865->1866 | yoy_jump | nuptiality 9.54 -> 5.64 |
 | marriages | Bologna 1865->1866 | yoy_jump | nuptiality 7.97 -> 4.49 |
-| marriages | Brescia 1865->1866 | yoy_jump | nuptiality 9.28 -> 5.34 |
-| marriages | Brescia 1866->1867 | yoy_jump | nuptiality 5.34 -> 7.52 |
+| marriages | Brescia 1865->1866 | yoy_jump | nuptiality 10.17 -> 5.77 |
+| marriages | Brescia 1866->1867 | yoy_jump | nuptiality 5.77 -> 8.01 |
 | marriages | Cagliari 1865->1866 | yoy_jump | nuptiality 10.04 -> 3.63 |
 | marriages | Caltanissetta 1865->1866 | yoy_jump | nuptiality 7.93 -> 3.86 |
 | marriages | Caltanissetta 1866->1867 | yoy_jump | nuptiality 3.86 -> 5.64 |
@@ -260,7 +223,7 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | marriages | Catanzaro 1865->1866 | yoy_jump | nuptiality 10.44 -> 6.14 |
 | marriages | Catanzaro 1868->1869 | yoy_jump | nuptiality 5.41 -> 8.98 |
 | marriages | Catanzaro 1880->1881 | yoy_jump | nuptiality 6.57 -> 8.99 |
-| marriages | Como 1865->1866 | yoy_jump | nuptiality 8.45 -> 5.06 |
+| marriages | Como 1865->1866 | yoy_jump | nuptiality 9.1 -> 5.39 |
 | marriages | Cosenza 1865->1866 | yoy_jump | nuptiality 10.13 -> 6.33 |
 | marriages | Cosenza 1868->1869 | yoy_jump | nuptiality 6.59 -> 9.11 |
 | marriages | Cremona 1865->1866 | yoy_jump | nuptiality 10.94 -> 6.46 |
@@ -316,7 +279,7 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | marriages | Sassari 1865->1866 | yoy_jump | nuptiality 11.07 -> 3.63 |
 | marriages | Sassari 1866->1867 | yoy_jump | nuptiality 3.63 -> 5.9 |
 | marriages | Sassari 1873->1874 | yoy_jump | nuptiality 6.6 -> 9.13 |
-| marriages | Siena 1865->1866 | yoy_jump | nuptiality 8.95 -> 4.94 |
+| marriages | Siena 1865->1866 | yoy_jump | nuptiality 9.95 -> 5.4 |
 | marriages | Siena 1880->1881 | yoy_jump | nuptiality 6.18 -> 8.49 |
 | marriages | Siracusa 1865->1866 | yoy_jump | nuptiality 7.6 -> 3.97 |
 | marriages | Siracusa 1867->1868 | yoy_jump | nuptiality 3.47 -> 5.6 |
@@ -550,7 +513,7 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | mortality | Ravenna 1936 | imr_range | imr=56.0 |
 | mortality | Sondrio 1881 | imr_range | imr=370.0 |
 
-## INFO (412)
+## INFO (314)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -558,95 +521,33 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | census | Cuneo 1931 | t_0!=m+f | 12,733 != 6,436+6,267 (off 30) |
 | census | Como 1881 | t_10_14!=m+f | 49,812 != 24,821+24,961 (off 30) |
 | census | Foggia 1936 | t_10_14!=m+f | 59,166 != 29,827+29,348 (off 9) |
-| census | Nuoro 1936 | t_10_14!=m+f | 23,955 != 12,399+11,506 (off 50) |
 | census | Reggionell'Emilia 1936 | t_10_14!=m+f | 41,453 != 20,616+20,842 (off 5) |
 | census | Siena 1911 | t_10_14!=m+f | 23,520 != 11,999+11,516 (off 5) |
-| census | Bergamo 1901 | t_15_19!=m+f | 55,713 != 27,110+28,602 (off 1) |
-| census | Bergamo 1936 | t_15_19!=m+f | 43,873 != 22,085+21,878 (off 90) |
-| census | Bologna 1901 | t_15_19!=m+f | 37,999 != 19,110+18,888 (off 1) |
-| census | Caltanissetta 1901 | t_15_19!=m+f | 34,837 != 17,450+17,386 (off 1) |
-| census | Campobasso 1901 | t_15_19!=m+f | 26,450 != 13,072+13,377 (off 1) |
-| census | Caserta 1901 | t_15_19!=m+f | 48,733 != 23,969+24,763 (off 1) |
-| census | Catania 1901 | t_15_19!=m+f | 54,672 != 27,792+26,879 (off 1) |
 | census | Catanzaro 1936 | t_15_19!=m+f | 48,611 != 24,870+23,738 (off 3) |
-| census | Grosseto 1901 | t_15_19!=m+f | 36,078 != 17,495+18,582 (off 1) |
-| census | Messina 1871 | t_15_19!=m+f | 37,789 != 18,901+18,895 (off 7) |
-| census | Messina 1901 | t_15_19!=m+f | 70,281 != 34,420+35,860 (off 1) |
-| census | PesaroUrbino 1901 | t_15_19!=m+f | 23,332 != 11,528+11,803 (off 1) |
-| census | Piacenza 1901 | t_15_19!=m+f | 31,648 != 15,536+16,111 (off 1) |
-| census | Pisa 1921 | t_15_19!=m+f | 36,011 != 18,315+17,606 (off 90) |
-| census | Potenza 1901 | t_15_19!=m+f | 69,891 != 35,449+34,441 (off 1) |
-| census | ReggioEmilia 1901 | t_15_19!=m+f | 24,146 != 12,090+12,055 (off 1) |
-| census | Roma 1901 | t_15_19!=m+f | 92,656 != 48,002+44,653 (off 1) |
-| census | Rovigo 1901 | t_15_19!=m+f | 22,370 != 11,196+11,173 (off 1) |
-| census | Salerno 1901 | t_15_19!=m+f | 40,433 != 19,912+20,520 (off 1) |
-| census | Siracusa 1901 | t_15_19!=m+f | 46,307 != 22,612+23,694 (off 1) |
-| census | Torino 1901 | t_15_19!=m+f | 81,447 != 40,089+41,357 (off 1) |
 | census | Trapani 1921 | t_15_19!=m+f | 39,677 != 19,856+19,823 (off 2) |
-| census | Venezia 1901 | t_15_19!=m+f | 31,254 != 15,504+15,749 (off 1) |
 | census | Cuneo 1931 | t_1_4!=m+f | 47,452 != 23,881+23,601 (off 30) |
-| census | Ancona 1901 | t_20_24!=m+f | 23,845 != 11,789+12,055 (off 1) |
-| census | Arezzo 1901 | t_20_24!=m+f | 26,820 != 13,123+13,696 (off 1) |
-| census | Belluno 1901 | t_20_24!=m+f | 16,099 != 7,423+8,675 (off 1) |
-| census | Brescia 1901 | t_20_24!=m+f | 39,016 != 19,320+19,695 (off 1) |
-| census | Campobasso 1901 | t_20_24!=m+f | 42,219 != 20,248+21,970 (off 1) |
-| census | Caserta 1901 | t_20_24!=m+f | 52,465 != 25,651+26,813 (off 1) |
-| census | Catania 1901 | t_20_24!=m+f | 54,637 != 27,345+27,291 (off 1) |
-| census | Como 1901 | t_20_24!=m+f | 41,838 != 19,415+22,422 (off 1) |
-| census | Cuneo 1901 | t_20_24!=m+f | 48,167 != 25,311+22,855 (off 1) |
-| census | Ferrara 1901 | t_20_24!=m+f | 29,621 != 14,576+15,044 (off 1) |
-| census | Lecce 1901 | t_20_24!=m+f | 54,630 != 27,844+26,785 (off 1) |
-| census | Lucca 1901 | t_20_24!=m+f | 38,583 != 17,843+20,739 (off 1) |
-| census | Nuoro 1936 | t_20_24!=m+f | 17,912 != 9,254+8,663 (off 5) |
-| census | Piacenza 1901 | t_20_24!=m+f | 20,364 != 10,660+9,703 (off 1) |
-| census | PortoMaurizio 1901 | t_20_24!=m+f | 17,255 != 9,048+8,206 (off 1) |
-| census | Ravenna 1901 | t_20_24!=m+f | 20,137 != 10,365+9,771 (off 1) |
-| census | Rovigo 1901 | t_20_24!=m+f | 17,623 != 8,376+9,246 (off 1) |
-| census | Salerno 1901 | t_20_24!=m+f | 35,706 != 16,870+18,835 (off 1) |
-| census | Sassari 1901 | t_20_24!=m+f | 25,509 != 13,619+11,889 (off 1) |
 | census | Sassari 1921 | t_20_24!=m+f | 27,315 != 12,877+14,538 (off 100) |
-| census | Siena 1901 | t_20_24!=m+f | 16,414 != 8,173+8,240 (off 1) |
-| census | Trapani 1901 | t_20_24!=m+f | 31,123 != 15,306+15,816 (off 1) |
-| census | Udine 1901 | t_20_24!=m+f | 45,856 != 21,730+24,125 (off 1) |
-| census | Venezia 1901 | t_20_24!=m+f | 35,253 != 17,980+17,272 (off 1) |
-| census | Verona 1901 | t_20_24!=m+f | 33,901 != 17,652+16,248 (off 1) |
-| census | Nuoro 1936 | t_25_29!=m+f | 17,196 != 8,673+8,518 (off 5) |
-| census | Bergamo 1936 | t_30_34!=m+f | 42,931 != 20,365+22,617 (off 51) |
-| census | Napoli 1936 | t_30_34!=m+f | 147,400 != 70,828+76,532 (off 40) |
-| census | Nuoro 1936 | t_30_34!=m+f | 14,844 != 7,062+7,777 (off 5) |
 | census | Ravenna 1931 | t_30_34!=m+f | 18,595 != 9,387+9,207 (off 1) |
 | census | Grosseto 1881 | t_35_39!=m+f | 7,641 != 4,615+2,996 (off 30) |
-| census | Imperia 1936 | t_35_39!=m+f | 11,384 != 5,399+5,986 (off 1) |
 | census | Piacenza 1921 | t_35_39!=m+f | 15,900 != 7,586+8,304 (off 10) |
 | census | Ravenna 1931 | t_35_39!=m+f | 17,112 != 8,571+8,540 (off 1) |
-| census | Bergamo 1936 | t_40_44!=m+f | 32,369 != 14,418+17,950 (off 1) |
-| census | Pisa 1921 | t_40_44!=m+f | 20,909 != 10,571+10,428 (off 90) |
 | census | ReggiodiCalabria 1936 | t_40_44!=m+f | 26,558 != 10,396+16,164 (off 2) |
 | census | Chieti 1936 | t_45_49!=m+f | 16,665 != 6,643+10,016 (off 6) |
 | census | Foggia 1936 | t_45_49!=m+f | 23,685 != 10,466+13,210 (off 9) |
-| census | Messina 1871 | t_45_49!=m+f | 19,313 != 9,598+9,724 (off 9) |
 | census | Salerno 1881 | t_45_49!=m+f | 24,360 != 11,259+13,111 (off 10) |
 | census | Asti 1936 | t_50_54!=m+f | 14,209 != 6,903+7,305 (off 1) |
-| census | Messina 1871 | t_50_54!=m+f | 25,130 != 12,338+12,732 (off 60) |
 | census | Ravenna 1931 | t_50_54!=m+f | 13,475 != 6,802+6,672 (off 1) |
-| census | Roma 1931 | t_50_54!=m+f | 65,776 != 32,012+33,766 (off 2) |
 | census | Sassari 1921 | t_50_54!=m+f | 15,182 != 7,785+7,373 (off 24) |
 | census | Ancona 1936 | t_55_59!=m+f | 14,313 != 6,754+7,564 (off 5) |
-| census | Bergamo 1936 | t_55_59!=m+f | 24,148 != 11,643+12,499 (off 6) |
-| census | Genova 1936 | t_55_59!=m+f | 43,832 != 21,385+22,507 (off 60) |
 | census | Grosseto 1936 | t_55_59!=m+f | 7,205 != 3,871+3,333 (off 1) |
-| census | Imperia 1936 | t_55_59!=m+f | 8,609 != 4,206+4,394 (off 9) |
 | census | Firenze 1921 | t_5_9!=m+f | 98,983 != 49,760+49,423 (off 200) |
-| census | Pisa 1921 | t_5_9!=m+f | 34,835 != 17,710+17,165 (off 40) |
 | census | Latina 1936 | t_60_64!=m+f | 5,874 != 2,843+3,022 (off 9) |
 | census | Parma 1921 | t_65_69!=m+f | 7,164 != 3,639+3,515 (off 10) |
 | census | Bergamo 1881 | t_70_74!=m+f | 5,137 != 2,838+2,279 (off 20) |
-| census | Bergamo 1936 | t_70_74!=m+f | 9,268 != 4,395+4,872 (off 1) |
 | census | Macerata 1881 | t_70_74!=m+f | 5,775 != 2,846+2,925 (off 4) |
 | census | Napoli 1911 | t_70_74!=m+f | 25,639 != 12,051+13,581 (off 7) |
 | census | Benevento 1936 | t_75_79!=m+f | 5,288 != 2,475+2,808 (off 5) |
 | census | Forlì 1881 | t_75_79!=m+f | 1,863 != 1,065+800 (off 2) |
-| census | Napoli 1936 | t_75_79!=m+f | 27,888 != 12,345+15,493 (off 50) |
 | census | Cuneo 1931 | t_80_84!=m+f | 3,853 != 1,928+1,924 (off 1) |
 | census | Ravenna 1881 | t_80_84!=m+f | 773 != 384+385 (off 4) |
 | census | Ancona 1881 | t_85plus!=m+f | 453 != 203+252 (off 2) |
@@ -658,79 +559,43 @@ Flags: **67 ERROR**, 471 WARNING, 412 INFO
 | census | Ferrara 1936 | t_85plus!=m+f | 121 != 43+81 (off 3) |
 | census | Grosseto 1931 | t_85plus!=m+f | 248 != 97+153 (off 2) |
 | census | Matera 1936 | t_85plus!=m+f | 330 != 139+194 (off 3) |
-| census | Nuoro 1936 | t_85plus!=m+f | 606 != 307+304 (off 5) |
 | census | Potenza 1936 | t_85plus!=m+f | 1,044 != 460+589 (off 5) |
 | census | Reggio nell'Emilia 1921 | t_85plus!=m+f | 648 != 255+395 (off 2) |
 | census | Ancona 1881 | total!=M+F | 267,335 != 130,939+136,398 (off 2) |
-| census | Ancona 1901 | total!=M+F | 318,609 != 156,627+161,981 (off 1) |
 | census | Ancona 1936 | total!=M+F | 372,226 != 180,621+191,610 (off 5) |
 | census | Aquila 1881 | total!=M+F | 352,993 != 164,251+188,787 (off 45) |
-| census | Arezzo 1901 | total!=M+F | 309,848 != 158,172+151,675 (off 1) |
 | census | Asti 1936 | total!=M+F | 241,704 != 121,914+119,789 (off 1) |
-| census | Belluno 1901 | total!=M+F | 198,496 != 94,618+103,877 (off 1) |
 | census | Benevento 1936 | total!=M+F | 349,695 != 169,769+179,920 (off 6) |
 | census | Bergamo 1881 | total!=M+F | 390,768 != 196,889+193,861 (off 18) |
-| census | Bergamo 1901 | total!=M+F | 470,509 != 233,699+236,809 (off 1) |
-| census | Bologna 1901 | total!=M+F | 512,754 != 258,062+254,691 (off 1) |
-| census | Brescia 1901 | total!=M+F | 521,149 != 262,195+258,953 (off 1) |
-| census | Caltanissetta 1901 | total!=M+F | 328,812 != 170,071+158,740 (off 1) |
-| census | Campobasso 1901 | total!=M+F | 374,430 != 177,198+197,230 (off 2) |
-| census | Caserta 1901 | total!=M+F | 754,421 != 366,785+387,634 (off 2) |
-| census | Catania 1901 | total!=M+F | 684,279 != 346,966+337,311 (off 2) |
 | census | Catanzaro 1936 | total!=M+F | 606,286 != 289,935+316,348 (off 3) |
 | census | Chieti 1936 | total!=M+F | 374,719 != 178,414+196,293 (off 12) |
 | census | Como 1881 | total!=M+F | 515,046 != 256,444+258,572 (off 30) |
-| census | Como 1901 | total!=M+F | 563,864 != 275,690+288,173 (off 1) |
 | census | Cremona 1936 | total!=M+F | 369,466 != 182,999+186,471 (off 4) |
-| census | Cuneo 1901 | total!=M+F | 617,071 != 311,916+305,154 (off 1) |
 | census | Cuneo 1931 | total!=M+F | 619,708 != 314,804+304,902 (off 2) |
-| census | Ferrara 1901 | total!=M+F | 284,972 != 143,909+141,062 (off 1) |
 | census | Ferrara 1936 | total!=M+F | 381,293 != 190,014+191,282 (off 3) |
 | census | Firenze 1921 | total!=M+F | 1,035,968 != 511,493+524,675 (off 200) |
 | census | Forlì 1881 | total!=M+F | 251,081 != 128,609+122,474 (off 2) |
-| census | Genova 1936 | total!=M+F | 866,256 != 420,813+446,193 (off 750) |
 | census | Grosseto 1881 | total!=M+F | 114,289 != 64,367+49,892 (off 30) |
-| census | Grosseto 1901 | total!=M+F | 178,102 != 94,490+83,611 (off 1) |
 | census | Grosseto 1931 | total!=M+F | 176,975 != 91,567+85,410 (off 2) |
 | census | Grosseto 1936 | total!=M+F | 185,799 != 96,145+89,653 (off 1) |
 | census | Latina 1936 | total!=M+F | 227,158 != 114,802+112,347 (off 9) |
-| census | Lecce 1901 | total!=M+F | 735,202 != 371,275+363,926 (off 1) |
-| census | Lucca 1901 | total!=M+F | 335,692 != 160,132+175,559 (off 1) |
 | census | Macerata 1881 | total!=M+F | 239,652 != 116,572+123,076 (off 4) |
 | census | Matera 1936 | total!=M+F | 166,770 != 82,697+84,076 (off 3) |
-| census | Messina 1901 | total!=M+F | 564,874 != 277,749+287,124 (off 1) |
 | census | Napoli 1911 | total!=M+F | 1,302,007 != 641,314+660,686 (off 7) |
 | census | Parma 1921 | total!=M+F | 343,394 != 172,295+171,089 (off 10) |
-| census | PesaroUrbino 1901 | total!=M+F | 253,777 != 128,362+125,414 (off 1) |
-| census | Piacenza 1901 | total!=M+F | 254,618 != 129,234+125,382 (off 2) |
-| census | PortoMaurizio 1901 | total!=M+F | 156,172 != 78,222+77,949 (off 1) |
-| census | Potenza 1901 | total!=M+F | 511,528 != 243,972+267,555 (off 1) |
 | census | Potenza 1936 | total!=M+F | 376,482 != 184,150+192,337 (off 5) |
 | census | Ravenna 1881 | total!=M+F | 225,757 != 115,138+110,615 (off 4) |
-| census | Ravenna 1901 | total!=M+F | 238,022 != 121,773+116,248 (off 1) |
 | census | Ravenna 1931 | total!=M+F | 271,666 != 136,151+135,512 (off 3) |
 | census | Reggio nell'Emilia 1921 | total!=M+F | 344,532 != 172,508+172,026 (off 2) |
-| census | ReggioEmilia 1901 | total!=M+F | 274,681 != 138,308+136,372 (off 1) |
 | census | ReggiodiCalabria 1936 | total!=M+F | 578,127 != 278,686+299,443 (off 2) |
 | census | Reggionell'Emilia 1936 | total!=M+F | 375,261 != 187,469+187,797 (off 5) |
-| census | Roma 1901 | total!=M+F | 1,157,797 != 601,614+556,182 (off 1) |
-| census | Rovigo 1901 | total!=M+F | 225,684 != 112,910+112,772 (off 2) |
 | census | Rovigo 1921 | total!=M+F | 286,688 != 141,941+144,567 (off 180) |
 | census | Salerno 1881 | total!=M+F | 550,157 != 266,129+284,038 (off 10) |
-| census | Salerno 1901 | total!=M+F | 547,920 != 262,478+285,440 (off 2) |
-| census | Sassari 1901 | total!=M+F | 307,614 != 158,767+148,846 (off 1) |
 | census | Sassari 1921 | total!=M+F | 330,548 != 165,097+165,527 (off 76) |
-| census | Siena 1901 | total!=M+F | 234,339 != 120,763+113,575 (off 1) |
 | census | Siena 1911 | total!=M+F | 241,535 != 124,795+116,735 (off 5) |
-| census | Siracusa 1901 | total!=M+F | 427,480 != 216,461+211,018 (off 1) |
 | census | Siracusa 1921 | total!=M+F | 526,953 != 267,126+259,927 (off 100) |
-| census | Torino 1901 | total!=M+F | 1,084,789 != 526,847+557,941 (off 1) |
-| census | Trapani 1901 | total!=M+F | 361,658 != 181,592+180,065 (off 1) |
 | census | Trapani 1921 | total!=M+F | 405,743 != 200,457+205,288 (off 2) |
-| census | Udine 1901 | total!=M+F | 584,954 != 288,699+296,254 (off 1) |
-| census | Venezia 1901 | total!=M+F | 398,716 != 197,814+200,900 (off 2) |
 | census | Venezia 1921 | total!=M+F | 517,970 != 257,222+261,108 (off 360) |
-| census | Verona 1901 | total!=M+F | 412,659 != 207,309+205,349 (off 1) |
 | census | Vicenza 1921 | total!=M+F | 545,991 != 269,010+277,481 (off 500) |
 | cross | Cuneo 1931 | cdr>cbr | deaths exceed births: CDR 20.85 > CBR 20.73 |
 | cross | Padova 1931 | cdr>cbr | deaths exceed births: CDR 26.8 > CBR 20.85 |

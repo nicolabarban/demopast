@@ -18,6 +18,7 @@ Outputs (data/mortality/):
 """
 
 import csv
+import json
 import re
 import shutil
 import unicodedata
@@ -28,6 +29,35 @@ HERE = Path(__file__).resolve().parent.parent
 SRC = Path("/Users/nicolabarban/Library/CloudStorage/Dropbox/dati_ISTAT"
            "/data/processed/mortality_extraction/csv")
 OUT = HERE / "data/mortality"
+GEO = HERE / "data/geojson"
+
+# compartimento life-table years that have a matching provincial geojson
+COMP_YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936]
+
+# canonical compartimento -> COD_PROV codes (1936 extent), mirrors
+# dati_ISTAT/ebiblio_downloader/build_lifetables_comp.py::COMP_PROVS.
+# Used to colour provincial polygons by their compartimento's e0.
+COMP_PROVS = {
+    "PIEMONTE": [1, 2, 3, 4, 5, 6, 7],
+    "LIGURIA": [8, 9, 10, 11],
+    "LOMBARDIA": list(range(12, 21)),
+    "VENEZIA TRIDENTINA": [21, 22],
+    "VENETO": list(range(23, 31)),
+    "VENEZIA GIULIA E ZARA": [31, 32],
+    "EMILIA": list(range(33, 41)),
+    "MARCHE": [41, 42, 43, 44],
+    "TOSCANA": list(range(45, 54)),
+    "UMBRIA": [54, 55],
+    "LAZIO": [56, 57, 58, 59, 60],
+    "CAMPANIA": [61, 62, 63, 64, 65],
+    "ABRUZZI E MOLISE": [66, 67, 68, 69, 70],
+    "PUGLIE": [71, 72, 73, 74, 75],
+    "BASILICATA": [76, 77],
+    "CALABRIE": [78, 79, 80],
+    "SICILIA": list(range(81, 90)),
+    "SARDEGNA": [90, 91, 92],
+}
+COMP_CANON = {"LUCANIA": "BASILICATA"}  # 1931/1936 naming
 
 # pyramid age groups: map TIDY detail rows -> census-style groups
 PYR_GROUPS = (["0", "1_4"] + [f"{a}_{a+4}" for a in range(5, 85, 5)] + ["85plus"])
@@ -108,6 +138,64 @@ def tidy_age_group(age: str, order: float) -> str | None:
         return "85plus"
     lo = int(order // 5 * 5)
     return f"{lo}_{lo+4}"
+
+
+def build_comp_decennial() -> None:
+    """Refresh compartimento outputs to the 7-date decennial series and
+    derive a province-level e0 file (each province coloured by its
+    compartimento's e0) for the compartimento life-table map."""
+    # a. overwrite the (older, 4-date) comp files with the decennial ones
+    for src_name, dst_name in (
+            ("e0_comp_decennial.csv", "e0_comp.csv"),
+            ("lifetables_comp_decennial.csv", "lifetables_comp.csv")):
+        src = SRC / src_name
+        if src.exists():
+            shutil.copy(src, OUT / dst_name)
+            print(f"{dst_name}: copied from {src_name}")
+
+    # b. e0_comp_byprov.csv: COD_PROV,year,e0_T,e0_M,e0_F via COMP_PROVS
+    prov2comp = {cod: comp for comp, codes in COMP_PROVS.items()
+                 for cod in codes}
+    # (comp, year) -> {e0_T, e0_M, e0_F}
+    e0_comp = {}
+    e0_path = SRC / "e0_comp_decennial.csv"
+    if not e0_path.exists():
+        print("e0_comp_decennial.csv missing — skip byprov")
+        return
+    for r in csv.DictReader(e0_path.open()):
+        comp = COMP_CANON.get(r["compartimento"], r["compartimento"])
+        if comp == "REGNO":
+            continue  # national aggregate, not a compartimento polygon
+        e0_comp[(comp, int(r["year"]))] = {
+            "e0_T": r["e0_T"], "e0_M": r["e0_M"], "e0_F": r["e0_F"]}
+
+    rows = []
+    per_year = {}
+    for year in COMP_YEARS:
+        gj = GEO / f"province_{year}.geojson"
+        if not gj.exists():
+            print(f"province_{year}.geojson missing — skip {year}")
+            continue
+        feats = json.load(gj.open())["features"]
+        n = 0
+        for feat in feats:
+            cod = feat["properties"].get("COD_PROV")
+            comp = prov2comp.get(cod)
+            if comp is None:
+                continue
+            vals = e0_comp.get((comp, year))
+            if vals is None:
+                continue  # compartimento has no data this year
+            rows.append({"COD_PROV": cod, "year": year, **vals})
+            n += 1
+        per_year[year] = n
+
+    with (OUT / "e0_comp_byprov.csv").open("w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=["COD_PROV", "year",
+                                           "e0_T", "e0_M", "e0_F"])
+        w.writeheader(); w.writerows(rows)
+    breakdown = ", ".join(f"{y}:{per_year[y]}" for y in sorted(per_year))
+    print(f"e0_comp_byprov.csv: {len(rows)} rows ({breakdown})")
 
 
 def main() -> None:
@@ -224,6 +312,9 @@ def main() -> None:
                                                "Lx", "Tx", "ex"])
             w.writeheader(); w.writerows(uni_rows)
         print(f"lifetables_province.csv: {len(uni_rows)} rows")
+
+    # --- compartimento decennial e0 + per-province colouring file ---
+    build_comp_decennial()
 
 
 if __name__ == "__main__":
