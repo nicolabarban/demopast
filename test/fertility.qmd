@@ -57,16 +57,51 @@ format:
       <div id="legendContent" class="map-legend"></div>
     </div>
   </div>
-  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:700px;overflow-y:auto;">
-    <h4 id="provName" style="margin-top:0;"></h4>
-    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
-      <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Crude Birth Rate (‰)</td><td id="provRate" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
-      <tr><td style="padding:3px 4px;">Total live births</td><td id="provCount" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
-    </table>
-    <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Birth rate over time</h5>
-    <div><canvas id="seriesChart" style="max-height:240px;"></canvas></div>
-    <div style="margin-top:0.75rem;font-size:0.9rem;">
-      <a href="../data/fertility/fertility_panel.csv" download>fertility_panel.csv</a>
+  <div style="flex:0 0 59%;">
+    <div id="provinceInfo" style="padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:700px;overflow-y:auto;">
+      <h4 id="provName" style="margin-top:0;"></h4>
+      <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Crude Birth Rate (‰)</td><td id="provRate" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+        <tr><td style="padding:3px 4px;">Total live births</td><td id="provCount" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      </table>
+      <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Birth rate over time</h5>
+      <div><canvas id="seriesChart" style="max-height:240px;"></canvas></div>
+      <div style="margin-top:0.75rem;font-size:0.9rem;">
+        <a href="../data/fertility/fertility_panel.csv" download>fertility_panel.csv</a>
+      </div>
+    </div>
+
+    <!-- National (Kingdom) panel — shown by default and whenever no area is selected -->
+    <div id="nationalInfo" style="padding:1rem;background:#f8f9fa;border-radius:4px;max-height:700px;overflow-y:auto;">
+      <h4 style="margin-top:0;">Dati nazionali (Regno d'Italia)</h4>
+      <p style="font-size:0.85rem;color:#555;margin-top:0;">
+        Seleziona una provincia o un compartimento sulla mappa per vederne le serie di natalità.
+        I due indicatori qui sotto esistono <strong>solo a livello nazionale (Regno)</strong>: non
+        sono disponibili per provincia o compartimento.
+      </p>
+
+      <h5 style="margin-top:1rem;margin-bottom:0.25rem;">Età della madre al parto</h5>
+      <div id="motherAgeSub" style="font-size:0.82rem;color:#666;margin-bottom:0.25rem;"></div>
+      <div><canvas id="motherAgeChart" style="max-height:240px;"></canvas></div>
+
+      <h5 style="margin-top:1.25rem;margin-bottom:0.25rem;">Intervallo protogenesico</h5>
+      <div id="protoSub" style="font-size:0.82rem;color:#666;margin-bottom:0.25rem;"></div>
+      <div><canvas id="protoChart" style="max-height:240px;"></canvas></div>
+      <p style="font-size:0.78rem;color:#777;margin-top:0.5rem;">
+        Distribuzione del tempo tra matrimonio e primo parto (concepimenti post-nuziali);
+        <strong>esclude i concepimenti prenuziali</strong>.
+      </p>
+
+      <p style="font-size:0.8rem;color:#555;margin-top:1rem;border-top:1px solid #e2e2e2;padding-top:0.5rem;">
+        Questi dati sono disponibili <strong>solo per il Regno</strong> e per pochi anni:
+        età della madre al parto <strong>1931–1936</strong>, intervallo protogenesico
+        <strong>1930–1936</strong>. Per un'analisi a livello territoriale si può usare
+        l'<em>età al matrimonio</em> (vedi la pagina <a href="marriages.html">Marriages</a>).
+      </p>
+      <div style="margin-top:0.75rem;font-size:0.85rem;">
+        <a href="../data/fertility/mother_age_birth_national.csv" download>mother_age_birth_national.csv</a> ·
+        <a href="../data/fertility/protogenesic_interval_national.csv" download>protogenesic_interval_national.csv</a>
+      </div>
     </div>
   </div>
 </div>
@@ -84,6 +119,15 @@ const GEO_AVAILABLE = [1861, 1871, 1881, 1901, 1911, 1921, 1931];
 const COMP_GEO_YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
 const DATA_URL = '../data/' + PANEL + '/' + PANEL + '_panel.csv';
 const COMP_URL = '../data/' + PANEL + '/' + PANEL + '_comp.csv';
+// national-only datasets (Kingdom): mother's age at birth & protogenesic interval
+const MOTHER_AGE_URL = '../data/' + PANEL + '/mother_age_birth_national.csv';
+const PROTO_URL = '../data/' + PANEL + '/protogenesic_interval_national.csv';
+const MOTHER_AGE_YEARS = [1931, 1932, 1933, 1934, 1935, 1936];
+const PROTO_YEARS = [1930, 1931, 1932, 1933, 1934, 1935, 1936];
+const NAT_BAR = '#fd8d3c';
+let motherAge = {};   // year -> [{age_group, age_lo, age_hi, count}]
+let proto = {};       // year -> [{interval_group, value}]
+let motherAgeChart = null, protoChart = null;
 
 // COD_PROV -> compartimento (geography stable across years)
 const PROV_COMP = {1:"PIEMONTE", 2:"PIEMONTE", 3:"PIEMONTE", 4:"PIEMONTE", 5:"PIEMONTE", 6:"PIEMONTE", 7:"PIEMONTE", 8:"LIGURIA", 9:"LIGURIA", 10:"LIGURIA", 11:"LIGURIA", 12:"LOMBARDIA", 13:"LOMBARDIA", 14:"LOMBARDIA", 15:"LOMBARDIA", 16:"LOMBARDIA", 17:"LOMBARDIA", 18:"LOMBARDIA", 19:"LOMBARDIA", 20:"LOMBARDIA", 21:"VENEZIA TRIDENTINA", 22:"VENEZIA TRIDENTINA", 23:"VENETO", 24:"VENETO", 25:"VENETO", 26:"VENETO", 27:"VENETO", 28:"VENETO", 29:"VENETO", 30:"VENETO", 31:"VENEZIA GIULIA E ZARA", 32:"VENEZIA GIULIA E ZARA", 33:"EMILIA", 34:"EMILIA", 35:"EMILIA", 36:"EMILIA", 37:"EMILIA", 38:"EMILIA", 39:"EMILIA", 40:"EMILIA", 41:"MARCHE", 42:"MARCHE", 43:"MARCHE", 44:"MARCHE", 45:"TOSCANA", 46:"TOSCANA", 47:"TOSCANA", 48:"TOSCANA", 49:"TOSCANA", 50:"TOSCANA", 51:"TOSCANA", 52:"TOSCANA", 53:"TOSCANA", 54:"UMBRIA", 55:"UMBRIA", 56:"LAZIO", 57:"LAZIO", 58:"LAZIO", 59:"LAZIO", 60:"LAZIO", 61:"CAMPANIA", 62:"CAMPANIA", 63:"CAMPANIA", 64:"CAMPANIA", 65:"CAMPANIA", 66:"ABRUZZI E MOLISE", 67:"ABRUZZI E MOLISE", 68:"ABRUZZI E MOLISE", 69:"ABRUZZI E MOLISE", 70:"ABRUZZI E MOLISE", 71:"PUGLIE", 72:"PUGLIE", 73:"PUGLIE", 74:"PUGLIE", 75:"PUGLIE", 76:"BASILICATA", 77:"BASILICATA", 78:"CALABRIE", 79:"CALABRIE", 80:"CALABRIE", 81:"SICILIA", 82:"SICILIA", 83:"SICILIA", 84:"SICILIA", 85:"SICILIA", 86:"SICILIA", 87:"SICILIA", 88:"SICILIA", 89:"SICILIA", 90:"SARDEGNA", 91:"SARDEGNA", 92:"SARDEGNA"};
@@ -129,6 +173,127 @@ function rebuildYears(keepYear) {
     '<span>' + ((i % step === 0 || i === YEARS.length - 1) ? y : '') + '</span>').join('');
 }
 
+// nearest available year within a list of available years
+function nearestYear(target, avail) {
+  return avail.reduce((a, b) => Math.abs(b - target) < Math.abs(a - target) ? b : a);
+}
+
+// midpoint of an age class for the mean-age computation
+function ageMid(r) {
+  if (r.age_lo != null && r.age_lo !== '' && r.age_hi != null && r.age_hi !== '')
+    return (Number(r.age_lo) + Number(r.age_hi)) / 2;
+  if (r.age_hi != null && r.age_hi !== '') return Number(r.age_hi) - 2;   // open low: "-15" -> ~12.5
+  if (r.age_lo != null && r.age_lo !== '') return Number(r.age_lo) + 2.5; // open high: "50-ω" -> ~52.5
+  return null;
+}
+
+async function loadNational() {
+  // Mother's age at birth
+  try {
+    const t = await fetch(MOTHER_AGE_URL).then(r => r.ok ? r.text() : '');
+    if (t && !t.trim().startsWith('<')) {
+      Papa.parse(t, {header: true, skipEmptyLines: true, dynamicTyping: true}).data.forEach(function(r) {
+        if (r.year == null) return;
+        (motherAge[r.year] = motherAge[r.year] || []).push(
+          {age_group: r.age_group, age_lo: r.age_lo, age_hi: r.age_hi, count: Number(r.count) || 0});
+      });
+    }
+  } catch (e) { /* national data optional */ }
+  // Protogenesic interval
+  try {
+    const t = await fetch(PROTO_URL).then(r => r.ok ? r.text() : '');
+    if (t && !t.trim().startsWith('<')) {
+      Papa.parse(t, {header: true, skipEmptyLines: true, dynamicTyping: true}).data.forEach(function(r) {
+        if (r.year == null) return;
+        (proto[r.year] = proto[r.year] || []).push(
+          {interval_group: r.interval_group, value: Number(r.value) || 0});
+      });
+    }
+  } catch (e) { /* national data optional */ }
+  drawNational();
+}
+
+function drawMotherAge() {
+  const avail = Object.keys(motherAge).map(Number).sort((a, b) => a - b);
+  const sub = document.getElementById('motherAgeSub');
+  if (!avail.length) { if (sub) sub.textContent = 'Dati non disponibili.'; return; }
+  const cur = getYear();
+  const inRange = (cur != null && motherAge[cur]);
+  const y = inRange ? cur : nearestYear(cur != null ? cur : MOTHER_AGE_YEARS[0], avail);
+  const rows = motherAge[y].slice().sort((a, b) =>
+    (a.age_lo == null ? -1 : Number(a.age_lo)) - (b.age_lo == null ? -1 : Number(b.age_lo)));
+  const total = rows.reduce((s, r) => s + r.count, 0);
+  const labels = rows.map(r => r.age_group);
+  const pct = rows.map(r => total ? (r.count / total * 100) : 0);
+  const mean = total ? rows.reduce((s, r) => {
+    const m = ageMid(r); return s + (m == null ? 0 : m * r.count);
+  }, 0) / total : null;
+  if (sub) {
+    sub.textContent = 'Parti legittimi, % per classe d’età della madre. '
+      + (inRange ? '' : 'dati nazionali: ' + y + '; ')
+      + 'disponibili ' + MOTHER_AGE_YEARS[0] + '–' + MOTHER_AGE_YEARS[MOTHER_AGE_YEARS.length - 1] + '. '
+      + (mean != null ? 'Età media ≈ ' + mean.toFixed(1).replace('.', ',') + ' anni.' : '');
+  }
+  const ctx = document.getElementById('motherAgeChart').getContext('2d');
+  if (motherAgeChart) motherAgeChart.destroy();
+  motherAgeChart = new Chart(ctx, {
+    type: 'bar',
+    data: {labels: labels, datasets: [{label: '% dei parti', data: pct,
+      backgroundColor: NAT_BAR, borderColor: HOVER_COLOR, borderWidth: 0.5}]},
+    options: {responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false},
+        title: {display: true, text: 'Età della madre al parto — Regno (' + y + ')', font: {size: 12}},
+        tooltip: {callbacks: {label: c => c.parsed.y.toFixed(1).replace('.', ',') + ' %'}}},
+      scales: {y: {beginAtZero: true, title: {display: true, text: '% sul totale'}}}}
+  });
+}
+
+function drawProto() {
+  const avail = Object.keys(proto).map(Number).sort((a, b) => a - b);
+  const sub = document.getElementById('protoSub');
+  if (!avail.length) { if (sub) sub.textContent = 'Dati non disponibili.'; return; }
+  const cur = getYear();
+  const inRange = (cur != null && proto[cur]);
+  const y = inRange ? cur : nearestYear(cur != null ? cur : PROTO_YEARS[0], avail);
+  const rows = proto[y];   // CSV already in natural interval order
+  const labels = rows.map(r => r.interval_group);
+  const vals = rows.map(r => r.value);
+  if (sub) {
+    sub.textContent = 'Distribuzione % dell’intervallo matrimonio→primo parto. '
+      + (inRange ? '' : 'dati nazionali: ' + y + '; ')
+      + 'disponibili ' + PROTO_YEARS[0] + '–' + PROTO_YEARS[PROTO_YEARS.length - 1] + '.';
+  }
+  const ctx = document.getElementById('protoChart').getContext('2d');
+  if (protoChart) protoChart.destroy();
+  protoChart = new Chart(ctx, {
+    type: 'bar',
+    data: {labels: labels, datasets: [{label: '%', data: vals,
+      backgroundColor: NAT_BAR, borderColor: HOVER_COLOR, borderWidth: 0.5}]},
+    options: {responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false},
+        title: {display: true, text: 'Intervallo protogenesico — Regno (' + y + ')', font: {size: 12}},
+        tooltip: {callbacks: {label: c => c.parsed.y.toFixed(2).replace('.', ',') + ' %'}}},
+      scales: {y: {beginAtZero: true, title: {display: true, text: '% (post-nuziali)'}},
+        x: {ticks: {maxRotation: 60, minRotation: 45, font: {size: 9}}}}}
+  });
+}
+
+function drawNational() { drawMotherAge(); drawProto(); }
+
+// show/hide national vs selected-area panel
+function showNational() {
+  const p = document.getElementById('provinceInfo');
+  const n = document.getElementById('nationalInfo');
+  if (p) p.style.display = 'none';
+  if (n) n.style.display = 'block';
+  lastSelComp = null;
+  if (seriesChart) { seriesChart.destroy(); seriesChart = null; }
+}
+function hideNational() {
+  const n = document.getElementById('nationalInfo');
+  if (n) n.style.display = 'none';
+}
+
 async function init() {
   let text = null;
   try {
@@ -137,6 +302,7 @@ async function init() {
   } catch (e) { /* missing file */ }
   if (!text || text.trim().startsWith('<')) {
     document.getElementById('noData').style.display = 'block';
+    loadNational();  // national panel is independent of the provincial panel
     return;
   }
   Papa.parse(text, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
@@ -165,14 +331,14 @@ async function init() {
   document.getElementById('indSelect').addEventListener('change', updateMap);
   document.querySelectorAll('input[name="geoLevel"]').forEach(el =>
     el.addEventListener('change', onLevelChange));
+  loadNational();   // load & draw the national (Kingdom) panel
   updateMap();
 }
 
 function onLevelChange() {
   const cur = getYear();
   rebuildYears(cur);
-  document.getElementById('provinceInfo').style.display = 'none';
-  if (seriesChart) { seriesChart.destroy(); seriesChart = null; }
+  showNational();   // switching geography level clears any selection -> back to national
   updateMap();
 }
 
@@ -218,6 +384,7 @@ function style(feature) {
 
 function showProvince(cod, name) {
   const rec = (panel[getYear()] || {})[cod];
+  hideNational();
   document.getElementById('provinceInfo').style.display = 'block';
   document.getElementById('provName').textContent = name + ' (' + getYear() + ')';
   document.getElementById('provRate').textContent = rec ? fmt(rec.rate) : 'N/A';
@@ -233,6 +400,7 @@ function showComp(name) {
   lastSelComp = name;
   const series = comp[name] || {};
   const rec = series[getYear()];
+  hideNational();
   document.getElementById('provinceInfo').style.display = 'block';
   document.getElementById('provName').textContent = name + ' (compartimento, ' + getYear() + ')';
   document.getElementById('provRate').textContent = rec ? fmt(rec.rate) : 'N/A';
@@ -291,6 +459,9 @@ async function updateMap() {
   // refresh open side panel for the new year/indicator
   if (document.getElementById('provinceInfo').style.display === 'block' &&
       level() === 'comp' && lastSelComp) showComp(lastSelComp);
+  // refresh the national panel (follows the slider) when it is the visible panel
+  const natEl = document.getElementById('nationalInfo');
+  if (natEl && natEl.style.display !== 'none') drawNational();
 }
 
 document.getElementById('legendToggle').addEventListener('click', function() {
@@ -330,9 +501,17 @@ and are included only in the full extraction file. The provincial map shows the 
 historical boundaries. The compartimento map uses the historical regional boundaries reconstructed
 from ISTAT (<em>Annali di statistica</em>, 2018; CC-BY): regional polygons at the compartimento
 level, joined to the data by region name.</p>
+<p><strong>National-only series (Kingdom).</strong> Mother's age at (legitimate) birth, 5-year
+classes, 1931–1936 (<em>Movimento dello stato civile</em>, Prospetto XLI and following years);
+protogenesic interval — distribution of the time from marriage to first birth (post-nuptial
+conceptions; pre-nuptial conceptions excluded), 1930–1936 (Prospetto 46 of the 1936 volume).
+These tabulations are published only for the Kingdom and are therefore shown in the default
+(no-selection) panel.</p>
 <p><strong>Download:</strong> <a href="../data/fertility/fertility_panel.csv" download>fertility_panel.csv</a> ·
 <a href="../data/fertility/fertility_comp.csv" download>fertility_comp.csv</a> ·
-<a href="../data/fertility/births_full_extraction.csv" download>births_full_extraction.csv</a></p>
+<a href="../data/fertility/births_full_extraction.csv" download>births_full_extraction.csv</a> ·
+<a href="../data/fertility/mother_age_birth_national.csv" download>mother_age_birth_national.csv</a> ·
+<a href="../data/fertility/protogenesic_interval_national.csv" download>protogenesic_interval_national.csv</a></p>
 <p>Preliminary — test environment.</p>
 </div>
 ```
