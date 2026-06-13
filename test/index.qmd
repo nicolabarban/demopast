@@ -57,25 +57,12 @@ format:
 
   <a href="lifetables.html" style="text-decoration:none;color:inherit;">
     <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <h3 style="margin-top:0;color:#016450;">📈 Life tables</h3>
-      <p style="font-size:0.95rem;">Provincial abridged life tables by sex, 1881 and 1921.</p>
+      <h3 style="margin-top:0;color:#016450;">📈 Life tables (compartimento)</h3>
+      <p style="font-size:0.95rem;">Regional (compartimento) abridged life tables by sex at seven decennial benchmarks.</p>
       <ul style="font-size:0.85rem;color:#555;">
-        <li>e₀ map by province; survival (lₓ) and mortality (qₓ) curves M/F</li>
-        <li>Full Chiang life table per province, 19 age groups</li>
-        <li>Compartimento decennial tables 1871–1936 (see card below)</li>
-      </ul>
-      <p style="font-weight:bold;color:#16a34a;">● Data available</p>
-    </div>
-  </a>
-
-  <a href="lifetables_comp.html" style="text-decoration:none;color:inherit;">
-    <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <h3 style="margin-top:0;color:#02818a;">🗺 Compartimento life tables</h3>
-      <p style="font-size:0.95rem;">Regional (compartimento) life expectancy e₀ at seven decennial benchmarks.</p>
-      <ul style="font-size:0.85rem;color:#555;">
-        <li>e₀ by sex for 1871, 1881, 1901, 1911, 1921, 1931, 1936</li>
-        <li>Provinces shaded by their compartimento's e₀; e₀ history per region</li>
-        <li>National e₀ matches official ISTAT period tables</li>
+        <li>e₀ map for 1871, 1881, 1901, 1911, 1921, 1931, 1936 (year slider)</li>
+        <li>Full Chiang life table per compartimento, 19 age groups; lₓ and qₓ curves M/F</li>
+        <li>e₀ history per region; national table (REGNO) matches official ISTAT period tables</li>
       </ul>
       <p style="font-weight:bold;color:#16a34a;">● Data available</p>
     </div>

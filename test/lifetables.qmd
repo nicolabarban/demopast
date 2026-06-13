@@ -1,5 +1,5 @@
 ---
-title: "Life tables — DEMOPAST (test)"
+title: "Life tables (compartimento) — DEMOPAST (test)"
 page-layout: full
 format:
   html:
@@ -15,30 +15,31 @@ format:
 <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
 <div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
-  <strong>Test section</strong> — provincial abridged life tables computed from
-  deaths by age &amp; sex and census populations.
+  <strong>Test section</strong> — abridged life tables by <em>compartimento</em>
+  (historical region) and sex at seven decennial benchmarks. The map colours each
+  province by the life expectancy (e₀) of the compartimento it belongs to.
   <a href="index.html">← back to test home</a>
 </div>
 
+<div class="slider-container">
+  <label for="yearSlider" class="year-label">Year: <span id="yearDisplay">—</span></label><br>
+  <input type="range" id="yearSlider" min="0" max="0" step="1" value="0" style="width:60%;max-width:500px;">
+  <div id="yearTicks" style="display:flex;justify-content:space-between;max-width:500px;margin:0 auto;"></div>
+</div>
+
 <div style="text-align:center;margin:1rem 0;">
-  <label style="font-weight:bold;">Year: </label>
-  <select id="yearSelect" style="padding:4px 8px;font-size:1rem;">
-    <option value="1881">1881</option>
-    <option value="1921">1921</option>
-  </select>
-  &nbsp;&nbsp;
-  <label style="font-weight:bold;">Sex (map): </label>
+  <label style="font-weight:bold;">Sex: </label>
   <select id="sexSelect" style="padding:4px 8px;font-size:1rem;">
     <option value="T">Total</option>
     <option value="M">Males</option>
     <option value="F">Females</option>
   </select>
   &nbsp;&nbsp;
-  <span style="font-size:0.95rem;color:#555;">Map shows life expectancy at birth (e₀)</span>
+  <span style="font-size:0.95rem;color:#555;">Map shows life expectancy at birth (e₀) by compartimento</span>
 </div>
 
-<div style="display:flex;gap:1.5rem;align-items:flex-start;">
-  <div style="flex:0 0 38%;display:flex;flex-direction:column;gap:0.75rem;">
+<div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+  <div style="flex:0 0 38%;min-width:320px;display:flex;flex-direction:column;gap:0.75rem;">
     <div id="map" style="width:100%;height:560px;"></div>
     <div id="legendWrapper">
       <div class="legend-header">
@@ -48,10 +49,10 @@ format:
       <div id="legendContent" class="map-legend"></div>
     </div>
   </div>
-  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;max-height:760px;overflow-y:auto;">
+  <div id="compInfo" style="flex:1 1 55%;min-width:320px;padding:1rem;background:#f8f9fa;border-radius:4px;max-height:900px;overflow-y:auto;">
     <div style="display:flex;align-items:baseline;justify-content:space-between;">
-      <h4 id="provName" style="margin-top:0;"></h4>
-      <button id="resetProv" type="button" style="display:none;font-size:0.8rem;padding:2px 8px;cursor:pointer;">← Italia (nazionale)</button>
+      <h4 id="compName" style="margin-top:0;"></h4>
+      <button id="resetComp" type="button" style="display:none;font-size:0.8rem;padding:2px 8px;cursor:pointer;">← REGNO (nazionale)</button>
     </div>
     <h5 id="fullTableTitle" style="margin-top:0.25rem;margin-bottom:0.25rem;">Full life table</h5>
     <table id="fullTable" style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-bottom:0.75rem;"></table>
@@ -59,50 +60,92 @@ format:
     <div><canvas id="lxChart" style="max-height:260px;"></canvas></div>
     <h5 style="margin-top:1rem;margin-bottom:0.25rem;">Death probability q<sub>x</sub> (log scale)</h5>
     <div><canvas id="qxChart" style="max-height:220px;"></canvas></div>
+    <h5 style="margin-top:1rem;margin-bottom:0.25rem;">e₀ across the seven benchmarks</h5>
+    <table id="seriesTable" style="width:100%;border-collapse:collapse;font-size:0.85rem;margin-bottom:0.5rem;"></table>
+    <p id="seriesNote" style="font-size:0.8rem;color:#777;margin-top:0;"></p>
   </div>
 </div>
 
 <script>
-const FILES = {1881: '../data/mortality/lifetables_1881.csv',
-               1921: '../data/mortality/lifetables_1921.csv'};
+const LTCOMP = '../data/mortality/lifetables_comp.csv';
+const BYPROV = '../data/mortality/e0_comp_byprov.csv';
+const E0COMP = '../data/mortality/e0_comp.csv';
+const YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
+const DEFAULT_YEAR = 1931;
 const COLORS = ['#fff7fb','#ece2f0','#d0d1e6','#a6bddb','#67a9cf','#3690c0','#02818a','#016450'];
 const SEXCLR = {M: '#1d4ed8', F: '#be123c', T: '#475569'};
+
+// COD_PROV -> compartimento name (mirrors COMP_PROVS in build_lifetables_comp.py)
+const COMP_PROVS = {
+  'PIEMONTE':[1,2,3,4,5,6,7], 'LIGURIA':[8,9,10,11],
+  'LOMBARDIA':[12,13,14,15,16,17,18,19,20], 'VENEZIA TRIDENTINA':[21,22],
+  'VENETO':[23,24,25,26,27,28,29,30], 'VENEZIA GIULIA E ZARA':[31,32],
+  'EMILIA':[33,34,35,36,37,38,39,40], 'MARCHE':[41,42,43,44],
+  'TOSCANA':[45,46,47,48,49,50,51,52,53], 'UMBRIA':[54,55],
+  'LAZIO':[56,57,58,59,60], 'CAMPANIA':[61,62,63,64,65],
+  'ABRUZZI E MOLISE':[66,67,68,69,70], 'PUGLIE':[71,72,73,74,75],
+  'BASILICATA':[76,77], 'CALABRIE':[78,79,80],
+  'SICILIA':[81,82,83,84,85,86,87,88,89], 'SARDEGNA':[90,91,92]
+};
+const PROV2COMP = {};
+for (const [c, codes] of Object.entries(COMP_PROVS))
+  for (const cod of codes) PROV2COMP[cod] = c;
+
+const NATIONAL = {name: 'REGNO'};
+// lt[comp][year][sex] = [rows by age_lo]
+// byprov[year][cod] = {e0_T,e0_M,e0_F}; e0comp[comp][year] = {e0_T,e0_M,e0_F,flags}
+let lt = {}, byprov = {}, e0comp = {}, geojsonCache = {};
+let currentLayer = null, currentBreaks = null, selected = NATIONAL;
+let lxChart = null, qxChart = null;
 
 const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
   scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
   touchZoom:false}).setView([41.5, 12.5], 6);
 
-const NATIONAL = {cod: 0, name: 'Italia'};
-let lt = {};          // year -> sex -> cod -> [rows by age_lo]
-let geojsonCache = {}, currentLayer = null, currentBreaks = null;
-let lxChart = null, qxChart = null, selected = NATIONAL;
-
-const getYear = () => +document.getElementById('yearSelect').value;
+const getYear = () => YEARS[+document.getElementById('yearSlider').value];
 const getSex = () => document.getElementById('sexSelect').value;
+const fnum = v => (v === '' || v == null) ? null : +v;
 
-function e0(year, sex, cod) {
-  const rows = ((lt[year] || {})[sex] || {})[cod];
-  return rows ? rows[0].ex : null;
+async function loadData() {
+  const [lc, bp, ec] = await Promise.all([
+    fetch(LTCOMP).then(r => r.text()),
+    fetch(BYPROV).then(r => r.text()),
+    fetch(E0COMP).then(r => r.text())
+  ]);
+  Papa.parse(lc, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+    if (!r.compartimento || !r.sex) return;
+    const byYear = (lt[r.compartimento] = lt[r.compartimento] || {});
+    const bySex = (byYear[r.year] = byYear[r.year] || {});
+    (bySex[r.sex] = bySex[r.sex] || []).push(r);
+  });
+  for (const comp of Object.keys(lt))
+    for (const y of Object.keys(lt[comp]))
+      for (const s of Object.keys(lt[comp][y]))
+        lt[comp][y][s].sort((a, b) => a.age_lo - b.age_lo);
+  Papa.parse(bp, {header:true, skipEmptyLines:true}).data.forEach(function(r) {
+    if (!r.COD_PROV) return;
+    (byprov[r.year] = byprov[r.year] || {})[+r.COD_PROV] =
+      {e0_T: fnum(r.e0_T), e0_M: fnum(r.e0_M), e0_F: fnum(r.e0_F)};
+  });
+  Papa.parse(ec, {header:true, skipEmptyLines:true}).data.forEach(function(r) {
+    if (!r.compartimento) return;
+    (e0comp[r.compartimento] = e0comp[r.compartimento] || {})[+r.year] =
+      {e0_T: fnum(r.e0_T), e0_M: fnum(r.e0_M), e0_F: fnum(r.e0_F), flags: r.flags};
+  });
 }
 
-async function loadYear(year) {
-  if (lt[year]) return;
-  lt[year] = {T: {}, M: {}, F: {}};
-  const text = await fetch(FILES[year]).then(r => r.text());
-  Papa.parse(text, {header:true, skipEmptyLines:true, dynamicTyping:true}).data
-    .forEach(function(r) {
-      const bySex = lt[year][r.sex];
-      if (!bySex) return;
-      (bySex[r.COD_PROV] = bySex[r.COD_PROV] || []).push(r);
-    });
-  for (const s of ['T','M','F'])
-    Object.values(lt[year][s]).forEach(a => a.sort((x, y) => x.age_lo - y.age_lo));
+function provValue(year, sex, cod) {
+  const rec = (byprov[year] || {})[cod];
+  return rec ? rec['e0_' + sex] : null;
 }
 
 function computeBreaks() {
-  const values = Object.entries(lt[getYear()][getSex()])
-    .filter(([cod]) => +cod !== 0)   // exclude national aggregate
-    .map(([, rows]) => rows[0].ex).filter(v => v != null).sort((a, b) => a - b);
+  const sex = getSex();
+  const seen = {};
+  const values = Object.values(byprov[getYear()] || {})
+    .map(r => r['e0_' + sex]).filter(v => v != null)
+    .filter(v => (seen[v] ? false : (seen[v] = true)))   // one value per compartimento level
+    .sort((a, b) => a - b);
   if (!values.length) return [0, 1];
   const breaks = [];
   for (let i = 1; i <= 7; i++)
@@ -118,45 +161,46 @@ function getColor(v, breaks) {
 }
 
 function style(feature) {
-  const v = e0(getYear(), getSex(), feature.properties.COD_PROV);
+  const v = provValue(getYear(), getSex(), feature.properties.COD_PROV);
   return {fillColor: getColor(v, currentBreaks), weight: 0.8, opacity: 1,
           color: '#94a3b8', fillOpacity: 0.85};
 }
 
+function tooltipHtml(cod) {
+  const comp = PROV2COMP[cod];
+  const rec = (byprov[getYear()] || {})[cod];
+  const f = x => x == null ? '—' : x.toFixed(1);
+  if (!comp) return 'no compartimento';
+  if (!rec) return '<strong>' + comp + '</strong><br>no data ' + getYear();
+  return '<strong>' + comp + '</strong> — ' + getYear() +
+    '<br>e₀ T ' + f(rec.e0_T) + ' · M ' + f(rec.e0_M) + ' · F ' + f(rec.e0_F);
+}
+
 function onEachFeature(feature, layer) {
+  const cod = feature.properties.COD_PROV;
+  layer.bindTooltip(() => tooltipHtml(cod), {sticky: true});
   layer.on({
     mouseover: function(e) { e.target.setStyle({weight: 2, color: '#0f766e', fillOpacity: 1}); e.target.bringToFront(); },
     mouseout: function(e) { if (currentLayer) currentLayer.resetStyle(e.target); },
     click: function() {
-      selected = {cod: feature.properties.COD_PROV, name: feature.properties.DEN_PROV};
-      showProvince();
+      const comp = PROV2COMP[cod];
+      if (comp) { selected = {name: comp}; showComp(); }
     }
   });
 }
 
-function fmtAge(g) { return g === '0' ? '0' : g === '1_4' ? '1–4' : g === '85plus' ? '85+' : String(g).replace('_', '–'); }
+function fmtAge(g) {
+  return g === '0' ? '0' : g === '1_4' ? '1–4' : g === '85plus' ? '85+'
+       : String(g).replace('_', '–');
+}
 
-function showProvince() {
-  if (!selected) selected = NATIONAL;
-  const year = getYear(), cod = selected.cod;
-  const data = lt[year];
-  const tRows = (data.T || {})[cod];
-  const isNational = cod === NATIONAL.cod;
-  document.getElementById('provinceInfo').style.display = 'block';
-  document.getElementById('resetProv').style.display = isNational ? 'none' : 'inline-block';
-  document.getElementById('provName').textContent = selected.name +
-    (isNational ? ' (nazionale)' : '') + ' — life table ' + year;
-  if (!tRows) {
-    document.getElementById('fullTableTitle').textContent = 'Full life table';
-    document.getElementById('fullTable').innerHTML =
-      '<tr><td>No life table for this province in ' + year + '</td></tr>';
-    if (lxChart) lxChart.destroy(); if (qxChart) qxChart.destroy();
-    lxChart = qxChart = null;
-    return;
-  }
+function rowsFor(comp, year, sex) {
+  return (((lt[comp] || {})[year] || {})[sex]) || null;
+}
 
+function renderCharts(comp, year) {
   const mkDatasets = field => ['M','F'].map(s => {
-    const rows = (data[s] || {})[cod] || [];
+    const rows = rowsFor(comp, year, s) || [];
     return {label: {M:'Males', F:'Females'}[s],
             data: rows.map(r => ({x: r.age_lo, y: r[field]})),
             borderColor: SEXCLR[s], backgroundColor: SEXCLR[s],
@@ -178,10 +222,18 @@ function showProvince() {
       scales: {x: {type: 'linear', min: 0, max: 90, title: {display: true, text: 'age'}},
                y: {type: 'logarithmic'}}}
   });
+}
 
-  // full table follows the sex selector (fallback to total)
-  const fSex = (data[getSex()] || {})[cod] ? getSex() : 'T';
-  const fRows = (data[fSex] || {})[cod] || tRows;
+function renderFullTable(comp, year) {
+  // follow the sex selector, fall back to total
+  const fSex = rowsFor(comp, year, getSex()) ? getSex() : 'T';
+  const fRows = rowsFor(comp, year, fSex);
+  if (!fRows) {
+    document.getElementById('fullTableTitle').textContent = 'Full life table';
+    document.getElementById('fullTable').innerHTML =
+      '<tr><td>No life table for this compartimento in ' + year + '</td></tr>';
+    return;
+  }
   document.getElementById('fullTableTitle').textContent =
     'Full life table — ' + {T:'total population', M:'males', F:'females'}[fSex];
   document.getElementById('fullTable').innerHTML =
@@ -190,14 +242,45 @@ function showProvince() {
     fRows.map(r =>
       '<tr style="border-bottom:1px solid #eee;"><td>' + fmtAge(r.age_group) + '</td>' +
       '<td style="text-align:right;">' + (r.ax != null ? r.ax.toFixed(2) : '—') + '</td>' +
-      ['mx','qx'].map(k => '<td style="text-align:right;">' + r[k].toFixed(5) + '</td>').join('') +
-      ['lx','dx','Lx','Tx'].map(k => '<td style="text-align:right;">' + Math.round(r[k]).toLocaleString('en-US') + '</td>').join('') +
-      '<td style="text-align:right;font-weight:bold;">' + r.ex.toFixed(2) + '</td></tr>').join('');
+      ['mx','qx'].map(k => '<td style="text-align:right;">' + (r[k] != null ? r[k].toFixed(5) : '—') + '</td>').join('') +
+      ['lx','dx','Lx','Tx'].map(k => '<td style="text-align:right;">' + (r[k] != null ? Math.round(r[k]).toLocaleString('en-US') : '—') + '</td>').join('') +
+      '<td style="text-align:right;font-weight:bold;">' + (r.ex != null ? r.ex.toFixed(2) : '—') + '</td></tr>').join('');
+}
+
+function renderSeries(comp, year) {
+  const series = e0comp[comp] || {};
+  const f = x => x == null ? '—' : x.toFixed(2);
+  let head = '<tr style="border-bottom:2px solid #ccc;"><th style="text-align:left;">year</th>' +
+    ['e₀ Total','e₀ Males','e₀ Females'].map(h => '<th style="text-align:right;">' + h + '</th>').join('') + '</tr>';
+  let body = YEARS.map(function(y) {
+    const r = series[y];
+    const cur = y === year ? ' style="background:#e0f2f1;font-weight:bold;"' : '';
+    if (!r) return '<tr' + cur + '><td>' + y + '</td><td colspan="3" style="text-align:right;color:#999;">no data</td></tr>';
+    return '<tr' + cur + '><td>' + y + '</td>' +
+      ['e0_T','e0_M','e0_F'].map(k => '<td style="text-align:right;">' + f(r[k]) + '</td>').join('') + '</tr>';
+  }).join('');
+  document.getElementById('seriesTable').innerHTML = head + body;
+  const cur = series[year];
+  document.getElementById('seriesNote').textContent =
+    cur && cur.flags ? 'Flags (' + year + '): ' + cur.flags : '';
+}
+
+function showComp() {
+  if (!selected) selected = NATIONAL;
+  const comp = selected.name, year = getYear();
+  const isNational = comp === NATIONAL.name;
+  document.getElementById('compInfo').style.display = 'block';
+  document.getElementById('resetComp').style.display = isNational ? 'none' : 'inline-block';
+  document.getElementById('compName').textContent = comp +
+    (isNational ? ' (nazionale)' : '') + ' — life table ' + year;
+  renderFullTable(comp, year);
+  renderCharts(comp, year);
+  renderSeries(comp, year);
 }
 
 async function updateMap() {
   const year = getYear();
-  await loadYear(year);
+  document.getElementById('yearDisplay').textContent = year;
   if (!geojsonCache[year]) {
     geojsonCache[year] = await fetch('../data/geojson/province_' + year + '.geojson').then(r => r.json());
   }
@@ -206,19 +289,8 @@ async function updateMap() {
   currentLayer = L.geoJSON(geojsonCache[year], {style: style, onEachFeature: onEachFeature}).addTo(map);
   map.fitBounds(currentLayer.getBounds(), {padding: [10, 10]});
   updateLegend();
-  showProvince();
+  showComp();
 }
-
-document.getElementById('yearSelect').addEventListener('change', updateMap);
-document.getElementById('sexSelect').addEventListener('change', updateMap);
-document.getElementById('resetProv').addEventListener('click', function() {
-  selected = NATIONAL;
-  showProvince();
-});
-document.getElementById('legendToggle').addEventListener('click', function() {
-  const hidden = document.getElementById('legendWrapper').classList.toggle('legend-hidden');
-  this.textContent = hidden ? 'Show' : 'Hide';
-});
 
 function updateLegend() {
   const div = document.getElementById('legendContent');
@@ -237,31 +309,56 @@ function updateLegend() {
   div.innerHTML = html;
 }
 
-updateMap();
+function init() {
+  const slider = document.getElementById('yearSlider');
+  slider.max = YEARS.length - 1;
+  slider.value = Math.max(0, YEARS.indexOf(DEFAULT_YEAR));
+  document.getElementById('yearTicks').innerHTML =
+    YEARS.map(y => '<span>' + y + '</span>').join('');
+  slider.addEventListener('input', updateMap);
+  document.getElementById('sexSelect').addEventListener('change', updateMap);
+  document.getElementById('resetComp').addEventListener('click', function() {
+    selected = NATIONAL; showComp();
+  });
+  document.getElementById('legendToggle').addEventListener('click', function() {
+    const hidden = document.getElementById('legendWrapper').classList.toggle('legend-hidden');
+    this.textContent = hidden ? 'Show' : 'Hide';
+  });
+  updateMap();
+}
+
+loadData().then(init);
 </script>
 
 <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
-<p><strong>Method.</strong> Abridged period life tables by province and sex, 19 age
-groups (0, 1–4, then 5-year groups to 85+), computed from deaths by age and sex
-(<em>Movimento dello stato civile</em>) and census populations: <strong>1881</strong> (deaths
-1879–1881 averaged around the 1881 census) and <strong>1921</strong> (deaths 1921, census 1921).
-Methodology follows the <a href="https://www.mortality.org/Data/MethodsProtocol">Human
-Mortality Database Methods Protocol</a> (v6): a₀ from the Andreev–Kingkade (2015)
-sex-specific formulas as a function of m₀ (total sex: death-weighted average of the
-male and female values); ₄a₁ = 1.5, ₙaₓ = n/2 elsewhere;
-qₓ = n·mₓ / (1 + (n − aₓ)·mₓ); open interval 85+ closed with q = 1, a = 1/m, L = l/m.
-Provincial tables are preliminary: small-province death counts make single-year mₓ
-noisy at old ages. The national table (ITALIA, shown when no province is selected;
-COD_PROV 0 in the CSVs) is computed from the sum of deaths and populations over the
-tabulated provinces.</p>
-<p>Compartimento-level tables for 1901, 1911, 1931 and 1936 are available below; national
-e₀ from these tables matches the official ISTAT period tables (43.4 / 44.4 / 54.9 / 56.8).</p>
+<p><strong>Method.</strong> Abridged period life tables by <em>compartimento</em>
+(historical region) and sex, 19 age groups (0, 1–4, then 5-year groups to 85+), at
+seven decennial benchmarks (<strong>1871, 1881, 1901, 1911, 1921, 1931, 1936</strong>),
+computed from deaths by age and sex (<em>Movimento dello stato civile</em>) and census
+populations. Methodology follows the
+<a href="https://www.mortality.org/Data/MethodsProtocol">Human Mortality Database Methods
+Protocol</a> (v6): a₀ from the Andreev–Kingkade (2015) sex-specific formulas as a function
+of m₀ (total sex: death-weighted average of the male and female values); ₄a₁ = 1.5,
+ₙaₓ = n/2 elsewhere; qₓ = n·mₓ / (1 + (n − aₓ)·mₓ); open interval 85+ closed with
+q = 1, a = 1/m, L = l/m. The national table (REGNO, shown when no compartimento is
+selected) is computed from the sum of deaths and populations over the tabulated
+compartimenti; its e₀ matches the official ISTAT period tables (e.g. 43.4 / 44.4 / 54.9 / 56.8
+for 1901 / 1911 / 1931 / 1936).</p>
+<p>There are no compartimento-level geometries, so the map renders the e₀ of each
+compartimento onto the historical provincial boundaries of the selected year: every
+province is shaded with its compartimento's e₀ (compartimento→province mapping from
+<code>build_lifetables_comp.py</code>). Coverage reflects the sources:
+<strong>Venezia Tridentina</strong> appears only from 1931, and the provinces of
+<strong>Venezia Giulia e Zara</strong> are not yet covered — these stay grey, which is
+expected. Click any province to load its compartimento's full Chiang life table,
+lₓ / qₓ curves and e₀ history; use <em>← REGNO (nazionale)</em> to return to the
+national table.</p>
 <p><strong>Download:</strong>
-<a href="../data/mortality/lifetables_province.csv" download>lifetables_province.csv</a> (1881 + 1921 unified, incl. ITALIA) ·
-<a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a> ·
-<a href="../data/mortality/lifetables_1921.csv" download>lifetables_1921.csv</a> ·
-<a href="../data/mortality/lifetables_comp.csv" download>lifetables_comp.csv</a> ·
-<a href="../data/mortality/e0_comp.csv" download>e0_comp.csv</a></p>
+<a href="../data/mortality/lifetables_comp.csv" download>lifetables_comp.csv</a> (full life tables, 7 dates, sexes T/M/F, incl. REGNO) ·
+<a href="../data/mortality/e0_comp.csv" download>e0_comp.csv</a> (e₀ by compartimento, 7 dates) ·
+<a href="../data/mortality/e0_comp_byprov.csv" download>e0_comp_byprov.csv</a> (per-province colouring).</p>
 <p>Preliminary — test environment.</p>
 </div>
 ```
+</content>
+</invoke>
