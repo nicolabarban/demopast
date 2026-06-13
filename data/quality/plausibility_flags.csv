@@ -412,12 +412,14 @@ WARNING,mortality,Alessandria 1936,cdr_range,cdr=13.1
 WARNING,mortality,Ancona 1931,cdr_range,cdr=11.63
 WARNING,mortality,Ancona 1936,cdr_range,cdr=12.1
 WARNING,mortality,Arezzo 1936,cdr_range,cdr=12.6
+WARNING,mortality,Ascoli Piceno 1931,cdr_range,cdr=12.87
 WARNING,mortality,Ascoli Piceno 1936,cdr_range,cdr=13.0
 WARNING,mortality,Bologna 1921,cdr_range,cdr=14.9
 WARNING,mortality,Bologna 1936,cdr_range,cdr=12.5
 WARNING,mortality,Cagliari 1881,cdr_range,cdr=14.66
 WARNING,mortality,Cagliari 1931,cdr_range,cdr=14.17
 WARNING,mortality,Cagliari 1936,cdr_range,cdr=14.5
+WARNING,mortality,Campobasso 1931,cdr_range,cdr=14.99
 WARNING,mortality,Catania 1931,cdr_range,cdr=13.51
 WARNING,mortality,Catania 1936,cdr_range,cdr=14.6
 WARNING,mortality,Chieti 1931,cdr_range,cdr=14.0
@@ -428,6 +430,7 @@ WARNING,mortality,Cuneo 1936,cdr_range,cdr=14.4
 WARNING,mortality,Ferrara 1936,cdr_range,cdr=12.4
 WARNING,mortality,Firenze 1921,cdr_range,cdr=14.87
 WARNING,mortality,Firenze 1936,cdr_range,cdr=11.9
+WARNING,mortality,Foggia 1871,cdr_range,cdr=41.75
 WARNING,mortality,Forlì 1936,cdr_range,cdr=12.1
 WARNING,mortality,Genova 1921,cdr_range,cdr=14.28
 WARNING,mortality,Genova 1931,cdr_range,cdr=13.82
@@ -452,6 +455,7 @@ WARNING,mortality,Palermo 1936,cdr_range,cdr=14.6
 WARNING,mortality,Parma 1936,cdr_range,cdr=12.9
 WARNING,mortality,Pavia 1921,cdr_range,cdr=13.86
 WARNING,mortality,Pavia 1936,cdr_range,cdr=12.8
+WARNING,mortality,Pesaro e Urbino 1931,cdr_range,cdr=13.27
 WARNING,mortality,Pesaro e Urbino 1936,cdr_range,cdr=13.4
 WARNING,mortality,Piacenza 1936,cdr_range,cdr=12.7
 WARNING,mortality,Pisa 1871,cdr_range,cdr=13.14
@@ -483,6 +487,7 @@ WARNING,mortality,Treviso 1936,cdr_range,cdr=11.1
 WARNING,mortality,Udine 1871,cdr_range,cdr=13.47
 WARNING,mortality,Udine 1881,cdr_range,cdr=12.17
 WARNING,mortality,Udine 1936,cdr_range,cdr=12.9
+WARNING,mortality,Umbria 1931,cdr_range,cdr=12.22
 WARNING,mortality,Umbria 1936,cdr_range,cdr=13.0
 WARNING,mortality,Venezia 1881,cdr_range,cdr=12.73
 WARNING,mortality,Venezia 1936,cdr_range,cdr=14.5
@@ -580,7 +585,10 @@ INFO,census,Siracusa 1921,total!=M+F,"526,953 != 267,126+259,927 (off 100)"
 INFO,census,Trapani 1921,total!=M+F,"405,743 != 200,457+205,288 (off 2)"
 INFO,census,Venezia 1921,total!=M+F,"517,970 != 257,222+261,108 (off 360)"
 INFO,census,Vicenza 1921,total!=M+F,"545,991 != 269,010+277,481 (off 500)"
+INFO,cross,Campobasso 1871,cdr>cbr,deaths exceed births: CDR 39.88 > CBR 39.61
+INFO,cross,Chieti 1871,cdr>cbr,deaths exceed births: CDR 38.34 > CBR 36.23
 INFO,cross,Cuneo 1931,cdr>cbr,deaths exceed births: CDR 20.85 > CBR 20.73
+INFO,cross,Foggia 1871,cdr>cbr,deaths exceed births: CDR 41.75 > CBR 36.46
 INFO,cross,Padova 1931,cdr>cbr,deaths exceed births: CDR 26.8 > CBR 20.85
 INFO,cross,Ravenna 1931,cdr>cbr,deaths exceed births: CDR 16.46 > CBR 15.84
 INFO,migration,Alessandria 1913->1914,yoy_jump,emig_rate 17.21 -> 7.73 (WWI disruption)
@@ -784,33 +792,4 @@ INFO,migration,Verona 1919->1920,yoy_jump,emig_rate 3.7 -> 9.12 (WWI disruption)
 INFO,migration,Vicenza 1914->1915,yoy_jump,emig_rate 29.39 -> 3.1 (WWI disruption)
 INFO,migration,Vicenza 1915->1916,yoy_jump,emig_rate 3.1 -> 0.7 (WWI disruption)
 INFO,migration,Vicenza 1919->1920,yoy_jump,emig_rate 4.14 -> 16.79 (WWI disruption)
-INFO,mortality,Ascoli Piceno 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Ascoli Piceno 1881,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Ascoli Piceno 1901,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Ascoli Piceno 1911,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Ascoli Piceno 1931,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Avellino 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Campobasso 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Campobasso 1931,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Caserta 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Chieti 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Cosenza 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Foggia 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Forlì 1881,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Forlì 1901,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Forlì 1911,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Forlì 1931,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Lecce 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Pesaro e Urbino 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Pesaro e Urbino 1881,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Pesaro e Urbino 1901,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Pesaro e Urbino 1911,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Pesaro e Urbino 1931,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Potenza 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Salerno 1871,missing_rate,"deaths present, cdr empty"
 INFO,mortality,Sondrio 1881,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Teramo 1871,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Umbria 1881,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Umbria 1901,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Umbria 1911,missing_rate,"deaths present, cdr empty"
-INFO,mortality,Umbria 1931,missing_rate,"deaths present, cdr empty"

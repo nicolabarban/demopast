@@ -1,6 +1,6 @@
 # DEMOPAST data plausibility report
 
-Flags: **36 ERROR**, 465 WARNING, 314 INFO
+Flags: **36 ERROR**, 470 WARNING, 288 INFO
 
 ## ERROR (36)
 
@@ -43,7 +43,7 @@ Flags: **36 ERROR**, 465 WARNING, 314 INFO
 | migration | Belluno 1914 | emig_rate_implausible | emig_rate=82.21 |
 | mortality | Trapani 1881 | cdr_implausible | cdr=0.95 |
 
-## WARNING (465)
+## WARNING (470)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -424,12 +424,14 @@ Flags: **36 ERROR**, 465 WARNING, 314 INFO
 | mortality | Ancona 1931 | cdr_range | cdr=11.63 |
 | mortality | Ancona 1936 | cdr_range | cdr=12.1 |
 | mortality | Arezzo 1936 | cdr_range | cdr=12.6 |
+| mortality | Ascoli Piceno 1931 | cdr_range | cdr=12.87 |
 | mortality | Ascoli Piceno 1936 | cdr_range | cdr=13.0 |
 | mortality | Bologna 1921 | cdr_range | cdr=14.9 |
 | mortality | Bologna 1936 | cdr_range | cdr=12.5 |
 | mortality | Cagliari 1881 | cdr_range | cdr=14.66 |
 | mortality | Cagliari 1931 | cdr_range | cdr=14.17 |
 | mortality | Cagliari 1936 | cdr_range | cdr=14.5 |
+| mortality | Campobasso 1931 | cdr_range | cdr=14.99 |
 | mortality | Catania 1931 | cdr_range | cdr=13.51 |
 | mortality | Catania 1936 | cdr_range | cdr=14.6 |
 | mortality | Chieti 1931 | cdr_range | cdr=14.0 |
@@ -440,6 +442,7 @@ Flags: **36 ERROR**, 465 WARNING, 314 INFO
 | mortality | Ferrara 1936 | cdr_range | cdr=12.4 |
 | mortality | Firenze 1921 | cdr_range | cdr=14.87 |
 | mortality | Firenze 1936 | cdr_range | cdr=11.9 |
+| mortality | Foggia 1871 | cdr_range | cdr=41.75 |
 | mortality | Forlì 1936 | cdr_range | cdr=12.1 |
 | mortality | Genova 1921 | cdr_range | cdr=14.28 |
 | mortality | Genova 1931 | cdr_range | cdr=13.82 |
@@ -464,6 +467,7 @@ Flags: **36 ERROR**, 465 WARNING, 314 INFO
 | mortality | Parma 1936 | cdr_range | cdr=12.9 |
 | mortality | Pavia 1921 | cdr_range | cdr=13.86 |
 | mortality | Pavia 1936 | cdr_range | cdr=12.8 |
+| mortality | Pesaro e Urbino 1931 | cdr_range | cdr=13.27 |
 | mortality | Pesaro e Urbino 1936 | cdr_range | cdr=13.4 |
 | mortality | Piacenza 1936 | cdr_range | cdr=12.7 |
 | mortality | Pisa 1871 | cdr_range | cdr=13.14 |
@@ -495,6 +499,7 @@ Flags: **36 ERROR**, 465 WARNING, 314 INFO
 | mortality | Udine 1871 | cdr_range | cdr=13.47 |
 | mortality | Udine 1881 | cdr_range | cdr=12.17 |
 | mortality | Udine 1936 | cdr_range | cdr=12.9 |
+| mortality | Umbria 1931 | cdr_range | cdr=12.22 |
 | mortality | Umbria 1936 | cdr_range | cdr=13.0 |
 | mortality | Venezia 1881 | cdr_range | cdr=12.73 |
 | mortality | Venezia 1936 | cdr_range | cdr=14.5 |
@@ -513,7 +518,7 @@ Flags: **36 ERROR**, 465 WARNING, 314 INFO
 | mortality | Ravenna 1936 | imr_range | imr=56.0 |
 | mortality | Sondrio 1881 | imr_range | imr=370.0 |
 
-## INFO (314)
+## INFO (288)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -597,7 +602,10 @@ Flags: **36 ERROR**, 465 WARNING, 314 INFO
 | census | Trapani 1921 | total!=M+F | 405,743 != 200,457+205,288 (off 2) |
 | census | Venezia 1921 | total!=M+F | 517,970 != 257,222+261,108 (off 360) |
 | census | Vicenza 1921 | total!=M+F | 545,991 != 269,010+277,481 (off 500) |
+| cross | Campobasso 1871 | cdr>cbr | deaths exceed births: CDR 39.88 > CBR 39.61 |
+| cross | Chieti 1871 | cdr>cbr | deaths exceed births: CDR 38.34 > CBR 36.23 |
 | cross | Cuneo 1931 | cdr>cbr | deaths exceed births: CDR 20.85 > CBR 20.73 |
+| cross | Foggia 1871 | cdr>cbr | deaths exceed births: CDR 41.75 > CBR 36.46 |
 | cross | Padova 1931 | cdr>cbr | deaths exceed births: CDR 26.8 > CBR 20.85 |
 | cross | Ravenna 1931 | cdr>cbr | deaths exceed births: CDR 16.46 > CBR 15.84 |
 | migration | Alessandria 1913->1914 | yoy_jump | emig_rate 17.21 -> 7.73 (WWI disruption) |
@@ -801,33 +809,4 @@ Flags: **36 ERROR**, 465 WARNING, 314 INFO
 | migration | Vicenza 1914->1915 | yoy_jump | emig_rate 29.39 -> 3.1 (WWI disruption) |
 | migration | Vicenza 1915->1916 | yoy_jump | emig_rate 3.1 -> 0.7 (WWI disruption) |
 | migration | Vicenza 1919->1920 | yoy_jump | emig_rate 4.14 -> 16.79 (WWI disruption) |
-| mortality | Ascoli Piceno 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Ascoli Piceno 1881 | missing_rate | deaths present, cdr empty |
-| mortality | Ascoli Piceno 1901 | missing_rate | deaths present, cdr empty |
-| mortality | Ascoli Piceno 1911 | missing_rate | deaths present, cdr empty |
-| mortality | Ascoli Piceno 1931 | missing_rate | deaths present, cdr empty |
-| mortality | Avellino 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Campobasso 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Campobasso 1931 | missing_rate | deaths present, cdr empty |
-| mortality | Caserta 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Chieti 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Cosenza 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Foggia 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Forlì 1881 | missing_rate | deaths present, cdr empty |
-| mortality | Forlì 1901 | missing_rate | deaths present, cdr empty |
-| mortality | Forlì 1911 | missing_rate | deaths present, cdr empty |
-| mortality | Forlì 1931 | missing_rate | deaths present, cdr empty |
-| mortality | Lecce 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Pesaro e Urbino 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Pesaro e Urbino 1881 | missing_rate | deaths present, cdr empty |
-| mortality | Pesaro e Urbino 1901 | missing_rate | deaths present, cdr empty |
-| mortality | Pesaro e Urbino 1911 | missing_rate | deaths present, cdr empty |
-| mortality | Pesaro e Urbino 1931 | missing_rate | deaths present, cdr empty |
-| mortality | Potenza 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Salerno 1871 | missing_rate | deaths present, cdr empty |
 | mortality | Sondrio 1881 | missing_rate | deaths present, cdr empty |
-| mortality | Teramo 1871 | missing_rate | deaths present, cdr empty |
-| mortality | Umbria 1881 | missing_rate | deaths present, cdr empty |
-| mortality | Umbria 1901 | missing_rate | deaths present, cdr empty |
-| mortality | Umbria 1911 | missing_rate | deaths present, cdr empty |
-| mortality | Umbria 1931 | missing_rate | deaths present, cdr empty |

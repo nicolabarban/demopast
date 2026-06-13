@@ -65,6 +65,11 @@ format:
     </table>
     <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Marriage rate over time</h5>
     <div><canvas id="seriesChart" style="max-height:240px;"></canvas></div>
+    <div id="ageDistBlock" style="display:none;margin-top:1.25rem;">
+      <div><canvas id="ageDistChart" style="max-height:260px;"></canvas></div>
+      <p id="ageDistNote" style="margin-top:0.4rem;font-size:0.8rem;color:#666;"></p>
+    </div>
+    <p id="ageDistMsg" style="display:none;margin-top:1.25rem;font-size:0.9rem;color:#666;font-style:italic;"></p>
     <div style="margin-top:0.75rem;font-size:0.9rem;">
       <a href="../data/marriages/marriages_panel.csv" download>marriages_panel.csv</a>
     </div>
@@ -84,6 +89,12 @@ const GEO_AVAILABLE = [1861, 1871, 1881, 1901, 1911, 1921, 1931];
 const COMP_GEO_YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
 const DATA_URL = '../data/' + PANEL + '/' + PANEL + '_panel.csv';
 const COMP_URL = '../data/' + PANEL + '/' + PANEL + '_comp.csv';
+// age-at-marriage distribution by compartimento (see notes at bottom of page)
+const AGE_URL = '../data/marriages/marriage_age_comp.csv';
+// 1890 excluded: it is tabulated by year of birth, not standard age classes
+const AGE_YEARS_OK = new Set([1894, 1895, 1900, 1901, 1911]);
+const AGE_GROOM_COLOR = '#2171b5';
+const AGE_BRIDE_COLOR = '#e6550d';
 
 // COD_PROV -> compartimento (geography stable across years)
 const PROV_COMP = {1:"PIEMONTE", 2:"PIEMONTE", 3:"PIEMONTE", 4:"PIEMONTE", 5:"PIEMONTE", 6:"PIEMONTE", 7:"PIEMONTE", 8:"LIGURIA", 9:"LIGURIA", 10:"LIGURIA", 11:"LIGURIA", 12:"LOMBARDIA", 13:"LOMBARDIA", 14:"LOMBARDIA", 15:"LOMBARDIA", 16:"LOMBARDIA", 17:"LOMBARDIA", 18:"LOMBARDIA", 19:"LOMBARDIA", 20:"LOMBARDIA", 21:"VENEZIA TRIDENTINA", 22:"VENEZIA TRIDENTINA", 23:"VENETO", 24:"VENETO", 25:"VENETO", 26:"VENETO", 27:"VENETO", 28:"VENETO", 29:"VENETO", 30:"VENETO", 31:"VENEZIA GIULIA E ZARA", 32:"VENEZIA GIULIA E ZARA", 33:"EMILIA", 34:"EMILIA", 35:"EMILIA", 36:"EMILIA", 37:"EMILIA", 38:"EMILIA", 39:"EMILIA", 40:"EMILIA", 41:"MARCHE", 42:"MARCHE", 43:"MARCHE", 44:"MARCHE", 45:"TOSCANA", 46:"TOSCANA", 47:"TOSCANA", 48:"TOSCANA", 49:"TOSCANA", 50:"TOSCANA", 51:"TOSCANA", 52:"TOSCANA", 53:"TOSCANA", 54:"UMBRIA", 55:"UMBRIA", 56:"LAZIO", 57:"LAZIO", 58:"LAZIO", 59:"LAZIO", 60:"LAZIO", 61:"CAMPANIA", 62:"CAMPANIA", 63:"CAMPANIA", 64:"CAMPANIA", 65:"CAMPANIA", 66:"ABRUZZI E MOLISE", 67:"ABRUZZI E MOLISE", 68:"ABRUZZI E MOLISE", 69:"ABRUZZI E MOLISE", 70:"ABRUZZI E MOLISE", 71:"PUGLIE", 72:"PUGLIE", 73:"PUGLIE", 74:"PUGLIE", 75:"PUGLIE", 76:"BASILICATA", 77:"BASILICATA", 78:"CALABRIE", 79:"CALABRIE", 80:"CALABRIE", 81:"SICILIA", 82:"SICILIA", 83:"SICILIA", 84:"SICILIA", 85:"SICILIA", 86:"SICILIA", 87:"SICILIA", 88:"SICILIA", 89:"SICILIA", 90:"SARDEGNA", 91:"SARDEGNA", 92:"SARDEGNA"};
@@ -100,6 +111,9 @@ let geojsonCache = {};       // province geojson (province view)
 let compGeojsonCache = {};   // compartimento (region) geojson (comp view)
 let currentLayer = null, currentBreaks = null, seriesChart = null;
 let lastSelComp = null; // remember selected comp across year/indicator changes
+let ageDist = {};        // COMP_UPPER -> year -> sex -> [{lo, label, count}]
+let ageYearsByComp = {}; // COMP_UPPER -> sorted [years] with usable age data
+let ageDistChart = null;
 
 function level() { return document.querySelector('input[name="geoLevel"]:checked').value; }
 function getField() { return document.getElementById('indSelect').value === RATE_FIELD ? 'rate' : 'count'; }
@@ -157,6 +171,31 @@ async function init() {
       if (r.year != null) compYearsWithData.add(Number(r.year));
     });
   } catch (e) { /* comp layer optional */ }
+
+  // age-at-marriage distribution (compartimento view side panel; optional)
+  try {
+    const aTxt = await fetch(AGE_URL).then(r => r.ok ? r.text() : '');
+    Papa.parse(aTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+      if (!r.compartimento || r.year == null || !r.sex) return;
+      const year = Number(r.year);
+      if (!AGE_YEARS_OK.has(year)) return;                 // skip 1890 / unexpected years
+      const notes = (r.notes == null ? '' : String(r.notes)).toLowerCase();
+      if (notes.indexOf('illegible') !== -1) return;       // skip unreadable cells
+      if (r.count == null || r.count === '') return;       // skip empty counts
+      const lo = r.age_lo;
+      if (lo == null || lo === '') return;                 // skip 'ignota'/'age unknown'
+      const key = String(r.compartimento).toUpperCase();
+      const sex = String(r.sex).toUpperCase();
+      if (!ageDist[key]) ageDist[key] = {};
+      if (!ageDist[key][year]) ageDist[key][year] = {};
+      if (!ageDist[key][year][sex]) ageDist[key][year][sex] = [];
+      ageDist[key][year][sex].push({lo: Number(lo), label: r.age_group, count: Number(r.count)});
+    });
+    Object.keys(ageDist).forEach(k => {
+      ageYearsByComp[k] = Object.keys(ageDist[k]).map(Number).sort((a, b) => a - b);
+    });
+  } catch (e) { /* age distribution optional */ }
+
   // comp slider = years with a real region geojson AND comp data
   yearsComp = COMP_GEO_YEARS.filter(y => compYearsWithData.has(y));
 
@@ -173,6 +212,7 @@ function onLevelChange() {
   rebuildYears(cur);
   document.getElementById('provinceInfo').style.display = 'none';
   if (seriesChart) { seriesChart.destroy(); seriesChart = null; }
+  hideAgeDist();
   updateMap();
 }
 
@@ -227,6 +267,7 @@ function showProvince(cod, name) {
     return {x: y, y: p ? p.rate : null};
   }).filter(d => d.y != null);
   drawSeries(name, data);
+  hideAgeDist(); // age distribution is a compartimento-only feature
 }
 
 function showComp(name) {
@@ -240,6 +281,77 @@ function showComp(name) {
   const data = Object.keys(series).map(Number).sort((a, b) => a - b)
     .map(y => ({x: y, y: series[y].rate})).filter(d => d.y != null && d.y !== '');
   drawSeries(name, data);
+  showAgeDist(name);
+}
+
+// normalize a sex's age classes to shares (sum = 100) over readable cells
+function ageShares(rows) {
+  const total = rows.reduce((s, r) => s + r.count, 0);
+  if (!(total > 0)) return {};
+  const out = {};
+  rows.forEach(r => { out[r.label] = (r.count / total) * 100; });
+  return out;
+}
+
+function hideAgeDist() {
+  document.getElementById('ageDistBlock').style.display = 'none';
+  document.getElementById('ageDistMsg').style.display = 'none';
+  if (ageDistChart) { ageDistChart.destroy(); ageDistChart = null; }
+}
+
+function showAgeDist(name) {
+  const block = document.getElementById('ageDistBlock');
+  const msg = document.getElementById('ageDistMsg');
+  const key = String(name).toUpperCase();
+  const years = ageYearsByComp[key];
+  if (!years || !years.length) {
+    block.style.display = 'none';
+    msg.style.display = 'block';
+    msg.textContent = 'Age-at-marriage distribution not available for ' + name + '.';
+    if (ageDistChart) { ageDistChart.destroy(); ageDistChart = null; }
+    return;
+  }
+  const cur = getYear();
+  // nearest available age-data year to the current slider year
+  const useYear = years.reduce((a, b) => Math.abs(b - cur) < Math.abs(a - cur) ? b : a);
+  const byYear = ageDist[key][useYear] || {};
+  const grooms = byYear.M || [];
+  const brides = byYear.F || [];
+
+  // union of age classes, ordered by age_lo, labelled by age_group
+  const labelByLo = {};
+  grooms.concat(brides).forEach(r => { labelByLo[r.lo] = r.label; });
+  const los = Object.keys(labelByLo).map(Number).sort((a, b) => a - b);
+  const labels = los.map(lo => labelByLo[lo]);
+
+  const gShare = ageShares(grooms);
+  const bShare = ageShares(brides);
+  const gData = labels.map(l => gShare[l] != null ? +gShare[l].toFixed(1) : null);
+  const bData = labels.map(l => bShare[l] != null ? +bShare[l].toFixed(1) : null);
+
+  msg.style.display = 'none';
+  block.style.display = 'block';
+  const note = document.getElementById('ageDistNote');
+  note.textContent = (useYear === cur ? '' : 'Age data: ' + useYear + ' (nearest to ' + cur + '). ') +
+    'Shares normalised to 100% over readable age classes; ages "ignota"/illegible excluded.';
+
+  const title = 'Age distribution at marriage — ' + name + ' ' + useYear + ' (% of total)';
+  const ctx = document.getElementById('ageDistChart').getContext('2d');
+  if (ageDistChart) ageDistChart.destroy();
+  ageDistChart = new Chart(ctx, {
+    type: 'bar',
+    data: {labels: labels, datasets: [
+      {label: 'Grooms (M)', data: gData, backgroundColor: AGE_GROOM_COLOR},
+      {label: 'Brides (F)', data: bData, backgroundColor: AGE_BRIDE_COLOR}
+    ]},
+    options: {responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: true, position: 'top'},
+        title: {display: true, text: title, font: {size: 12}},
+        tooltip: {callbacks: {label: c => c.dataset.label + ': ' +
+          (c.parsed.y == null ? 'N/A' : c.parsed.y + '%')}}},
+      scales: {x: {title: {display: true, text: 'Age class'}},
+        y: {beginAtZero: true, title: {display: true, text: '% of marriages'}}}}
+  });
 }
 
 function drawSeries(name, data) {
@@ -331,7 +443,16 @@ boundaries. The compartimento map uses the historical regional boundaries recons
 the data by region name.</p>
 <p><strong>Download:</strong> <a href="../data/marriages/marriages_panel.csv" download>marriages_panel.csv</a> ·
 <a href="../data/marriages/marriages_comp.csv" download>marriages_comp.csv</a> ·
+<a href="../data/marriages/marriage_age_comp.csv" download>marriage_age_comp.csv</a> ·
 <a href="../data/marriages/marriages_full_extraction.csv" download>marriages_full_extraction.csv</a></p>
+<p><strong>Age at marriage.</strong> In the compartimento view, selecting a region shows the
+distribution of marriages by age class of grooms (M) and brides (F). Because the underlying
+ISTAT tables mix units across years — absolute counts (<em>effettive</em>, 1894–1895),
+figures per 10,000 (1900–1901) and per 1,000 (1911) — values are not summed across years;
+instead each (region, year, sex) is normalised to a share summing to 100% over the readable age
+classes (cells marked illegible, or with unknown age, are excluded). The year 1890 is omitted
+because it is tabulated by year of birth rather than by standard age classes. Available age-data
+years are 1894, 1895, 1900, 1901 and 1911; if the slider year differs, the nearest of these is shown.</p>
 <p>Preliminary — test environment.</p>
 </div>
 ```
