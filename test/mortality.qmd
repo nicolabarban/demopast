@@ -16,15 +16,17 @@ format:
 
 <div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
   <strong>Test section</strong> — preliminary data extracted from ISTAT <em>Movimento dello stato civile</em> volumes (1863–1936).
+  Use the <strong>Geography</strong> toggle to switch between <em>province</em> (fine detail, boundaries
+  changing over time) and <em>compartimento</em> (sum of the constituent provinces, shaded on the
+  historical regional boundaries). The available years and colour scale adjust to the
+  selected level; at compartimento level only crude death rate and total deaths are available.
   <a href="index.html">← back to test home</a>
 </div>
 
 <div class="slider-container">
   <label for="yearSlider" class="year-label">Year: <span id="yearDisplay">1871</span></label><br>
   <input type="range" id="yearSlider" min="0" max="6" step="1" value="0" style="width:60%;max-width:500px;">
-  <div style="display:flex;justify-content:space-between;max-width:500px;margin:0 auto;">
-    <span>1871</span><span>1881</span><span>1901</span><span>1911</span><span>1921</span><span>1931</span><span>1936</span>
-  </div>
+  <div id="yearTicks" style="display:flex;justify-content:space-between;max-width:500px;margin:0 auto;"></div>
 </div>
 
 <div style="text-align:center;margin:1rem 0;">
@@ -35,6 +37,14 @@ format:
     <option value="deaths">Total deaths</option>
     <option value="e0">Life expectancy at birth, 1881 &amp; 1921 (years)</option>
   </select>
+  &nbsp;&nbsp;
+  <label style="font-weight:bold;">Geography: </label>
+  <label style="margin-right:0.5rem;"><input type="radio" name="geoLevel" value="prov" checked> Province</label>
+  <label><input type="radio" name="geoLevel" value="comp"> Compartimento</label>
+  <div id="compNote" style="display:none;font-size:0.82rem;color:#777;margin-top:0.35rem;">
+    At compartimento level only Crude Death Rate and Total deaths are available
+    (infant mortality, life expectancy and the age–sex pyramid remain provincial).
+  </div>
 </div>
 
 <div style="display:flex;gap:1.5rem;align-items:flex-start;">
@@ -67,6 +77,7 @@ format:
 
     <div style="margin-top:0.75rem;font-size:0.9rem;">
       <a href="../data/mortality/mortality_panel.csv" download>mortality_panel.csv</a> ·
+      <a href="../data/mortality/mortality_comp.csv" download>mortality_comp.csv</a> ·
       <a href="../data/mortality/imr_annual.csv" download>imr_annual.csv</a> ·
       <a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a> ·
     <a href="../data/mortality/lifetables_1921.csv" download>lifetables_1921.csv</a> ·
@@ -78,11 +89,18 @@ format:
 </div>
 
 <script>
-const YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
-const GEO_YEAR = {1871:1871, 1881:1881, 1901:1901, 1911:1911, 1921:1921, 1931:1931, 1936:1936};
+const COUNT_FIELD = 'deaths';
+const RATE_FIELD = 'cdr';
+const GEO_AVAILABLE = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936];
+// years for which a real compartimento (region) geojson exists
+const COMP_GEO_YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
 const COLORS = ['#fff5f0','#fee0d2','#fcbba1','#fc9272','#fb6a4a','#ef3b2c','#cb181d','#99000d'];
-// breaks are pinned to the first year in which the indicator is observed
+// breaks are pinned to the first year in which the indicator is observed (province level)
 const FIELD_BASE_YEAR = {cdr: 1871, imr: 1871, deaths: 1871, e0: 1881};
+const COMP_FIELDS = ['cdr', 'deaths'];   // indicators available at compartimento level
+
+// COD_PROV -> compartimento (geography stable across years)
+const PROV_COMP = {1:"PIEMONTE", 2:"PIEMONTE", 3:"PIEMONTE", 4:"PIEMONTE", 5:"PIEMONTE", 6:"PIEMONTE", 7:"PIEMONTE", 8:"LIGURIA", 9:"LIGURIA", 10:"LIGURIA", 11:"LIGURIA", 12:"LOMBARDIA", 13:"LOMBARDIA", 14:"LOMBARDIA", 15:"LOMBARDIA", 16:"LOMBARDIA", 17:"LOMBARDIA", 18:"LOMBARDIA", 19:"LOMBARDIA", 20:"LOMBARDIA", 21:"VENEZIA TRIDENTINA", 22:"VENEZIA TRIDENTINA", 23:"VENETO", 24:"VENETO", 25:"VENETO", 26:"VENETO", 27:"VENETO", 28:"VENETO", 29:"VENETO", 30:"VENETO", 31:"VENEZIA GIULIA E ZARA", 32:"VENEZIA GIULIA E ZARA", 33:"EMILIA", 34:"EMILIA", 35:"EMILIA", 36:"EMILIA", 37:"EMILIA", 38:"EMILIA", 39:"EMILIA", 40:"EMILIA", 41:"MARCHE", 42:"MARCHE", 43:"MARCHE", 44:"MARCHE", 45:"TOSCANA", 46:"TOSCANA", 47:"TOSCANA", 48:"TOSCANA", 49:"TOSCANA", 50:"TOSCANA", 51:"TOSCANA", 52:"TOSCANA", 53:"TOSCANA", 54:"UMBRIA", 55:"UMBRIA", 56:"LAZIO", 57:"LAZIO", 58:"LAZIO", 59:"LAZIO", 60:"LAZIO", 61:"CAMPANIA", 62:"CAMPANIA", 63:"CAMPANIA", 64:"CAMPANIA", 65:"CAMPANIA", 66:"ABRUZZI E MOLISE", 67:"ABRUZZI E MOLISE", 68:"ABRUZZI E MOLISE", 69:"ABRUZZI E MOLISE", 70:"ABRUZZI E MOLISE", 71:"PUGLIE", 72:"PUGLIE", 73:"PUGLIE", 74:"PUGLIE", 75:"PUGLIE", 76:"BASILICATA", 77:"BASILICATA", 78:"CALABRIE", 79:"CALABRIE", 80:"CALABRIE", 81:"SICILIA", 82:"SICILIA", 83:"SICILIA", 84:"SICILIA", 85:"SICILIA", 86:"SICILIA", 87:"SICILIA", 88:"SICILIA", 89:"SICILIA", 90:"SARDEGNA", 91:"SARDEGNA", 92:"SARDEGNA"};
 
 const PYR_GROUPS = [
   {label:'0', col:'0', width:1}, {label:'1–4', col:'1_4', width:4},
@@ -103,29 +121,60 @@ const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:
 
 let currentLayer = null;
 let panel = {};          // year -> COD_PROV -> {deaths, cdr, imr, e0, den}
+let comp = {};           // compartimento -> year -> {deaths, cdr}  (comp series + side panel + map)
 let imrSeries = {};      // COD_PROV -> [{year, imr}]
 let agesex = {};         // COD_PROV -> year -> sex -> {age_group: deaths}
-let geojsonCache = {};
+let geojsonCache = {};       // province geojson (province view)
+let compGeojsonCache = {};   // compartimento (region) geojson (comp view)
 let currentBreaks = null;
 let pyramidChart = null;
 let imrChart = null;
 let dataReady = false;
+let YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
+let yearsProv = YEARS.slice(), yearsComp = [];
+let lastSelComp = null;
 
+function levelMode() { return document.querySelector('input[name="geoLevel"]:checked').value; }
 function getField() { return document.getElementById('indSelect').value; }
+// comp value for a given compartimento name in the current year
+function compVal(name, year, field) {
+  const rec = (comp[name] || {})[year];
+  return rec ? rec[field] : null;
+}
 function getYear() { return YEARS[document.getElementById('yearSlider').value]; }
+function geoYear(y) {
+  return GEO_AVAILABLE.reduce((a, b) => Math.abs(b - y) < Math.abs(a - y) ? b : a);
+}
+
+function rebuildYears(keepYear) {
+  YEARS = (levelMode() === 'comp' ? yearsComp : yearsProv).slice();
+  const slider = document.getElementById('yearSlider');
+  let idx = 0;
+  if (keepYear != null && YEARS.length) {
+    idx = YEARS.reduce((best, y, i) =>
+      Math.abs(y - keepYear) < Math.abs(YEARS[best] - keepYear) ? i : best, 0);
+  }
+  slider.max = Math.max(0, YEARS.length - 1);
+  slider.value = idx;
+  const step = Math.max(1, Math.ceil(YEARS.length / 8));
+  document.getElementById('yearTicks').innerHTML = YEARS.map((y, i) =>
+    '<span>' + ((i % step === 0 || i === YEARS.length - 1) ? y : '') + '</span>').join('');
+}
 
 async function loadAll() {
   if (dataReady) return;
-  const [pTxt, iTxt, aTxt] = await Promise.all([
+  const [pTxt, iTxt, aTxt, cTxt] = await Promise.all([
     fetch('../data/mortality/mortality_panel.csv').then(r => r.text()),
     fetch('../data/mortality/imr_annual.csv').then(r => r.text()),
     fetch('../data/mortality/deaths_agesex.csv').then(r => r.text()),
+    fetch('../data/mortality/mortality_comp.csv').then(r => r.ok ? r.text() : ''),
   ]);
   Papa.parse(pTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
     if (!panel[r.year]) panel[r.year] = {};
     panel[r.year][r.COD_PROV] = {den: r.DEN_PROV, deaths: r.deaths || null,
       cdr: r.cdr || null, imr: r.imr || null, e0: r.e0 || null};
   });
+  yearsProv = Object.keys(panel).map(Number).sort((a, b) => a - b);
   Papa.parse(iTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
     if (!imrSeries[r.COD_PROV]) imrSeries[r.COD_PROV] = [];
     imrSeries[r.COD_PROV].push({year: r.year, imr: r.imr});
@@ -136,11 +185,33 @@ async function loadAll() {
     if (!agesex[c][r.year]) agesex[c][r.year] = {M:{}, F:{}, T:{}};
     if (agesex[c][r.year][r.sex]) agesex[c][r.year][r.sex][r.age_group] = r.deaths;
   });
+  const compYearsWithData = new Set();
+  Papa.parse(cTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+    if (!r.compartimento) return;
+    if (!comp[r.compartimento]) comp[r.compartimento] = {};
+    comp[r.compartimento][r.year] = {deaths: r.deaths || null, cdr: r.cdr || null};
+    if (r.year != null) compYearsWithData.add(Number(r.year));
+  });
+  // comp slider = years with a real region geojson AND comp data
+  yearsComp = COMP_GEO_YEARS.filter(y => compYearsWithData.has(y));
   dataReady = true;
 }
 
 function computeBreaks() {
-  const field = getField();
+  let field = getField();
+  if (levelMode() === 'comp' && !COMP_FIELDS.includes(field)) field = RATE_FIELD;
+  if (levelMode() === 'comp') {
+    const y0 = yearsComp[0];
+    const values = Object.keys(comp).map(name => compVal(name, y0, field))
+      .filter(v => v != null && v > 0);
+    if (values.length === 0) return [0, 1, 10, 100];
+    values.sort((a, b) => a - b);
+    const breaks = [];
+    for (let i = 1; i <= 7; i++) {
+      breaks.push(values[Math.min(Math.floor(values.length * i / 8), values.length - 1)]);
+    }
+    return [...new Set(breaks)].sort((a, b) => a - b);
+  }
   const base = panel[FIELD_BASE_YEAR[field]] || {};
   const values = Object.values(base).map(p => p[field]).filter(v => v != null && v > 0);
   if (values.length === 0) return [0, 1, 10, 100];
@@ -161,8 +232,15 @@ function getColor(v, breaks) {
 }
 
 function style(feature) {
-  const prov = (panel[getYear()] || {})[feature.properties.COD_PROV];
-  const v = prov ? prov[getField()] : null;
+  let field = getField();
+  if (levelMode() === 'comp' && !COMP_FIELDS.includes(field)) field = RATE_FIELD;
+  let v;
+  if (levelMode() === 'comp') {
+    v = compVal(feature.properties.COMP, getYear(), field);
+  } else {
+    const rec = (panel[getYear()] || {})[feature.properties.COD_PROV];
+    v = rec ? rec[field] : null;
+  }
   return {fillColor: getColor(v, currentBreaks), weight: 0.8, opacity: 1,
           color: '#94a3b8', fillOpacity: 0.85};
 }
@@ -212,17 +290,43 @@ function onEachFeature(feature, layer) {
     },
     mouseout: function(e) { if (currentLayer) currentLayer.resetStyle(e.target); },
     click: function() {
-      showProvince(feature.properties.COD_PROV, feature.properties.DEN_PROV);
+      if (levelMode() === 'comp') showComp(feature.properties.COMP);
+      else showProvince(feature.properties.COD_PROV, feature.properties.DEN_PROV);
     }
   });
 }
 
 async function loadGeoJSON(year) {
-  const gy = GEO_YEAR[year];
+  if (levelMode() === 'comp') {
+    if (compGeojsonCache[year]) return compGeojsonCache[year];
+    const cdata = await fetch('../data/geojson/compartimento_' + year + '.geojson').then(r => r.json());
+    compGeojsonCache[year] = cdata;
+    return cdata;
+  }
+  const gy = geoYear(year);
   if (geojsonCache[gy]) return geojsonCache[gy];
   const data = await fetch('../data/geojson/province_' + gy + '.geojson').then(r => r.json());
   geojsonCache[gy] = data;
   return data;
+}
+
+function syncIndicatorOptions() {
+  const isComp = levelMode() === 'comp';
+  document.getElementById('compNote').style.display = isComp ? 'block' : 'none';
+  const sel = document.getElementById('indSelect');
+  Array.from(sel.options).forEach(o => {
+    const ok = !isComp || COMP_FIELDS.includes(o.value);
+    o.disabled = !ok;
+  });
+  if (isComp && !COMP_FIELDS.includes(sel.value)) sel.value = RATE_FIELD;
+}
+
+function onLevelChange() {
+  syncIndicatorOptions();
+  rebuildYears(getYear());
+  if (imrChart) { imrChart.destroy(); imrChart = null; }
+  if (pyramidChart) { pyramidChart.destroy(); pyramidChart = null; }
+  updateMap();
 }
 
 async function updateMap() {
@@ -235,7 +339,55 @@ async function updateMap() {
   currentLayer = L.geoJSON(geojson, {style: style, onEachFeature: onEachFeature}).addTo(map);
   map.fitBounds(currentLayer.getBounds(), {padding: [10, 10]});
   updateLegend();
-  showNational(year);
+  if (levelMode() === 'comp') {
+    if (lastSelComp) showComp(lastSelComp); else showNationalComp(year);
+  } else {
+    showNational(year);
+  }
+}
+
+function showComp(name) {
+  lastSelComp = name;
+  const series = comp[name] || {};
+  const rec = series[getYear()];
+  document.getElementById('provinceInfo').style.display = 'block';
+  document.getElementById('provName').textContent = name + ' (compartimento, ' + getYear() + ')';
+  document.getElementById('provCDR').textContent = rec ? fmt(rec.cdr) : 'N/A';
+  document.getElementById('provIMR').textContent = 'N/A (provincial only)';
+  document.getElementById('provDeaths').textContent = rec ? fmt(rec.deaths) : 'N/A';
+  document.getElementById('provE0').textContent = 'N/A (provincial only)';
+  // CDR series for the compartimento (reuse the IMR chart canvas)
+  const ctx = document.getElementById('imrChart').getContext('2d');
+  if (imrChart) imrChart.destroy();
+  const data = Object.keys(series).map(Number).sort((a, b) => a - b)
+    .map(y => ({x: y, y: series[y].cdr})).filter(d => d.y != null && d.y !== '');
+  imrChart = new Chart(ctx, {
+    type: 'line',
+    data: {datasets: [{label: 'CDR (‰)', data: data, borderColor: '#cb181d',
+      backgroundColor: '#cb181d', pointRadius: 3, borderWidth: 1.5}]},
+    options: {responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false},
+        title: {display: true, text: name + ' — deaths per 1,000 pop. (compartimento)', font: {size: 12}}},
+      scales: {x: {type: 'linear', ticks: {callback: v => v}}, y: {beginAtZero: true}}}
+  });
+  document.getElementById('pyramidYearNote').textContent = '(provincial only)';
+  if (pyramidChart) { pyramidChart.destroy(); pyramidChart = null; }
+}
+
+function showNationalComp(year) {
+  document.getElementById('provinceInfo').style.display = 'block';
+  document.getElementById('provName').textContent = 'Italy (compartimenti, ' + year + ')';
+  const recs = Object.values(comp).map(s => s[year]).filter(Boolean);
+  const deaths = recs.reduce((s, r) => s + (r.deaths || 0), 0);
+  const cdrs = recs.map(r => r.cdr).filter(v => v != null);
+  const med = a => a.length ? a.sort((x, y) => x - y)[Math.floor(a.length / 2)] : null;
+  document.getElementById('provCDR').textContent = cdrs.length ? fmt(Math.round(med(cdrs) * 10) / 10) + ' (median comp.)' : 'N/A';
+  document.getElementById('provIMR').textContent = 'N/A (provincial only)';
+  document.getElementById('provDeaths').textContent = deaths ? fmt(deaths) : 'N/A';
+  document.getElementById('provE0').textContent = 'N/A (provincial only)';
+  document.getElementById('pyramidYearNote').textContent = '(click a compartimento)';
+  if (imrChart) { imrChart.destroy(); imrChart = null; }
+  if (pyramidChart) { pyramidChart.destroy(); pyramidChart = null; }
 }
 
 document.getElementById('legendToggle').addEventListener('click', function() {
@@ -246,7 +398,11 @@ document.getElementById('legendToggle').addEventListener('click', function() {
 function updateLegend() {
   const div = document.getElementById('legendContent');
   if (!div || !currentBreaks) return;
-  const label = document.getElementById('indSelect').selectedOptions[0].text;
+  let label = document.getElementById('indSelect').selectedOptions[0].text;
+  if (levelMode() === 'comp') {
+    if (!COMP_FIELDS.includes(getField())) label = 'Crude Death Rate (deaths / 1,000 pop.)';
+    label += ' — compartimento';
+  }
   let html = '<strong>' + label + '</strong>';
   html += '<div class="legend-row"><i style="background:' + COLORS[0] + '"></i><span>&lt; ' + fmt(currentBreaks[0]) + '</span></div>';
   for (let i = 0; i < currentBreaks.length; i++) {
@@ -338,7 +494,16 @@ function drawPyramid(cod, name, year) {
 
 document.getElementById('yearSlider').addEventListener('input', updateMap);
 document.getElementById('indSelect').addEventListener('change', updateMap);
-updateMap();
+document.querySelectorAll('input[name="geoLevel"]').forEach(el =>
+  el.addEventListener('change', onLevelChange));
+
+async function start() {
+  await loadAll();
+  syncIndicatorOptions();
+  rebuildYears(1871);
+  updateMap();
+}
+start();
 </script>
 
 <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
@@ -353,7 +518,10 @@ groups ages 0–4, the under-1 share is borrowed from the nearest single-year ed
 in 1931/1936 (no census exposure), with the Regno total adjusted accordingly.
 Deaths, CDR and IMR 1951–1961: ISTAT, <em>Annuari di Statistiche Demografiche</em> (full file in the downloads below;
 the per-province IMR chart shows post-war values only for provinces with unchanged historical boundaries/names).
-Population denominators: DEMOPAST census data.</p>
+Population denominators: DEMOPAST census data.
+The compartimento map uses the historical regional boundaries reconstructed from ISTAT
+(<em>Annali di statistica</em>, 2018; CC-BY): regional polygons at the compartimento level,
+joined to the data by region name.</p>
 <p>Preliminary — test environment. Cells failing checksum validation are excluded.</p>
 </div>
 ```

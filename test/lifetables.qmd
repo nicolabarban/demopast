@@ -17,7 +17,7 @@ format:
 <div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
   <strong>Test section</strong> — abridged life tables by <em>compartimento</em>
   (historical region) and sex at seven decennial benchmarks. The map colours each
-  province by the life expectancy (e₀) of the compartimento it belongs to.
+  compartimento (historical region) by its life expectancy at birth (e₀).
   <a href="index.html">← back to test home</a>
 </div>
 
@@ -68,33 +68,16 @@ format:
 
 <script>
 const LTCOMP = '../data/mortality/lifetables_comp.csv';
-const BYPROV = '../data/mortality/e0_comp_byprov.csv';
 const E0COMP = '../data/mortality/e0_comp.csv';
 const YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
 const DEFAULT_YEAR = 1931;
 const COLORS = ['#fff7fb','#ece2f0','#d0d1e6','#a6bddb','#67a9cf','#3690c0','#02818a','#016450'];
 const SEXCLR = {M: '#1d4ed8', F: '#be123c', T: '#475569'};
 
-// COD_PROV -> compartimento name (mirrors COMP_PROVS in build_lifetables_comp.py)
-const COMP_PROVS = {
-  'PIEMONTE':[1,2,3,4,5,6,7], 'LIGURIA':[8,9,10,11],
-  'LOMBARDIA':[12,13,14,15,16,17,18,19,20], 'VENEZIA TRIDENTINA':[21,22],
-  'VENETO':[23,24,25,26,27,28,29,30], 'VENEZIA GIULIA E ZARA':[31,32],
-  'EMILIA':[33,34,35,36,37,38,39,40], 'MARCHE':[41,42,43,44],
-  'TOSCANA':[45,46,47,48,49,50,51,52,53], 'UMBRIA':[54,55],
-  'LAZIO':[56,57,58,59,60], 'CAMPANIA':[61,62,63,64,65],
-  'ABRUZZI E MOLISE':[66,67,68,69,70], 'PUGLIE':[71,72,73,74,75],
-  'BASILICATA':[76,77], 'CALABRIE':[78,79,80],
-  'SICILIA':[81,82,83,84,85,86,87,88,89], 'SARDEGNA':[90,91,92]
-};
-const PROV2COMP = {};
-for (const [c, codes] of Object.entries(COMP_PROVS))
-  for (const cod of codes) PROV2COMP[cod] = c;
-
 const NATIONAL = {name: 'REGNO'};
 // lt[comp][year][sex] = [rows by age_lo]
-// byprov[year][cod] = {e0_T,e0_M,e0_F}; e0comp[comp][year] = {e0_T,e0_M,e0_F,flags}
-let lt = {}, byprov = {}, e0comp = {}, geojsonCache = {};
+// e0comp[comp][year] = {e0_T,e0_M,e0_F,flags}
+let lt = {}, e0comp = {}, geojsonCache = {};   // geojsonCache: year -> compartimento geojson
 let currentLayer = null, currentBreaks = null, selected = NATIONAL;
 let lxChart = null, qxChart = null;
 
@@ -107,9 +90,8 @@ const getSex = () => document.getElementById('sexSelect').value;
 const fnum = v => (v === '' || v == null) ? null : +v;
 
 async function loadData() {
-  const [lc, bp, ec] = await Promise.all([
+  const [lc, ec] = await Promise.all([
     fetch(LTCOMP).then(r => r.text()),
-    fetch(BYPROV).then(r => r.text()),
     fetch(E0COMP).then(r => r.text())
   ]);
   Papa.parse(lc, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
@@ -122,11 +104,6 @@ async function loadData() {
     for (const y of Object.keys(lt[comp]))
       for (const s of Object.keys(lt[comp][y]))
         lt[comp][y][s].sort((a, b) => a.age_lo - b.age_lo);
-  Papa.parse(bp, {header:true, skipEmptyLines:true}).data.forEach(function(r) {
-    if (!r.COD_PROV) return;
-    (byprov[r.year] = byprov[r.year] || {})[+r.COD_PROV] =
-      {e0_T: fnum(r.e0_T), e0_M: fnum(r.e0_M), e0_F: fnum(r.e0_F)};
-  });
   Papa.parse(ec, {header:true, skipEmptyLines:true}).data.forEach(function(r) {
     if (!r.compartimento) return;
     (e0comp[r.compartimento] = e0comp[r.compartimento] || {})[+r.year] =
@@ -134,17 +111,17 @@ async function loadData() {
   });
 }
 
-function provValue(year, sex, cod) {
-  const rec = (byprov[year] || {})[cod];
+// e0 value for a compartimento name in a given year/sex
+function compE0(name, year, sex) {
+  const rec = (e0comp[name] || {})[year];
   return rec ? rec['e0_' + sex] : null;
 }
 
 function computeBreaks() {
-  const sex = getSex();
-  const seen = {};
-  const values = Object.values(byprov[getYear()] || {})
-    .map(r => r['e0_' + sex]).filter(v => v != null)
-    .filter(v => (seen[v] ? false : (seen[v] = true)))   // one value per compartimento level
+  const sex = getSex(), year = getYear();
+  const values = Object.keys(e0comp)
+    .filter(name => name !== NATIONAL.name)
+    .map(name => compE0(name, year, sex)).filter(v => v != null)
     .sort((a, b) => a - b);
   if (!values.length) return [0, 1];
   const breaks = [];
@@ -161,30 +138,28 @@ function getColor(v, breaks) {
 }
 
 function style(feature) {
-  const v = provValue(getYear(), getSex(), feature.properties.COD_PROV);
+  const v = compE0(feature.properties.COMP, getYear(), getSex());
   return {fillColor: getColor(v, currentBreaks), weight: 0.8, opacity: 1,
           color: '#94a3b8', fillOpacity: 0.85};
 }
 
-function tooltipHtml(cod) {
-  const comp = PROV2COMP[cod];
-  const rec = (byprov[getYear()] || {})[cod];
+function tooltipHtml(name) {
+  const rec = (e0comp[name] || {})[getYear()];
   const f = x => x == null ? '—' : x.toFixed(1);
-  if (!comp) return 'no compartimento';
-  if (!rec) return '<strong>' + comp + '</strong><br>no data ' + getYear();
-  return '<strong>' + comp + '</strong> — ' + getYear() +
+  if (!name) return 'no compartimento';
+  if (!rec) return '<strong>' + name + '</strong><br>no data ' + getYear();
+  return '<strong>' + name + '</strong> — ' + getYear() +
     '<br>e₀ T ' + f(rec.e0_T) + ' · M ' + f(rec.e0_M) + ' · F ' + f(rec.e0_F);
 }
 
 function onEachFeature(feature, layer) {
-  const cod = feature.properties.COD_PROV;
-  layer.bindTooltip(() => tooltipHtml(cod), {sticky: true});
+  const name = feature.properties.COMP;
+  layer.bindTooltip(() => tooltipHtml(name), {sticky: true});
   layer.on({
     mouseover: function(e) { e.target.setStyle({weight: 2, color: '#0f766e', fillOpacity: 1}); e.target.bringToFront(); },
     mouseout: function(e) { if (currentLayer) currentLayer.resetStyle(e.target); },
     click: function() {
-      const comp = PROV2COMP[cod];
-      if (comp) { selected = {name: comp}; showComp(); }
+      if (name) { selected = {name: name}; showComp(); }
     }
   });
 }
@@ -282,7 +257,7 @@ async function updateMap() {
   const year = getYear();
   document.getElementById('yearDisplay').textContent = year;
   if (!geojsonCache[year]) {
-    geojsonCache[year] = await fetch('../data/geojson/province_' + year + '.geojson').then(r => r.json());
+    geojsonCache[year] = await fetch('../data/geojson/compartimento_' + year + '.geojson').then(r => r.json());
   }
   currentBreaks = computeBreaks();
   if (currentLayer) map.removeLayer(currentLayer);
@@ -344,21 +319,17 @@ q = 1, a = 1/m, L = l/m. The national table (REGNO, shown when no compartimento 
 selected) is computed from the sum of deaths and populations over the tabulated
 compartimenti; its e₀ matches the official ISTAT period tables (e.g. 43.4 / 44.4 / 54.9 / 56.8
 for 1901 / 1911 / 1931 / 1936).</p>
-<p>There are no compartimento-level geometries, so the map renders the e₀ of each
-compartimento onto the historical provincial boundaries of the selected year: every
-province is shaded with its compartimento's e₀ (compartimento→province mapping from
-<code>build_lifetables_comp.py</code>). Coverage reflects the sources:
-<strong>Venezia Tridentina</strong> appears only from 1931, and the provinces of
-<strong>Venezia Giulia e Zara</strong> are not yet covered — these stay grey, which is
-expected. Click any province to load its compartimento's full Chiang life table,
+<p>The map uses the historical regional boundaries reconstructed from ISTAT
+(<em>Annali di statistica</em>, 2018; CC-BY): true compartimento (region) polygons for the
+selected year, each shaded by its own e₀ and joined to the data by region name. Coverage
+reflects the sources: <strong>Venezia Tridentina</strong> appears only from 1931, and
+<strong>Venezia Giulia e Zara</strong> is not yet covered — these stay grey, which is
+expected. Click any compartimento to load its full Chiang life table,
 lₓ / qₓ curves and e₀ history; use <em>← REGNO (nazionale)</em> to return to the
 national table.</p>
 <p><strong>Download:</strong>
 <a href="../data/mortality/lifetables_comp.csv" download>lifetables_comp.csv</a> (full life tables, 7 dates, sexes T/M/F, incl. REGNO) ·
-<a href="../data/mortality/e0_comp.csv" download>e0_comp.csv</a> (e₀ by compartimento, 7 dates) ·
-<a href="../data/mortality/e0_comp_byprov.csv" download>e0_comp_byprov.csv</a> (per-province colouring).</p>
+<a href="../data/mortality/e0_comp.csv" download>e0_comp.csv</a> (e₀ by compartimento, 7 dates).</p>
 <p>Preliminary — test environment.</p>
 </div>
 ```
-</content>
-</invoke>

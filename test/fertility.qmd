@@ -16,7 +16,10 @@ format:
 
 <div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
   <strong>Test section</strong> — live births from ISTAT <em>Movimento dello stato civile</em> volumes.
-  <a href="index.html">← back to test home</a>
+  Use the <strong>Geography</strong> toggle to switch between <em>province</em> (fine detail, boundaries
+  changing over time) and <em>compartimento</em> (sum of the constituent provinces, geography stable across
+  the whole period; the map is then shaded by region). The available years and colour scale adjust to the
+  selected level. <a href="index.html">← back to test home</a>
 </div>
 
 <div id="noData" style="display:none;background:#e7f1ff;border:1px solid #b6d4fe;border-radius:4px;padding:1rem;margin-bottom:1rem;">
@@ -37,6 +40,10 @@ format:
     <option value="cbr">Crude Birth Rate (births / 1,000 pop.)</option>
     <option value="births">Total live births</option>
   </select>
+  &nbsp;&nbsp;
+  <label style="font-weight:bold;">Geography: </label>
+  <label style="margin-right:0.5rem;"><input type="radio" name="geoLevel" value="prov" checked> Province</label>
+  <label><input type="radio" name="geoLevel" value="comp"> Compartimento</label>
 </div>
 
 <div style="display:flex;gap:1.5rem;align-items:flex-start;">
@@ -65,27 +72,62 @@ format:
 </div>
 
 <script>
-const DATA_URL = '../data/fertility/fertility_panel.csv';
+const PANEL = 'fertility';
 const COUNT_FIELD = 'births';
 const RATE_FIELD = 'cbr';
+const SERIES_LABEL = 'births per 1,000 pop.';
+const LINE_COLOR = '#d94801';
+const HOVER_COLOR = '#7c2d12';
 const COLORS = ['#fff5eb','#fee6ce','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#8c2d04'];
 const GEO_AVAILABLE = [1861, 1871, 1881, 1901, 1911, 1921, 1931];
+// years for which a real compartimento (region) geojson exists
+const COMP_GEO_YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
+const DATA_URL = '../data/' + PANEL + '/' + PANEL + '_panel.csv';
+const COMP_URL = '../data/' + PANEL + '/' + PANEL + '_comp.csv';
+
+// COD_PROV -> compartimento (geography stable across years)
+const PROV_COMP = {1:"PIEMONTE", 2:"PIEMONTE", 3:"PIEMONTE", 4:"PIEMONTE", 5:"PIEMONTE", 6:"PIEMONTE", 7:"PIEMONTE", 8:"LIGURIA", 9:"LIGURIA", 10:"LIGURIA", 11:"LIGURIA", 12:"LOMBARDIA", 13:"LOMBARDIA", 14:"LOMBARDIA", 15:"LOMBARDIA", 16:"LOMBARDIA", 17:"LOMBARDIA", 18:"LOMBARDIA", 19:"LOMBARDIA", 20:"LOMBARDIA", 21:"VENEZIA TRIDENTINA", 22:"VENEZIA TRIDENTINA", 23:"VENETO", 24:"VENETO", 25:"VENETO", 26:"VENETO", 27:"VENETO", 28:"VENETO", 29:"VENETO", 30:"VENETO", 31:"VENEZIA GIULIA E ZARA", 32:"VENEZIA GIULIA E ZARA", 33:"EMILIA", 34:"EMILIA", 35:"EMILIA", 36:"EMILIA", 37:"EMILIA", 38:"EMILIA", 39:"EMILIA", 40:"EMILIA", 41:"MARCHE", 42:"MARCHE", 43:"MARCHE", 44:"MARCHE", 45:"TOSCANA", 46:"TOSCANA", 47:"TOSCANA", 48:"TOSCANA", 49:"TOSCANA", 50:"TOSCANA", 51:"TOSCANA", 52:"TOSCANA", 53:"TOSCANA", 54:"UMBRIA", 55:"UMBRIA", 56:"LAZIO", 57:"LAZIO", 58:"LAZIO", 59:"LAZIO", 60:"LAZIO", 61:"CAMPANIA", 62:"CAMPANIA", 63:"CAMPANIA", 64:"CAMPANIA", 65:"CAMPANIA", 66:"ABRUZZI E MOLISE", 67:"ABRUZZI E MOLISE", 68:"ABRUZZI E MOLISE", 69:"ABRUZZI E MOLISE", 70:"ABRUZZI E MOLISE", 71:"PUGLIE", 72:"PUGLIE", 73:"PUGLIE", 74:"PUGLIE", 75:"PUGLIE", 76:"BASILICATA", 77:"BASILICATA", 78:"CALABRIE", 79:"CALABRIE", 80:"CALABRIE", 81:"SICILIA", 82:"SICILIA", 83:"SICILIA", 84:"SICILIA", 85:"SICILIA", 86:"SICILIA", 87:"SICILIA", 88:"SICILIA", 89:"SICILIA", 90:"SARDEGNA", 91:"SARDEGNA", 92:"SARDEGNA"};
 
 const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
   scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
   touchZoom:false}).setView([41.5, 12.5], 6);
 
 let YEARS = [];
-let panel = {};      // year -> COD_PROV -> {den, count, rate}
-let geojsonCache = {};
+let panel = {};        // year -> COD_PROV -> {den, count, rate}  (province level)
+let comp = {};         // compartimento -> year -> {count, rate}  (comp series + side panel + map)
+let yearsProv = [], yearsComp = [];
+let geojsonCache = {};       // province geojson (province view)
+let compGeojsonCache = {};   // compartimento (region) geojson (comp view)
 let currentLayer = null, currentBreaks = null, seriesChart = null;
+let lastSelComp = null; // remember selected comp across year/indicator changes
 
+function level() { return document.querySelector('input[name="geoLevel"]:checked').value; }
 function getField() { return document.getElementById('indSelect').value === RATE_FIELD ? 'rate' : 'count'; }
+// comp value for a given compartimento name in the current year
+function compVal(name, year, field) {
+  const rec = (comp[name] || {})[year];
+  return rec ? rec[field] : null;
+}
 function getYear() { return YEARS[document.getElementById('yearSlider').value]; }
 function geoYear(y) {
   return GEO_AVAILABLE.reduce((a, b) => Math.abs(b - y) < Math.abs(a - y) ? b : a);
 }
 function fmt(n) { return (n == null || n === '') ? 'N/A' : Number(n).toLocaleString('en-US'); }
+
+function rebuildYears(keepYear) {
+  YEARS = (level() === 'comp' ? yearsComp : yearsProv).slice();
+  const slider = document.getElementById('yearSlider');
+  let idx = 0;
+  if (keepYear != null && YEARS.length) {
+    idx = YEARS.reduce((best, y, i) =>
+      Math.abs(y - keepYear) < Math.abs(YEARS[best] - keepYear) ? i : best, 0);
+  }
+  slider.max = Math.max(0, YEARS.length - 1);
+  slider.value = idx;
+  const step = Math.max(1, Math.ceil(YEARS.length / 8));
+  document.getElementById('yearTicks').innerHTML = YEARS.map((y, i) =>
+    '<span>' + ((i % step === 0 || i === YEARS.length - 1) ? y : '') + '</span>').join('');
+}
 
 async function init() {
   let text = null;
@@ -102,22 +144,49 @@ async function init() {
     panel[r.year][r.COD_PROV] = {den: r.DEN_PROV,
       count: r[COUNT_FIELD] || null, rate: r[RATE_FIELD] || null};
   });
-  YEARS = Object.keys(panel).map(Number).sort((a, b) => a - b);
-  const slider = document.getElementById('yearSlider');
-  slider.max = YEARS.length - 1;
-  // thin tick labels: ~8 labels max, always keep first and last
-  const step = Math.max(1, Math.ceil(YEARS.length / 8));
-  document.getElementById('yearTicks').innerHTML = YEARS.map((y, i) =>
-    '<span>' + ((i % step === 0 || i === YEARS.length - 1) ? y : '') + '</span>').join('');
-  slider.addEventListener('input', updateMap);
+  yearsProv = Object.keys(panel).map(Number).sort((a, b) => a - b);
+
+  // compartimento layer (best-effort; if missing, comp toggle just shows no data)
+  const compYearsWithData = new Set();
+  try {
+    const cTxt = await fetch(COMP_URL).then(r => r.ok ? r.text() : '');
+    Papa.parse(cTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+      if (!r.compartimento) return;
+      if (!comp[r.compartimento]) comp[r.compartimento] = {};
+      comp[r.compartimento][r.year] = {count: r[COUNT_FIELD] || null, rate: r[RATE_FIELD] || null};
+      if (r.year != null) compYearsWithData.add(Number(r.year));
+    });
+  } catch (e) { /* comp layer optional */ }
+  // comp slider = years with a real region geojson AND comp data
+  yearsComp = COMP_GEO_YEARS.filter(y => compYearsWithData.has(y));
+
+  rebuildYears(null);
+  document.getElementById('yearSlider').addEventListener('input', updateMap);
   document.getElementById('indSelect').addEventListener('change', updateMap);
+  document.querySelectorAll('input[name="geoLevel"]').forEach(el =>
+    el.addEventListener('change', onLevelChange));
+  updateMap();
+}
+
+function onLevelChange() {
+  const cur = getYear();
+  rebuildYears(cur);
+  document.getElementById('provinceInfo').style.display = 'none';
+  if (seriesChart) { seriesChart.destroy(); seriesChart = null; }
   updateMap();
 }
 
 function computeBreaks() {
   const field = getField();
-  const base = panel[YEARS[0]] || {};
-  const values = Object.values(base).map(p => p[field]).filter(v => v != null && v > 0);
+  let values;
+  if (level() === 'comp') {
+    const y0 = YEARS[0];
+    values = Object.keys(comp).map(name => compVal(name, y0, field))
+      .filter(v => v != null && v > 0);
+  } else {
+    const base = panel[YEARS[0]] || {};
+    values = Object.values(base).map(p => p[field]).filter(v => v != null && v > 0);
+  }
   if (!values.length) return [0, 1];
   values.sort((a, b) => a - b);
   const breaks = [];
@@ -136,54 +205,92 @@ function getColor(v, breaks) {
 }
 
 function style(feature) {
-  const prov = (panel[getYear()] || {})[feature.properties.COD_PROV];
-  return {fillColor: getColor(prov ? prov[getField()] : null, currentBreaks),
+  let v;
+  if (level() === 'comp') {
+    v = compVal(feature.properties.COMP, getYear(), getField());
+  } else {
+    const rec = (panel[getYear()] || {})[feature.properties.COD_PROV];
+    v = rec ? rec[getField()] : null;
+  }
+  return {fillColor: getColor(v, currentBreaks),
           weight: 0.8, opacity: 1, color: '#94a3b8', fillOpacity: 0.85};
 }
 
 function showProvince(cod, name) {
-  const prov = (panel[getYear()] || {})[cod];
+  const rec = (panel[getYear()] || {})[cod];
   document.getElementById('provinceInfo').style.display = 'block';
   document.getElementById('provName').textContent = name + ' (' + getYear() + ')';
-  document.getElementById('provRate').textContent = prov ? fmt(prov.rate) : 'N/A';
-  document.getElementById('provCount').textContent = prov ? fmt(prov.count) : 'N/A';
-  const ctx = document.getElementById('seriesChart').getContext('2d');
-  if (seriesChart) seriesChart.destroy();
+  document.getElementById('provRate').textContent = rec ? fmt(rec.rate) : 'N/A';
+  document.getElementById('provCount').textContent = rec ? fmt(rec.count) : 'N/A';
   const data = YEARS.map(y => {
     const p = (panel[y] || {})[cod];
     return {x: y, y: p ? p.rate : null};
   }).filter(d => d.y != null);
+  drawSeries(name, data);
+}
+
+function showComp(name) {
+  lastSelComp = name;
+  const series = comp[name] || {};
+  const rec = series[getYear()];
+  document.getElementById('provinceInfo').style.display = 'block';
+  document.getElementById('provName').textContent = name + ' (compartimento, ' + getYear() + ')';
+  document.getElementById('provRate').textContent = rec ? fmt(rec.rate) : 'N/A';
+  document.getElementById('provCount').textContent = rec ? fmt(rec.count) : 'N/A';
+  const data = Object.keys(series).map(Number).sort((a, b) => a - b)
+    .map(y => ({x: y, y: series[y].rate})).filter(d => d.y != null && d.y !== '');
+  drawSeries(name, data);
+}
+
+function drawSeries(name, data) {
+  const ctx = document.getElementById('seriesChart').getContext('2d');
+  if (seriesChart) seriesChart.destroy();
   seriesChart = new Chart(ctx, {
     type: 'line',
-    data: {datasets: [{label: '‰', data: data, borderColor: '#d94801',
-      backgroundColor: '#d94801', pointRadius: 3, borderWidth: 1.5}]},
+    data: {datasets: [{label: '‰', data: data, borderColor: LINE_COLOR,
+      backgroundColor: LINE_COLOR, pointRadius: 3, borderWidth: 1.5}]},
     options: {responsive: true, maintainAspectRatio: false,
       plugins: {legend: {display: false},
-        title: {display: true, text: name + ' — births per 1,000 pop.', font: {size: 12}}},
+        title: {display: true, text: name + ' — ' + SERIES_LABEL, font: {size: 12}}},
       scales: {x: {type: 'linear', ticks: {callback: v => v}}, y: {beginAtZero: true}}}
   });
 }
 
 function onEachFeature(feature, layer) {
   layer.on({
-    mouseover: function(e) { e.target.setStyle({weight: 2, color: '#7c2d12', fillOpacity: 1}); e.target.bringToFront(); },
+    mouseover: function(e) { e.target.setStyle({weight: 2, color: HOVER_COLOR, fillOpacity: 1}); e.target.bringToFront(); },
     mouseout: function(e) { if (currentLayer) currentLayer.resetStyle(e.target); },
-    click: function() { showProvince(feature.properties.COD_PROV, feature.properties.DEN_PROV); }
+    click: function() {
+      if (level() === 'comp') showComp(feature.properties.COMP);
+      else showProvince(feature.properties.COD_PROV, feature.properties.DEN_PROV);
+    }
   });
 }
 
 async function updateMap() {
   const year = getYear();
   document.getElementById('yearDisplay').textContent = year;
-  const gy = geoYear(year);
-  if (!geojsonCache[gy]) {
-    geojsonCache[gy] = await fetch('../data/geojson/province_' + gy + '.geojson').then(r => r.json());
+  let geojson;
+  if (level() === 'comp') {
+    if (!compGeojsonCache[year]) {
+      compGeojsonCache[year] = await fetch('../data/geojson/compartimento_' + year + '.geojson').then(r => r.json());
+    }
+    geojson = compGeojsonCache[year];
+  } else {
+    const gy = geoYear(year);
+    if (!geojsonCache[gy]) {
+      geojsonCache[gy] = await fetch('../data/geojson/province_' + gy + '.geojson').then(r => r.json());
+    }
+    geojson = geojsonCache[gy];
   }
   currentBreaks = computeBreaks();
   if (currentLayer) map.removeLayer(currentLayer);
-  currentLayer = L.geoJSON(geojsonCache[gy], {style: style, onEachFeature: onEachFeature}).addTo(map);
+  currentLayer = L.geoJSON(geojson, {style: style, onEachFeature: onEachFeature}).addTo(map);
   map.fitBounds(currentLayer.getBounds(), {padding: [10, 10]});
   updateLegend();
+  // refresh open side panel for the new year/indicator
+  if (document.getElementById('provinceInfo').style.display === 'block' &&
+      level() === 'comp' && lastSelComp) showComp(lastSelComp);
 }
 
 document.getElementById('legendToggle').addEventListener('click', function() {
@@ -195,7 +302,8 @@ function updateLegend() {
   const div = document.getElementById('legendContent');
   if (!div || !currentBreaks) return;
   const label = document.getElementById('indSelect').selectedOptions[0].text;
-  let html = '<strong>' + label + '</strong>';
+  const lvl = level() === 'comp' ? ' — compartimento' : '';
+  let html = '<strong>' + label + lvl + '</strong>';
   html += '<div class="legend-row"><i style="background:' + COLORS[0] + '"></i><span>&lt; ' + fmt(currentBreaks[0]) + '</span></div>';
   for (let i = 0; i < currentBreaks.length; i++) {
     const next = currentBreaks[i + 1];
@@ -218,9 +326,12 @@ provincial totals) and the 1901, 1911, 1921 and 1931 volumes (TAVOLA I, nati-viv
 validated as the sum of the printed male and female counts, mismatches flagged in the full
 extraction file). Crude birth rate = live births / population × 1000, with population linearly
 interpolated between flanking censuses. Pola, Trieste and Zara (1931) lack census denominators
-and are included only in the full extraction file. Map shows the nearest available historical
-boundaries.</p>
+and are included only in the full extraction file. The provincial map shows the nearest available
+historical boundaries. The compartimento map uses the historical regional boundaries reconstructed
+from ISTAT (<em>Annali di statistica</em>, 2018; CC-BY): regional polygons at the compartimento
+level, joined to the data by region name.</p>
 <p><strong>Download:</strong> <a href="../data/fertility/fertility_panel.csv" download>fertility_panel.csv</a> ·
+<a href="../data/fertility/fertility_comp.csv" download>fertility_comp.csv</a> ·
 <a href="../data/fertility/births_full_extraction.csv" download>births_full_extraction.csv</a></p>
 <p>Preliminary — test environment.</p>
 </div>
