@@ -57,7 +57,7 @@ format:
       <div id="legendContent" class="map-legend"></div>
     </div>
   </div>
-  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:700px;overflow-y:auto;">
+  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:920px;overflow-y:auto;">
     <h4 id="provName" style="margin-top:0;"></h4>
     <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
       <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Crude Marriage Rate (‰)</td><td id="provRate" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>

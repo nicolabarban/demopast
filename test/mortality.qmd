@@ -51,6 +51,12 @@ format:
     <label style="margin-right:0.4rem;"><input type="radio" name="compSex" value="M"> Males</label>
     <label><input type="radio" name="compSex" value="F"> Females</label>
   </div>
+  <div id="provSexWrap" style="display:none;margin-top:0.45rem;">
+    <label style="font-weight:bold;font-size:0.9rem;">Sex (life tables): </label>
+    <label style="margin-right:0.4rem;"><input type="radio" name="provSex" value="T" checked> Total</label>
+    <label style="margin-right:0.4rem;"><input type="radio" name="provSex" value="M"> Males</label>
+    <label><input type="radio" name="provSex" value="F"> Females</label>
+  </div>
 </div>
 
 <div style="display:flex;gap:1.5rem;align-items:flex-start;">
@@ -98,6 +104,7 @@ format:
       <a href="../data/mortality/lifetables_1881.csv" download>lifetables_1881.csv</a> ·
     <a href="../data/mortality/lifetables_1921.csv" download>lifetables_1921.csv</a> ·
     <a href="../data/mortality/lifetables_comp.csv" download>lifetables_comp.csv</a> ·
+    <a href="../data/mortality/lifetables_province.csv" download>lifetables_province.csv</a> ·
     <a href="../data/mortality/e0_comp.csv" download>e0_comp.csv</a> ·
     <a href="../data/mortality/mortality_1951_1961.csv" download>mortality_1951_1961.csv</a>
     </div>
@@ -141,6 +148,8 @@ let comp = {};           // compartimento -> year -> {deaths, cdr}  (comp series
 let imrSeries = {};      // COD_PROV -> [{year, imr}]
 let agesex = {};         // COD_PROV -> year -> sex -> {age_group: deaths}
 let ltComp = {};         // compartimento -> year -> sex -> [rows by age_lo]  (life tables)
+let ltProv = {};         // COD_PROV -> year -> sex -> [rows by age_lo]  (province life tables, 1881/1921 only)
+const LT_PROV_YEARS = [1881, 1921];   // province life tables available only for these years
 let survivalChart = null;
 let mxChart = null;
 const COMP_SEXCLR = {T: '#374151', M: '#1d4ed8', F: '#be185d'};
@@ -154,6 +163,7 @@ let dataReady = false;
 let YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
 let yearsProv = YEARS.slice(), yearsComp = [];
 let lastSelComp = null;
+let lastSelProv = null;   // {cod, name} of last clicked province
 
 function levelMode() { return document.querySelector('input[name="geoLevel"]:checked').value; }
 function getField() { return document.getElementById('indSelect').value; }
@@ -184,12 +194,13 @@ function rebuildYears(keepYear) {
 
 async function loadAll() {
   if (dataReady) return;
-  const [pTxt, iTxt, aTxt, cTxt, ltTxt] = await Promise.all([
+  const [pTxt, iTxt, aTxt, cTxt, ltTxt, ltpTxt] = await Promise.all([
     fetch('../data/mortality/mortality_panel.csv').then(r => r.text()),
     fetch('../data/mortality/imr_annual.csv').then(r => r.text()),
     fetch('../data/mortality/deaths_agesex.csv').then(r => r.text()),
     fetch('../data/mortality/mortality_comp.csv').then(r => r.ok ? r.text() : ''),
     fetch('../data/mortality/lifetables_comp.csv').then(r => r.ok ? r.text() : ''),
+    fetch('../data/mortality/lifetables_province.csv').then(r => r.ok ? r.text() : ''),
   ]);
   Papa.parse(pTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
     if (!panel[r.year]) panel[r.year] = {};
@@ -225,6 +236,16 @@ async function loadAll() {
     ltComp[r.compartimento][r.year][r.sex].push(r);
   });
   Object.values(ltComp).forEach(byYear => Object.values(byYear).forEach(bySex =>
+    Object.values(bySex).forEach(rows => rows.sort((a, b) => a.age_lo - b.age_lo))));
+  // province life tables: ltProv[COD_PROV][year][sex] = rows sorted by age_lo (1881/1921 only)
+  Papa.parse(ltpTxt, {header:true, skipEmptyLines:true, dynamicTyping:true}).data.forEach(function(r) {
+    if (r.COD_PROV == null || r.year == null || !r.sex) return;
+    if (!ltProv[r.COD_PROV]) ltProv[r.COD_PROV] = {};
+    if (!ltProv[r.COD_PROV][r.year]) ltProv[r.COD_PROV][r.year] = {};
+    if (!ltProv[r.COD_PROV][r.year][r.sex]) ltProv[r.COD_PROV][r.year][r.sex] = [];
+    ltProv[r.COD_PROV][r.year][r.sex].push(r);
+  });
+  Object.values(ltProv).forEach(byYear => Object.values(byYear).forEach(bySex =>
     Object.values(bySex).forEach(rows => rows.sort((a, b) => a.age_lo - b.age_lo))));
   dataReady = true;
 }
@@ -312,6 +333,8 @@ function showProvince(cod, name) {
   document.getElementById('pyramidYearNote').textContent =
     py ? '(' + py + ', nearest available)' : '(not available for this province)';
   drawPyramid(cod, name, py);
+  lastSelProv = {cod: cod, name: name};
+  drawProvinceLifetableCharts(cod, name, year);
 }
 
 function onEachFeature(feature, layer) {
@@ -346,7 +369,9 @@ function syncIndicatorOptions() {
   const isComp = levelMode() === 'comp';
   document.getElementById('compNote').style.display = isComp ? 'block' : 'none';
   document.getElementById('compSexWrap').style.display = isComp ? 'block' : 'none';
-  if (!isComp) {
+  if (isComp) {
+    document.getElementById('provSexWrap').style.display = 'none';
+  } else {
     destroyLifetableCharts();
     document.getElementById('ltCompBlock').style.display = 'none';
   }
@@ -359,11 +384,15 @@ function syncIndicatorOptions() {
 }
 
 function onLevelChange() {
+  // selections do not carry across geography levels
+  lastSelComp = null;
+  lastSelProv = null;
   syncIndicatorOptions();
   rebuildYears(getYear());
   if (imrChart) { imrChart.destroy(); imrChart = null; }
   if (pyramidChart) { pyramidChart.destroy(); pyramidChart = null; }
   destroyLifetableCharts();
+  document.getElementById('ltCompBlock').style.display = 'none';
   updateMap();
 }
 
@@ -380,7 +409,8 @@ async function updateMap() {
   if (levelMode() === 'comp') {
     if (lastSelComp) showComp(lastSelComp); else showNationalComp(year);
   } else {
-    showNational(year);
+    if (lastSelProv) showProvince(lastSelProv.cod, lastSelProv.name);
+    else showNational(year);
   }
 }
 
@@ -475,6 +505,9 @@ function showNational(year) {
   document.getElementById('pyramidYearNote').textContent = '(click a province)';
   if (pyramidChart) { pyramidChart.destroy(); pyramidChart = null; }
   if (imrChart) { imrChart.destroy(); imrChart = null; }
+  destroyLifetableCharts();
+  document.getElementById('ltCompBlock').style.display = 'none';
+  document.getElementById('provSexWrap').style.display = 'none';
 }
 
 function getCompSex() {
@@ -489,38 +522,48 @@ function ltRowsFor(compName, year, sex) {
   return bySex[sex] || bySex['T'] || null;
 }
 
+// province rows for the active sex, falling back to Total if the chosen sex is missing
+function ltProvRowsFor(cod, year, sex) {
+  const byYear = ltProv[cod] || {};
+  const bySex = byYear[year] || {};
+  return bySex[sex] || bySex['T'] || null;
+}
+
+function getProvSex() {
+  const el = document.querySelector('input[name="provSex"]:checked');
+  return el ? el.value : 'T';
+}
+
 function destroyLifetableCharts() {
   if (survivalChart) { survivalChart.destroy(); survivalChart = null; }
   if (mxChart) { mxChart.destroy(); mxChart = null; }
 }
 
-// Draw the two compartimento life-table charts (survival lx + age-specific mx).
-// Always plots the active sex; for Total also overlays M and F when available.
-function drawLifetableCharts(compName, year) {
-  const block = document.getElementById('ltCompBlock');
-  block.style.display = 'block';
-  const sex = getCompSex();
-  const active = ltRowsFor(compName, year, sex);
-  if (!active || !active.length) {
+// Generic drawing of the two life-table charts (survival lx + age-specific mx).
+// rowsFor(sex) returns the sorted rows for that sex (or null); always plots the
+// active sex, and for Total also overlays M and F when available.
+function renderLifetableCharts(rowsFor, sex, titleSuffix) {
+  // mostra sempre solo Maschi e Femmine, mai la linea Totale
+  const active = (rowsFor('M') || []).length || (rowsFor('F') || []).length;
+  if (!active) {
     destroyLifetableCharts();
     document.getElementById('ltCompCharts').style.display = 'none';
     document.getElementById('ltCompNoData').style.display = 'block';
-    return;
+    return false;
   }
   document.getElementById('ltCompNoData').style.display = 'none';
   document.getElementById('ltCompCharts').style.display = 'block';
 
-  // sexes to plot: the active one, plus M/F context when Total is selected
-  const sexes = (sex === 'T') ? ['T', 'M', 'F'] : [sex];
+  const sexes = ['M', 'F'];
   const mkDatasets = field => sexes.map(s => {
-    const rows = ltRowsFor(compName, year, s);
+    const rows = rowsFor(s);
     if (!rows || !rows.length) return null;
     return {
       label: COMP_SEXLBL[s],
       data: rows.map(r => ({x: r.age_lo, y: r[field]}))
                 .filter(d => d.y != null && d.y !== '' && (field !== 'mx' || d.y > 0)),
       borderColor: COMP_SEXCLR[s], backgroundColor: COMP_SEXCLR[s],
-      pointRadius: 2, borderWidth: s === sex ? 2 : 1.25, tension: 0.2,
+      pointRadius: 2, borderWidth: 2, tension: 0.2,
     };
   }).filter(Boolean);
 
@@ -529,7 +572,7 @@ function drawLifetableCharts(compName, year) {
     type: 'line', data: {datasets: mkDatasets('lx')},
     options: {responsive: true, maintainAspectRatio: false,
       plugins: {legend: {position: 'bottom'},
-        title: {display: true, text: 'Curva di sopravvivenza — ' + compName + ' ' + year, font: {size: 12}}},
+        title: {display: true, text: 'Curva di sopravvivenza — ' + titleSuffix, font: {size: 12}}},
       scales: {x: {type: 'linear', min: 0, max: 90, title: {display: true, text: 'età'}},
                y: {min: 0, max: 100000, title: {display: true, text: 'sopravviventi (lₓ)'}}}}
   });
@@ -537,10 +580,40 @@ function drawLifetableCharts(compName, year) {
     type: 'line', data: {datasets: mkDatasets('mx')},
     options: {responsive: true, maintainAspectRatio: false,
       plugins: {legend: {position: 'bottom'},
-        title: {display: true, text: 'Tassi di mortalità per età (mₓ) — ' + compName + ' ' + year, font: {size: 12}}},
+        title: {display: true, text: 'Tassi di mortalità per età (mₓ) — ' + titleSuffix, font: {size: 12}}},
       scales: {x: {type: 'linear', min: 0, max: 90, title: {display: true, text: 'età'}},
                y: {type: 'logarithmic', title: {display: true, text: 'tasso di mortalità (mₓ)'}}}}
   });
+  return true;
+}
+
+// Draw the two compartimento life-table charts.
+function drawLifetableCharts(compName, year) {
+  document.getElementById('ltCompBlock').style.display = 'block';
+  document.getElementById('provSexWrap').style.display = 'none';
+  document.getElementById('ltCompNoData').textContent =
+    'Life-table data not available for this compartimento and year.';
+  renderLifetableCharts(s => ltRowsFor(compName, year, s), getCompSex(),
+    compName + ' ' + year);
+}
+
+// Draw the two province life-table charts (1881/1921 only).
+function drawProvinceLifetableCharts(cod, name, year) {
+  const block = document.getElementById('ltCompBlock');
+  block.style.display = 'block';
+  document.getElementById('provSexWrap').style.display = 'block';
+  if (!LT_PROV_YEARS.includes(Number(year))) {
+    destroyLifetableCharts();
+    document.getElementById('ltCompCharts').style.display = 'none';
+    document.getElementById('ltCompNoData').textContent =
+      'Tavola di mortalità provinciale disponibile solo per 1881 e 1921.';
+    document.getElementById('ltCompNoData').style.display = 'block';
+    return;
+  }
+  document.getElementById('ltCompNoData').textContent =
+    'Tavola di mortalità provinciale non disponibile per questa provincia (' + year + ').';
+  renderLifetableCharts(s => ltProvRowsFor(cod, year, s), getProvSex(),
+    name + ' ' + year);
 }
 
 function drawIMRSeries(cod, name) {
@@ -607,6 +680,11 @@ document.querySelectorAll('input[name="compSex"]').forEach(el =>
   el.addEventListener('change', function() {
     if (levelMode() !== 'comp') return;
     drawLifetableCharts(lastSelComp || 'REGNO', getYear());
+  }));
+document.querySelectorAll('input[name="provSex"]').forEach(el =>
+  el.addEventListener('change', function() {
+    if (levelMode() === 'comp' || !lastSelProv) return;
+    drawProvinceLifetableCharts(lastSelProv.cod, lastSelProv.name, getYear());
   }));
 
 async function start() {
