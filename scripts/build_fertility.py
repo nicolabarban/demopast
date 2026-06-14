@@ -24,7 +24,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
 SRC = Path("/Users/nicolabarban/Library/CloudStorage/Dropbox/dati_ISTAT"
-           "/data/processed/mortality_extraction/csv/births_province_panel.csv")
+           "/processed/mortality_extraction/csv/births_province_panel.csv")
 CENSUS_DIR = HERE / "data/census"
 OUT = HERE / "data/fertility"
 

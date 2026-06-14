@@ -64,7 +64,7 @@ PANELS = {
 # mortalita': ricostruita da fonti AUTOREVOLI (il mortality_panel del sito e'
 # incompleto: perde le province con nome storico variante).
 DATI = Path("/Users/nicolabarban/Library/CloudStorage/Dropbox/dati_ISTAT"
-            "/data/processed/mortality_extraction/csv")
+            "/processed/mortality_extraction/csv")
 CENSUS = DATA / "census"
 CROSSWALK = DATI / "province_crosswalk_demopast.csv"
 DEATHS_PROV = DATI / "deaths_province_panel.csv"          # 1863-1881 + 1901

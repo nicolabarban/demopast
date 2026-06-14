@@ -3,7 +3,7 @@
 Build data/mortality/*.csv for the test mortality section from the
 dati_ISTAT extraction outputs.
 
-Inputs (dati_ISTAT/data/processed/mortality_extraction/csv/):
+Inputs (dati_ISTAT/processed/mortality_extraction/csv/):
   cdr_province_panel.csv        COD_PROV, DEN_PROV, year, deaths_total, total_pop, cdr
   imr_province_1863_1882.csv    COD_PROV, DEN_PROV, region, year, deaths_u1, births, imr
   imr_province_1931_1936.csv    COD_PROV, DEN_PROV, name_source, year, imr, neonatal_m1
@@ -27,7 +27,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
 SRC = Path("/Users/nicolabarban/Library/CloudStorage/Dropbox/dati_ISTAT"
-           "/data/processed/mortality_extraction/csv")
+           "/processed/mortality_extraction/csv")
 OUT = HERE / "data/mortality"
 GEO = HERE / "data/geojson"
 
