@@ -1,0 +1,30 @@
+year,matrimoni,nati_vivi,morti,matrimoni_n_vol,nati_vivi_n_vol,morti_n_vol,matrimoni_confidenza,nati_vivi_confidenza,morti_confidenza,fonti,confidenza
+1872,202361,1020682,827498,2,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896,alta
+1873,214906,985188,813973,2,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896,alta
+1874,207997,951658,827253,2,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896,alta
+1875,230486,1035377,843161,2,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896,alta
+1876,225453,1083721,796420,2,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896,alta
+1877,214972,1029037,787817,2,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896,alta
+1878,199885,1012475,813550,2,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896,alta
+1879,213096,1064153,836682,2,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896,alta
+1880,196738,957900,869992,2,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896,alta
+1881,230143,1081125,784181,3,4,4,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1882,224041,1061094,787326,3,3,4,alta,media (discordanza),alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,media
+1883,231945,1071452,794196,3,3,3,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1884,239513,1130741,780361,3,4,4,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1885,233931,1125970,787217,3,4,4,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1886,233310,1086960,844603,3,4,4,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1887,235629,1152906,828992,3,4,4,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1888,236883,1119563,820431,3,4,4,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1889,230451,1149197,768068,4,4,4,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1890,221972,1083103,795911,4,4,4,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1891,227656,1132139,795327,4,4,4,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1892,228572,1110573,802779,4,4,2,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1893,228103,1126296,776713,4,4,2,alta,alta,alta,ED_1895_Anno_1893;ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1894,231581,1102935,776372,3,3,1,alta,alta,bassa (1 volume),ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,bassa
+1895,228152,1092102,783813,3,3,2,alta,alta,alta,ED_1896_Anno_1895;ED_1897_Anno_1896;ED_1902_Anno_1900,alta
+1896,222603,1095505,758129,1,2,1,bassa (1 volume),alta,bassa (1 volume),ED_1897_Anno_1896;ED_1902_Anno_1900,bassa
+1897,229041,1101848,,1,1,0,bassa (1 volume),bassa (1 volume),assente,ED_1902_Anno_1900,bassa
+1898,219597,1070074,,1,1,0,bassa (1 volume),bassa (1 volume),assente,ED_1902_Anno_1900,bassa
+1899,,1088558,,0,1,0,assente,bassa (1 volume),assente,ED_1902_Anno_1900,bassa
+1900,232631,1067376,768917,1,1,1,bassa (1 volume),bassa (1 volume),bassa (1 volume),ED_1902_Anno_1900,bassa
