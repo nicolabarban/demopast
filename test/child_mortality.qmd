@@ -1,0 +1,285 @@
+---
+title: "Under-5 child mortality (compartimento) — DEMOPAST (test)"
+page-layout: full
+format:
+  html:
+    toc: false
+---
+
+```{=html}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+<div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
+  <strong>Test section</strong> — under-5 mortality rate (u5mr, deaths age 0–4
+  per 1,000 live births) by <em>compartimento</em> (historical region), annual
+  benchmarks 1890–1936. The map colours each region by its u5mr.
+  <a href="index.html">← back to test home</a>
+</div>
+
+<div class="slider-container">
+  <label for="yearSlider" class="year-label">Year: <span id="yearDisplay">—</span></label><br>
+  <input type="range" id="yearSlider" min="0" max="0" step="1" value="0" style="width:70%;max-width:640px;">
+  <div id="yearTicks" style="display:flex;justify-content:space-between;max-width:640px;margin:0 auto;font-size:0.7rem;color:#888;"></div>
+</div>
+
+<div style="text-align:center;margin:0.75rem 0;">
+  <span style="font-size:0.95rem;color:#555;">Map shows the under-5 mortality
+  rate (deaths 0–4 per 1,000 live births) by compartimento</span>
+</div>
+
+<div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+  <div style="flex:0 0 48%;min-width:340px;display:flex;flex-direction:column;gap:0.75rem;">
+    <div id="map" style="width:100%;height:600px;"></div>
+    <div id="legendWrapper">
+      <div class="legend-header">
+        <span class="legend-title">Legend</span>
+        <button id="legendToggle" type="button">Hide</button>
+      </div>
+      <div id="legendContent" class="map-legend"></div>
+    </div>
+  </div>
+  <div id="compInfo" style="flex:1 1 45%;min-width:320px;padding:1rem;background:#f8f9fa;border-radius:4px;max-height:900px;overflow-y:auto;">
+    <h4 id="compName" style="margin-top:0;"></h4>
+    <table id="compTable" style="width:100%;border-collapse:collapse;font-size:0.85rem;margin-bottom:0.75rem;"></table>
+    <h5 style="margin-bottom:0.25rem;">u5mr time series</h5>
+    <p id="seriesNote" style="font-size:0.85rem;color:#777;">Click a region on the map to see its full annual series.</p>
+    <table id="seriesTable" style="width:100%;border-collapse:collapse;font-size:0.8rem;"></table>
+  </div>
+</div>
+
+<script>
+const CM_COMP   = '../data/mortality/child_mortality_comp.csv';
+const CM_BYPROV = '../data/mortality/child_mortality_comp_byprov.csv';
+// boundary geojsons actually present on disk
+const COMP_GEO_YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936];
+const PROV_GEO_YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936];
+const COLORS = ['#fff7ec','#fee8c8','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d7301f','#990000'];
+const DEFAULT_YEAR = 1901;
+
+// data[comp][year] = {births, deaths_u5, u5mr};   byprov[cod][year] = u5mr
+let data = {}, byprov = {}, YEARS = [], geoCache = {};
+let currentLayer = null, currentBreaks = null, selected = null;
+
+const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
+  scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
+  touchZoom:false}).setView([41.5, 12.5], 6);
+
+const getYear = () => YEARS[+document.getElementById('yearSlider').value];
+const fnum = v => (v === '' || v == null) ? null : +v;
+const nearest = (year, list) =>
+  list.reduce((b, y) => Math.abs(y - year) < Math.abs(b - year) ? y : b, list[0]);
+
+async function loadData() {
+  const [c, p] = await Promise.all([
+    fetch(CM_COMP).then(r => r.text()),
+    fetch(CM_BYPROV).then(r => r.text())
+  ]);
+  const yearSet = new Set();
+  Papa.parse(c, {header:true, skipEmptyLines:true}).data.forEach(function(r) {
+    if (!r.compartimento || !r.year) return;
+    const y = +r.year;
+    yearSet.add(y);
+    (data[r.compartimento] = data[r.compartimento] || {})[y] =
+      {births: fnum(r.births), deaths_u5: fnum(r.deaths_u5), u5mr: fnum(r.u5mr)};
+  });
+  Papa.parse(p, {header:true, skipEmptyLines:true}).data.forEach(function(r) {
+    if (!r.COD_PROV || !r.year) return;
+    (byprov[+r.COD_PROV] = byprov[+r.COD_PROV] || {})[+r.year] = fnum(r.u5mr);
+  });
+  YEARS = [...yearSet].sort((a, b) => a - b);
+}
+
+// u5mr for a compartimento name in a year
+const compU5 = (name, year) => ((data[name] || {})[year] || {}).u5mr ?? null;
+
+function computeBreaks() {
+  const year = getYear();
+  const values = Object.keys(data)
+    .map(name => compU5(name, year)).filter(v => v != null)
+    .sort((a, b) => a - b);
+  if (!values.length) return [0, 1];
+  const breaks = [];
+  for (let i = 1; i <= 7; i++)
+    breaks.push(values[Math.min(Math.floor(values.length * i / 8), values.length - 1)]);
+  return [...new Set(breaks)].sort((a, b) => a - b);
+}
+
+function getColor(v, breaks) {
+  if (v == null) return '#e5e7eb';
+  for (let i = breaks.length - 1; i >= 0; i--)
+    if (v > breaks[i]) return COLORS[Math.min(i + 1, COLORS.length - 1)];
+  return COLORS[0];
+}
+
+// resolve a feature (compartimento OR province) to its u5mr for the current year
+function featureU5(props) {
+  const year = getYear();
+  if (props.COMP != null) return compU5(props.COMP, year);
+  if (props.COD_PROV != null) return (byprov[+props.COD_PROV] || {})[year] ?? null;
+  return null;
+}
+function featureName(props) {
+  return props.COMP != null ? props.COMP : (props.DEN_PROV || ('prov ' + props.COD_PROV));
+}
+
+function style(feature) {
+  return {fillColor: getColor(featureU5(feature.properties), currentBreaks),
+          weight: 0.7, opacity: 1, color: '#94a3b8', fillOpacity: 0.85};
+}
+
+function tooltipHtml(props) {
+  const year = getYear();
+  const f0 = x => x == null ? '—' : Math.round(x).toLocaleString('en-US');
+  if (props.COMP != null) {
+    const rec = (data[props.COMP] || {})[year];
+    if (!rec) return '<strong>' + props.COMP + '</strong><br>no data ' + year;
+    return '<strong>' + props.COMP + '</strong> — ' + year +
+      '<br>u5mr ' + (rec.u5mr != null ? rec.u5mr.toFixed(1) : '—') + ' ‰' +
+      '<br>births ' + f0(rec.births) + ' · deaths 0–4 ' + f0(rec.deaths_u5);
+  }
+  // province polygon (region value spread onto provinces)
+  const v = (byprov[+props.COD_PROV] || {})[year];
+  return '<strong>' + (props.DEN_PROV || props.COD_PROV) + '</strong> — ' + year +
+    '<br>u5mr (region) ' + (v != null ? v.toFixed(1) + ' ‰' : '—');
+}
+
+function onEachFeature(feature, layer) {
+  const props = feature.properties;
+  layer.bindTooltip(() => tooltipHtml(props), {sticky: true});
+  layer.on({
+    mouseover: function(e) { e.target.setStyle({weight: 2, color: '#7f0000', fillOpacity: 1}); e.target.bringToFront(); },
+    mouseout: function(e) { if (currentLayer) currentLayer.resetStyle(e.target); },
+    click: function() {
+      if (props.COMP != null) { selected = props.COMP; showComp(); }
+    }
+  });
+}
+
+function showComp() {
+  const year = getYear();
+  const el = document.getElementById('compInfo');
+  if (!selected) {
+    document.getElementById('compName').textContent = 'Pick a compartimento';
+    document.getElementById('compTable').innerHTML = '';
+    document.getElementById('seriesTable').innerHTML = '';
+    document.getElementById('seriesNote').textContent =
+      'Click a region on the map to see its full annual series.';
+    return;
+  }
+  const rec = (data[selected] || {})[year];
+  document.getElementById('compName').textContent = selected + ' — ' + year;
+  const f0 = x => x == null ? '—' : Math.round(x).toLocaleString('en-US');
+  document.getElementById('compTable').innerHTML = rec
+    ? '<tr><td>u5mr (per 1,000)</td><td style="text-align:right;font-weight:bold;">' +
+        (rec.u5mr != null ? rec.u5mr.toFixed(1) : '—') + '</td></tr>' +
+      '<tr><td>live births</td><td style="text-align:right;">' + f0(rec.births) + '</td></tr>' +
+      '<tr><td>deaths age 0–4</td><td style="text-align:right;">' + f0(rec.deaths_u5) + '</td></tr>'
+    : '<tr><td colspan="2">no data ' + year + '</td></tr>';
+  document.getElementById('seriesNote').textContent = '';
+  const series = data[selected] || {};
+  let head = '<tr style="border-bottom:2px solid #ccc;"><th style="text-align:left;">year</th>' +
+    ['u5mr','births','deaths 0–4'].map(h => '<th style="text-align:right;">' + h + '</th>').join('') + '</tr>';
+  let body = YEARS.map(function(y) {
+    const r = series[y];
+    const cur = y === year ? ' style="background:#fde2d2;font-weight:bold;"' : '';
+    if (!r) return '<tr' + cur + '><td>' + y + '</td><td colspan="3" style="text-align:right;color:#999;">—</td></tr>';
+    return '<tr' + cur + '><td>' + y + '</td><td style="text-align:right;">' +
+      (r.u5mr != null ? r.u5mr.toFixed(1) : '—') + '</td><td style="text-align:right;">' +
+      f0(r.births) + '</td><td style="text-align:right;">' + f0(r.deaths_u5) + '</td></tr>';
+  }).join('');
+  document.getElementById('seriesTable').innerHTML = head + body;
+}
+
+async function fetchGeo(year) {
+  // prefer a compartimento boundary if one is close enough (<=5y); else provinces
+  const cy = nearest(year, COMP_GEO_YEARS);
+  const useComp = Math.abs(cy - year) <= 5;
+  const py = nearest(year, PROV_GEO_YEARS);
+  const kind = useComp ? 'compartimento' : 'province';
+  const gy = useComp ? cy : py;
+  const key = kind + '_' + gy;
+  if (!geoCache[key])
+    geoCache[key] = await fetch('../data/geojson/' + key + '.geojson').then(r => r.json());
+  return {geo: geoCache[key], kind, gy};
+}
+
+async function updateMap() {
+  const year = getYear();
+  document.getElementById('yearDisplay').textContent = year;
+  const {geo, kind, gy} = await fetchGeo(year);
+  currentBreaks = computeBreaks();
+  if (currentLayer) map.removeLayer(currentLayer);
+  currentLayer = L.geoJSON(geo, {style: style, onEachFeature: onEachFeature}).addTo(map);
+  map.fitBounds(currentLayer.getBounds(), {padding: [10, 10]});
+  document.getElementById('boundaryNote').textContent =
+    'Boundaries: ' + kind + ' ' + gy + (gy === year ? '' : ' (nearest available)');
+  updateLegend();
+  showComp();
+}
+
+function updateLegend() {
+  const div = document.getElementById('legendContent');
+  if (!div || !currentBreaks) return;
+  let html = '<strong>u5mr (per 1,000 births)</strong>';
+  html += '<div class="legend-row"><i style="background:' + COLORS[0] + '"></i><span>&lt; ' + currentBreaks[0].toFixed(0) + '</span></div>';
+  for (let i = 0; i < currentBreaks.length; i++) {
+    const next = currentBreaks[i + 1];
+    const clr = COLORS[Math.min(i + 1, COLORS.length - 1)];
+    html += next
+      ? '<div class="legend-row"><i style="background:' + clr + '"></i><span>' + currentBreaks[i].toFixed(0) + '–' + next.toFixed(0) + '</span></div>'
+      : '<div class="legend-row"><i style="background:' + clr + '"></i><span>&gt; ' + currentBreaks[i].toFixed(0) + '</span></div>';
+  }
+  html += '<div class="legend-row"><i style="background:#e5e7eb"></i><span>no data</span></div>';
+  html += '<div id="boundaryNote" style="margin-top:0.4rem;font-size:0.75rem;color:#888;"></div>';
+  div.innerHTML = html;
+}
+
+function init() {
+  const slider = document.getElementById('yearSlider');
+  slider.max = YEARS.length - 1;
+  slider.value = Math.max(0, YEARS.indexOf(DEFAULT_YEAR));
+  document.getElementById('yearTicks').innerHTML =
+    YEARS.map((y, i) => '<span>' + (i % 5 === 0 ? y : '·') + '</span>').join('');
+  slider.addEventListener('input', updateMap);
+  document.getElementById('legendToggle').addEventListener('click', function() {
+    const hidden = document.getElementById('legendWrapper').classList.toggle('legend-hidden');
+    this.textContent = hidden ? 'Show' : 'Hide';
+  });
+  updateMap();
+}
+
+loadData().then(init);
+</script>
+
+<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
+<p><strong>Method.</strong> The under-5 mortality rate (u5mr) is computed as
+deaths of children aged 0–4 divided by live births in the same year and
+compartimento, per 1,000. Live births and under-5 deaths are taken from the
+manual compilation of <strong>M. Raftakis</strong>, drawn from the ISTAT
+<em>Movimento dello stato civile</em>. Romagna is summed back into Emilia and
+Zara into Venezia Giulia e Zara; for sheets reporting sexes separately, deaths
+are the sum of males and females. Only years passing a plausibility filter are
+shown: the year is kept when the aggregate ratio (total under-5 deaths / total
+births) lies between 0.10 and 0.45 (u5mr 100–450 ‰); years that report total
+deaths (e.g. 1871) or are empty (1891–1894) are excluded.</p>
+<p>The map draws each compartimento by its own u5mr on the historical region
+boundaries for the nearest available benchmark; for intercensal years without a
+region polygon, the value is spread onto the provinces of each compartimento and
+the province boundaries are shaded instead. Coverage of <strong>Venezia
+Tridentina</strong> and <strong>Venezia Giulia e Zara</strong> begins only in the
+1920s–1930s, matching the source.</p>
+<p><strong>Validation.</strong> For 1901, 1911, 1931 and 1936 the Raftakis
+under-5 deaths were checked against our own ISTAT age-by-sex extraction
+(sum of ages 0–4 from <em>deaths_comp_agesex_{year}.csv</em>): 1901, 1911 and
+1936 match exactly across all tabulated compartimenti, and 1931 matches on 17 of
+18 (Sardegna differs by 50, a manual-transcription rounding in the source).</p>
+<p><strong>Data:</strong> M. Raftakis (manual extraction).
+<a href="../data/mortality/child_mortality_comp.csv" download>child_mortality_comp.csv</a>
+(compartimento × year: births, under-5 deaths, u5mr) ·
+<a href="../data/mortality/child_mortality_comp_byprov.csv" download>child_mortality_comp_byprov.csv</a>
+(region u5mr projected onto provinces, for the map).</p>
+<p>Preliminary — test environment.</p>
+</div>
+```

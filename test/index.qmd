@@ -68,6 +68,20 @@ format:
     </div>
   </a>
 
+  <a href="child_mortality.html" style="text-decoration:none;color:inherit;">
+    <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <h3 style="margin-top:0;color:#990000;">🍼 Under-5 child mortality (compartimento)</h3>
+      <p style="font-size:0.95rem;">Under-5 mortality rate (deaths age 0–4 per 1,000 live births) by region, annual 1890–1936.</p>
+      <ul style="font-size:0.85rem;color:#555;">
+        <li>u5mr map by compartimento, year slider 1890–1936 (42 years)</li>
+        <li>Region polygons where available, else provinces coloured by region</li>
+        <li>Validated against our ISTAT age-by-sex extraction (1901/1911/1931/1936)</li>
+        <li>Source: M. Raftakis (manual extraction), Movimento dello stato civile</li>
+      </ul>
+      <p style="font-weight:bold;color:#16a34a;">● Data available</p>
+    </div>
+  </a>
+
   <a href="marriages.html" style="text-decoration:none;color:inherit;">
     <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <h3 style="margin-top:0;color:#084594;">💍 Marriages</h3>
