@@ -22,7 +22,7 @@ HERE = Path(__file__).resolve().parent.parent
 DATA = HERE / "data"
 OUTDIR = DATA / "quality"
 
-CENSUS_YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936]
+CENSUS_YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1961]
 AGE_KEYS = (["0", "1_4"] + [f"{lo}_{lo + 4}" for lo in range(5, 85, 5)]
             + ["85plus"])
 

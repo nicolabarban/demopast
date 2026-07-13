@@ -21,6 +21,13 @@ OUT_DIR = ROOT / "data" / "geojson"
 
 SIMPLIFY_TOLERANCE_DEG = 0.005  # ~500 m at Italian latitudes
 
+# Some ISTAT DBFs carry a wrong codepage declaration (.CPG says ANSI 1252 but
+# the bytes are cp850), so accented names come out garbled after read_file.
+DEN_PROV_FIXES = {
+    "Forl\x8di'": "Forlì",
+    "Forli'": "Forlì",
+}
+
 
 def build(year: int) -> Path:
     src = RAW_DIR / f"Province_{year}" / f"Province_{year}.shp"
@@ -31,7 +38,7 @@ def build(year: int) -> Path:
         raise ValueError(f"{src} missing required columns: {missing}")
 
     gdf["COD_PROV"] = gdf["COD_PROV"].astype(int)
-    gdf["DEN_PROV"] = gdf["DEN_PROV"].astype(str)
+    gdf["DEN_PROV"] = gdf["DEN_PROV"].astype(str).replace(DEN_PROV_FIXES)
     gdf["geometry"] = gdf["geometry"].simplify(
         SIMPLIFY_TOLERANCE_DEG, preserve_topology=True
     )

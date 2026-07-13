@@ -23,6 +23,7 @@ format:
     <option value="1921">1921</option>
     <option value="1931">1931</option>
     <option value="1936">1936</option>
+    <option value="1961">1961</option>
   </select>
 </div>
 

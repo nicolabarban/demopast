@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT / "downloads"
 OUT_DIR = ROOT / "data" / "census"
 
-YEARS = (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936)
+YEARS = (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1961)
 
 AGE_CLASS_TO_SUFFIX = {
     "0": "0",

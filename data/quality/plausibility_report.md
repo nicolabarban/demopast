@@ -1,38 +1,205 @@
 # DEMOPAST data plausibility report
 
-Flags: **36 ERROR**, 470 WARNING, 288 INFO
+Flags: **202 ERROR**, 489 WARNING, 315 INFO
 
-## ERROR (36)
+## ERROR (202)
 
 | dataset | where | check | detail |
 |---|---|---|---|
+| census | Firenze 1936->1961 | intercensal_jump | 322,526 -> 1,012,703 (x3.14) |
+| census | Foggia 1936->1961 | intercensal_jump | 523,586 -> 328,989 (x0.63) |
 | census | Palermo 1861->1871 | intercensal_jump | 384,526 -> 617,618 (x1.61) |
+| census | PesaroUrbino 1936->1961 | intercensal_jump | 311,860 -> 521,138 (x1.67) |
+| census | Roma 1936->1961 | intercensal_jump | 1,562,414 -> 2,775,419 (x1.78) |
+| census | Torino 1936->1961 | intercensal_jump | 1,168,351 -> 1,831,422 (x1.57) |
+| census | Trieste 1936->1961 | intercensal_jump | 460,596 -> 298,596 (x0.65) |
+| census | Valled'Aosta 1936->1961 | intercensal_jump | 227,490 -> 101,152 (x0.44) |
 | census | AscoliPiceno 1931 | t_0!=m+f | 7,641 != 3,765+3,696 (off 180) |
+| census | Ferrara 1961 | t_0!=m+f | 5,727 != 2,917+281 (off 2,529) |
+| census | Palermo 1961 | t_0!=m+f | 23,390 != 1,193+1,146 (off 21,051) |
+| census | Varese 1961 | t_0!=m+f | 869 != 439+43 (off 387) |
+| census | Verona 1961 | t_0!=m+f | 11 != 5,598+5,402 (off 10,989) |
+| census | Alessandria 1961 | t_10_14!=m+f | 27,856 != 14,155+11,118 (off 2,583) |
+| census | Brescia 1961 | t_10_14!=m+f | 77,636 != 32,213+38,169 (off 7,254) |
+| census | Ferrara 1961 | t_10_14!=m+f | 31,401 != 16,088+9,292 (off 6,021) |
 | census | Piacenza 1921 | t_10_14!=m+f | 32,152 != 16,871+15,881 (off 600) |
+| census | Varese 1961 | t_10_14!=m+f | 41,286 != 17,330+20,068 (off 3,888) |
 | census | Venezia 1921 | t_10_14!=m+f | 58,411 != 29,590+29,181 (off 360) |
+| census | Verona 1961 | t_10_14!=m+f | 54,310 != 27,402+22,237 (off 4,671) |
 | census | Vicenza 1921 | t_10_14!=m+f | 66,074 != 33,580+32,994 (off 500) |
+| census | Vicenza 1961 | t_10_14!=m+f | 52,702 != 26,580+21,388 (off 4,734) |
+| census | Viterbo 1961 | t_10_14!=m+f | 21,982 != 9,547+10,626 (off 1,809) |
+| census | Avellino 1961 | t_15_19!=m+f | 37,870 != 8,608+18,453 (off 10,809) |
+| census | Ferrara 1961 | t_15_19!=m+f | 28,512 != 9,792+13,914 (off 4,806) |
+| census | Modena 1961 | t_15_19!=m+f | 29,351 != 18,198+17,651 (off 6,498) |
 | census | Rovigo 1921 | t_15_19!=m+f | 30,248 != 15,184+14,884 (off 180) |
+| census | Varese 1961 | t_15_19!=m+f | 40,103 != 13,385+19,707 (off 7,011) |
+| census | Vicenza 1961 | t_15_19!=m+f | 42,165 != 16,981+21,152 (off 4,032) |
+| census | Viterbo 1961 | t_15_19!=m+f | 16,193 != 7,922+9,666 (off 1,395) |
+| census | Alessandria 1961 | t_1_4!=m+f | 18,992 != 7,641+7,130 (off 4,221) |
 | census | AscoliPiceno 1931 | t_1_4!=m+f | 27,610 != 14,286+13,504 (off 180) |
 | census | Catania 1936 | t_1_4!=m+f | 63,096 != 24,025+30,869 (off 8,202) |
+| census | Modena 1961 | t_1_4!=m+f | 26,638 != 10,365+10,117 (off 6,156) |
+| census | Palermo 1961 | t_1_4!=m+f | 89,964 != 25,531+43,760 (off 20,673) |
+| census | Varese 1961 | t_1_4!=m+f | 17,940 != 16,489+15,761 (off 14,310) |
+| census | Verona 1961 | t_1_4!=m+f | 31,893 != 15,998+20,179 (off 4,284) |
+| census | Viterbo 1961 | t_1_4!=m+f | 12,002 != 6,143+7,659 (off 1,800) |
+| census | Alessandria 1961 | t_20_24!=m+f | 32,516 != 13,518+13,238 (off 5,760) |
+| census | Avellino 1961 | t_20_24!=m+f | 31,600 != 20,060+18,776 (off 7,236) |
+| census | Ferrara 1961 | t_20_24!=m+f | 25,709 != 13,169+15,591 (off 3,051) |
+| census | Modena 1961 | t_20_24!=m+f | 32,085 != 20,595+19,806 (off 8,316) |
+| census | Palermo 1961 | t_20_24!=m+f | 87,990 != 36,152+43,603 (off 8,235) |
+| census | Varese 1961 | t_20_24!=m+f | 38,638 != 15,437+19,772 (off 3,429) |
+| census | Verona 1961 | t_20_24!=m+f | 43,052 != 22,895+26,736 (off 6,579) |
+| census | Vicenza 1961 | t_20_24!=m+f | 52,813 != 26,585+21,485 (off 4,743) |
+| census | Viterbo 1961 | t_20_24!=m+f | 16,813 != 10,295+8,246 (off 1,728) |
+| census | Avellino 1961 | t_25_29!=m+f | 35,511 != 14,179+17,768 (off 3,564) |
+| census | Brescia 1961 | t_25_29!=m+f | 68,387 != 22,206+33,329 (off 12,852) |
+| census | Chieti 1961 | t_25_29!=m+f | 28,420 != 14,099+14,495 (off 174) |
+| census | Ferrara 1961 | t_25_29!=m+f | 30,786 != 12,772+15,323 (off 2,691) |
+| census | Modena 1961 | t_25_29!=m+f | 39,209 != 16,301+19,137 (off 3,771) |
+| census | Palermo 1961 | t_25_29!=m+f | 81,251 != 39,644+34,011 (off 7,596) |
+| census | Varese 1961 | t_25_29!=m+f | 46,199 != 23,131+18,865 (off 4,203) |
+| census | Vicenza 1961 | t_25_29!=m+f | 37,046 != 22,873+18,565 (off 4,392) |
+| census | Viterbo 1961 | t_25_29!=m+f | 19,058 != 9,726+7,694 (off 1,638) |
+| census | Alessandria 1961 | t_30_34!=m+f | 22,334 != 17,596+14,287 (off 9,549) |
+| census | Avellino 1961 | t_30_34!=m+f | 34,838 != 17,160+14,654 (off 3,024) |
+| census | Brescia 1961 | t_30_34!=m+f | 69,591 != 29,025+34,437 (off 6,129) |
+| census | Ferrara 1961 | t_30_34!=m+f | 20,316 != 10,245+12,906 (off 2,835) |
+| census | Palermo 1961 | t_30_34!=m+f | 79,342 != 38,488+19,263 (off 21,591) |
 | census | Terni 1936 | t_30_34!=m+f | 13,024 != 6,708+6,816 (off 500) |
+| census | Varese 1961 | t_30_34!=m+f | 46,220 != 23,043+19,064 (off 4,113) |
+| census | Vicenza 1961 | t_30_34!=m+f | 36,873 != 22,525+14,132 (off 216) |
+| census | Viterbo 1961 | t_30_34!=m+f | 16,862 != 10,281+8,327 (off 1,746) |
+| census | Avellino 1961 | t_35_39!=m+f | 26,433 != 12,874+17,033 (off 3,474) |
+| census | Brescia 1961 | t_35_39!=m+f | 67,589 != 27,371+34,296 (off 5,922) |
 | census | Cosenza 1936 | t_35_39!=m+f | 25,459 != 13,311+18,278 (off 6,130) |
+| census | Ferrara 1961 | t_35_39!=m+f | 27,198 != 13,570+16,769 (off 3,141) |
+| census | Modena 1961 | t_35_39!=m+f | 43,219 != 21,516+13,657 (off 8,046) |
+| census | Verona 1961 | t_35_39!=m+f | 52,156 != 25,619+21,821 (off 4,716) |
+| census | Viterbo 1961 | t_35_39!=m+f | 21,507 != 10,802+6,898 (off 3,807) |
+| census | Alessandria 1961 | t_40_44!=m+f | 29,987 != 22,840+13,501 (off 6,354) |
+| census | Avellino 1961 | t_40_44!=m+f | 22,190 != 10,471+7,138 (off 4,581) |
+| census | Brescia 1961 | t_40_44!=m+f | 46,342 != 13,420+24,012 (off 8,910) |
+| census | Ferrara 1961 | t_40_44!=m+f | 17,916 != 10,206+9,447 (off 1,737) |
+| census | Modena 1961 | t_40_44!=m+f | 27,641 != 15,849+16,130 (off 4,338) |
 | census | ReggioCalabria 1911 | t_40_44!=m+f | 22,375 != 10,818+12,557 (off 1,000) |
+| census | Treviso 1961 | t_40_44!=m+f | 29,641 != 14,331+15,130 (off 180) |
+| census | Valled'Aosta 1961 | t_40_44!=m+f | 6,041 != 3,003+2,998 (off 40) |
+| census | Varese 1961 | t_40_44!=m+f | 27,396 != 15,096+16,521 (off 4,221) |
+| census | Vicenza 1961 | t_40_44!=m+f | 19,505 != 10,960+14,431 (off 5,886) |
+| census | Alessandria 1961 | t_45_49!=m+f | 28,837 != 14,386+18,231 (off 3,780) |
+| census | Avellino 1961 | t_45_49!=m+f | 26,291 != 12,673+11,071 (off 2,547) |
+| census | Brescia 1961 | t_45_49!=m+f | 44,869 != 17,791+28,725 (off 1,647) |
+| census | Brindisi 1961 | t_45_49!=m+f | 19,626 != 9,504+8,583 (off 1,539) |
+| census | Ferrara 1961 | t_45_49!=m+f | 28,605 != 13,829+11,932 (off 2,844) |
+| census | Modena 1961 | t_45_49!=m+f | 38,054 != 18,713+15,588 (off 3,753) |
+| census | Taranto 1961 | t_45_49!=m+f | 25,595 != 10,258+12,835 (off 2,502) |
+| census | Varese 1961 | t_45_49!=m+f | 40,945 != 12,072+17,497 (off 11,376) |
+| census | Verona 1961 | t_45_49!=m+f | 35,391 != 21,267+22,728 (off 8,604) |
+| census | Vicenza 1961 | t_45_49!=m+f | 38,933 != 15,443+12,438 (off 11,052) |
+| census | Viterbo 1961 | t_45_49!=m+f | 14,609 != 8,798+5,343 (off 468) |
+| census | Alessandria 1961 | t_50_54!=m+f | 31,660 != 11,798+19,457 (off 405) |
+| census | Avellino 1961 | t_50_54!=m+f | 25,782 != 10,250+10,654 (off 4,878) |
+| census | Ferrara 1961 | t_50_54!=m+f | 27,030 != 13,349+11,206 (off 2,475) |
+| census | Modena 1961 | t_50_54!=m+f | 35,632 != 17,894+11,105 (off 6,633) |
+| census | Taranto 1961 | t_50_54!=m+f | 23,088 != 7,208+11,596 (off 4,284) |
+| census | Varese 1961 | t_50_54!=m+f | 34,432 != 20,040+22,051 (off 7,659) |
+| census | Vicenza 1961 | t_50_54!=m+f | 25,270 != 18,677+19,661 (off 13,068) |
+| census | Alessandria 1961 | t_55_59!=m+f | 28,724 != 17,213+17,820 (off 6,309) |
+| census | Avellino 1961 | t_55_59!=m+f | 17,038 != 10,046+8,954 (off 1,962) |
 | census | Enna 1936 | t_55_59!=m+f | 7,278 != 4,422+3,728 (off 872) |
+| census | Ferrara 1961 | t_55_59!=m+f | 22,108 != 6,836+11,393 (off 3,879) |
+| census | Modena 1961 | t_55_59!=m+f | 28,778 != 14,219+11,922 (off 2,637) |
+| census | Taranto 1961 | t_55_59!=m+f | 17,159 != 6,614+5,739 (off 4,806) |
+| census | Varese 1961 | t_55_59!=m+f | 35,619 != 13,583+15,655 (off 6,381) |
+| census | Verona 1961 | t_55_59!=m+f | 30,200 != 16,937+19,275 (off 6,012) |
+| census | Vicenza 1961 | t_55_59!=m+f | 25,743 != 14,548+16,541 (off 5,346) |
+| census | Viterbo 1961 | t_55_59!=m+f | 13,377 != 5,642+6,673 (off 1,062) |
+| census | Alessandria 1961 | t_5_9!=m+f | 23,803 != 12,242+9,473 (off 2,088) |
+| census | Brescia 1961 | t_5_9!=m+f | 69,955 != 29,242+34,368 (off 6,345) |
+| census | Ferrara 1961 | t_5_9!=m+f | 22,270 != 13,864+13,581 (off 5,175) |
 | census | Massa e Carrara 1921 | t_5_9!=m+f | 25,559 != 13,271+12,888 (off 600) |
+| census | Modena 1961 | t_5_9!=m+f | 26,839 != 16,572+12,994 (off 2,727) |
 | census | PrincipatoUlteriore 1871 | t_5_9!=m+f | 40,436 != 13,687+19,929 (off 6,820) |
+| census | Varese 1961 | t_5_9!=m+f | 37,935 != 19,198+15,434 (off 3,303) |
+| census | Verona 1961 | t_5_9!=m+f | 51,159 != 21,438+24,978 (off 4,743) |
+| census | Vicenza 1961 | t_5_9!=m+f | 30,847 != 24,651+19,039 (off 12,843) |
+| census | Alessandria 1961 | t_60_64!=m+f | 30,243 != 13,981+13,193 (off 3,069) |
+| census | Brescia 1961 | t_60_64!=m+f | 30,339 != 16,426+20,222 (off 6,309) |
+| census | Ferrara 1961 | t_60_64!=m+f | 17,906 != 6,873+9,539 (off 1,494) |
+| census | Modena 1961 | t_60_64!=m+f | 23,705 != 10,977+10,397 (off 2,331) |
+| census | Palermo 1961 | t_60_64!=m+f | 42,144 != 19,575+18,690 (off 3,879) |
+| census | Valled'Aosta 1961 | t_60_64!=m+f | 4,838 != 2,173+2,460 (off 205) |
+| census | Varese 1961 | t_60_64!=m+f | 23,344 != 12,424+15,672 (off 4,752) |
+| census | Verona 1961 | t_60_64!=m+f | 24,557 != 13,856+16,524 (off 5,823) |
+| census | Vicenza 1961 | t_60_64!=m+f | 26,046 != 9,517+14,612 (off 1,917) |
+| census | Viterbo 1961 | t_60_64!=m+f | 9,381 != 5,680+6,077 (off 2,376) |
+| census | Alessandria 1961 | t_65_69!=m+f | 25,812 != 11,233+11,816 (off 2,763) |
+| census | Avellino 1961 | t_65_69!=m+f | 10,637 != 4,164+7,796 (off 1,323) |
+| census | Brescia 1961 | t_65_69!=m+f | 29,006 != 10,238+16,527 (off 2,241) |
+| census | Brindisi 1961 | t_65_69!=m+f | 9,991 != 4,382+4,628 (off 981) |
+| census | Ferrara 1961 | t_65_69!=m+f | 6,830 != 5,316+6,626 (off 5,112) |
+| census | Genova 1961 | t_65_69!=m+f | 48,157 != 19,880+23,273 (off 5,004) |
+| census | Modena 1961 | t_65_69!=m+f | 15,488 != 8,362+8,539 (off 1,413) |
+| census | Taranto 1961 | t_65_69!=m+f | 12,215 != 4,360+6,820 (off 1,035) |
+| census | Verona 1961 | t_65_69!=m+f | 19,973 != 10,503+13,547 (off 4,077) |
+| census | Avellino 1961 | t_70_74!=m+f | 8,535 != 4,178+6,382 (off 2,025) |
+| census | Cuneo 1961 | t_70_74!=m+f | 20,593 != 7,634+11,276 (off 1,683) |
+| census | Forlì 1961 | t_70_74!=m+f | 14,136 != 4,963+8,048 (off 1,125) |
+| census | Genova 1961 | t_70_74!=m+f | 38,081 != 13,084+21,910 (off 3,087) |
+| census | Modena 1961 | t_70_74!=m+f | 11,917 != 6,461+5,168 (off 288) |
+| census | Palermo 1961 | t_70_74!=m+f | 26,355 != 8,959+15,443 (off 1,953) |
 | census | Siracusa 1921 | t_70_74!=m+f | 9,870 != 5,028+4,942 (off 100) |
+| census | Torino 1961 | t_70_74!=m+f | 59,361 != 20,193+35,145 (off 4,023) |
+| census | Valled'Aosta 1961 | t_70_74!=m+f | 2,899 != 1,289+1,628 (off 18) |
+| census | Vicenza 1961 | t_70_74!=m+f | 13,267 != 5,671+9,459 (off 1,863) |
+| census | Viterbo 1961 | t_70_74!=m+f | 6,772 != 3,796+4,461 (off 1,485) |
+| census | Alessandria 1961 | t_75_79!=m+f | 15,285 != 6,644+7,309 (off 1,332) |
+| census | Avellino 1961 | t_75_79!=m+f | 4,936 != 3,220+4,398 (off 2,682) |
+| census | Cuneo 1961 | t_75_79!=m+f | 11,896 != 6,403+6,339 (off 846) |
+| census | Genova 1961 | t_75_79!=m+f | 25,064 != 10,619+12,177 (off 2,268) |
+| census | Novara 1961 | t_75_79!=m+f | 8,916 != 4,564+6,827 (off 2,475) |
+| census | Palermo 1961 | t_75_79!=m+f | 18,880 != 6,652+10,923 (off 1,305) |
+| census | Trapani 1961 | t_75_79!=m+f | 8,908 != 3,874+4,008 (off 1,026) |
+| census | Vercelli 1961 | t_75_79!=m+f | 11,703 != 4,646+5,770 (off 1,287) |
+| census | Vicenza 1961 | t_75_79!=m+f | 8,949 != 4,614+4,038 (off 297) |
+| census | Cuneo 1961 | t_80_84!=m+f | 7,009 != 323+3,779 (off 2,907) |
+| census | Genova 1961 | t_80_84!=m+f | 13,515 != 562+7,895 (off 5,058) |
+| census | Imperia 1961 | t_80_84!=m+f | 2,959 != 128+1,679 (off 1,152) |
+| census | Novara 1961 | t_80_84!=m+f | 6,118 != 242+3,698 (off 2,178) |
+| census | Vercelli 1961 | t_80_84!=m+f | 66 != 2,515+4,085 (off 6,534) |
+| census | Alessandria 1961 | t_85plus!=m+f | 1,134 != 1,506+2,391 (off 2,763) |
+| census | Alessandria 1961 | total!=M+F | 438,961 != 224,324+221,171 (off 6,534) |
+| census | Avellino 1961 | total!=M+F | 432,918 != 199,815+222,222 (off 10,881) |
+| census | Brescia 1961 | total!=M+F | 866,162 != 376,160+448,305 (off 41,697) |
+| census | Brindisi 1961 | total!=M+F | 345,635 != 169,466+173,649 (off 2,520) |
 | census | Catania 1936 | total!=M+F | 713,108 != 343,463+361,443 (off 8,202) |
 | census | Cosenza 1936 | total!=M+F | 580,763 != 280,256+306,637 (off 6,130) |
+| census | Cuneo 1961 | total!=M+F | 540,684 != 267,111+269,829 (off 3,744) |
 | census | Enna 1936 | total!=M+F | 216,240 != 110,509+106,603 (off 872) |
+| census | Ferrara 1961 | total!=M+F | 359,964 != 170,996+183,280 (off 5,688) |
+| census | Forlì 1961 | total!=M+F | 521,518 != 256,405+263,988 (off 1,125) |
+| census | Genova 1961 | total!=M+F | 1,030,835 != 485,175+530,243 (off 15,417) |
+| census | Imperia 1961 | total!=M+F | 202,219 != 96,729+104,338 (off 1,152) |
 | census | Massa e Carrara 1921 | total!=M+F | 223,346 != 110,053+113,893 (off 600) |
+| census | Modena 1961 | total!=M+F | 473,060 != 242,869+219,868 (off 10,323) |
+| census | Palermo 1961 | total!=M+F | 1,111,397 != 501,179+523,935 (off 86,283) |
 | census | Piacenza 1921 | total!=M+F | 280,483 != 142,209+138,864 (off 590) |
 | census | PrincipatoUlteriore 1871 | total!=M+F | 377,207 != 179,187+191,200 (off 6,820) |
 | census | ReggioCalabria 1911 | total!=M+F | 443,611 != 212,964+231,647 (off 1,000) |
+| census | Taranto 1961 | total!=M+F | 468,713 != 221,757+234,329 (off 12,627) |
 | census | Terni 1936 | total!=M+F | 191,547 != 97,260+94,787 (off 500) |
-| fertility | Fiume 1931 | cbr_implausible | cbr=5.8 |
+| census | Torino 1961 | total!=M+F | 1,831,422 != 888,426+938,973 (off 4,023) |
+| census | Trapani 1961 | total!=M+F | 426,330 != 209,625+215,679 (off 1,026) |
+| census | Valled'Aosta 1961 | total!=M+F | 101,152 != 50,786+50,162 (off 204) |
+| census | Varese 1961 | total!=M+F | 532,766 != 246,230+273,387 (off 13,149) |
+| census | Vercelli 1961 | total!=M+F | 394,864 != 191,706+208,405 (off 5,247) |
+| census | Verona 1961 | total!=M+F | 611,195 != 312,450+330,983 (off 32,238) |
+| census | Vicenza 1961 | total!=M+F | 536,469 != 280,561+272,315 (off 16,407) |
+| census | Viterbo 1961 | total!=M+F | 243,693 != 125,688+119,751 (off 1,746) |
 | fertility | Mantova 1865 | cbr_implausible | cbr=5.16 |
 | marriages | Ferrara 1866 | nuptiality_implausible | nuptiality=1.68 |
-| marriages | Fiume 1931 | nuptiality_implausible | nuptiality=1.93 |
 | marriages | Girgenti 1866 | nuptiality_implausible | nuptiality=2.53 |
 | marriages | Mantova 1865 | nuptiality_implausible | nuptiality=1.2 |
 | marriages | Pesaro e Urbino 1866 | nuptiality_implausible | nuptiality=2.94 |
@@ -41,9 +208,8 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | migration | Belluno 1912 | emig_rate_implausible | emig_rate=87.25 |
 | migration | Belluno 1913 | emig_rate_implausible | emig_rate=94.07 |
 | migration | Belluno 1914 | emig_rate_implausible | emig_rate=82.21 |
-| mortality | Trapani 1881 | cdr_implausible | cdr=0.95 |
 
-## WARNING (470)
+## WARNING (489)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -66,7 +232,14 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | census | Livorno 1921->1931 | intercensal_jump | 143,190 -> 245,707 (x1.72) (possible 1927/1935 boundary change) |
 | census | Novara 1921->1931 | intercensal_jump | 723,269 -> 389,312 (x0.54) (possible 1927/1935 boundary change) |
 | census | Siracusa 1921->1931 | intercensal_jump | 526,953 -> 284,193 (x0.54) (possible 1927/1935 boundary change) |
+| census | Alessandria 1961 | mean_age | 39.7 |
+| census | Asti 1961 | mean_age | 39.9 |
+| census | Genova 1961 | mean_age | 38.4 |
 | census | Girgenti 1861 | mean_age | 42.7 |
+| census | Pavia 1961 | mean_age | 38.8 |
+| census | Savona 1961 | mean_age | 38.3 |
+| census | Trieste 1961 | mean_age | 40.0 |
+| census | Vercelli 1961 | mean_age | 38.4 |
 | census | COD_PROV 14 1881 | province_missing | present in 1871 and 1901, absent in 1881 (Sondrio) |
 | census | Aquila 1881 | sex_ratio | M/F = 87.0 per 100 |
 | census | Aquila 1901 | sex_ratio | M/F = 87.9 per 100 |
@@ -74,6 +247,7 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | census | AquiladegliAbruzzi 1871 | sex_ratio | M/F = 87.8 per 100 |
 | census | Belluno 1911 | sex_ratio | M/F = 81.8 per 100 |
 | census | Belluno 1931 | sex_ratio | M/F = 86.9 per 100 |
+| census | Brescia 1961 | sex_ratio | M/F = 83.9 per 100 |
 | census | Caltanissetta 1861 | sex_ratio | M/F = 113.0 per 100 |
 | census | Campobasso 1901 | sex_ratio | M/F = 88.0 per 100 |
 | census | Campobasso 1911 | sex_ratio | M/F = 83.8 per 100 |
@@ -97,10 +271,21 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | census | Palermo 1861 | sex_ratio | M/F = 298.5 per 100 |
 | census | Roma 1871 | sex_ratio | M/F = 115.9 per 100 |
 | census | Roma 1881 | sex_ratio | M/F = 113.6 per 100 |
+| census | Trieste 1961 | sex_ratio | M/F = 87.3 per 100 |
 | census | Udine 1911 | sex_ratio | M/F = 83.0 per 100 |
 | census | Girgenti 1861 | share_50_54 | 17.0% in one 5-year group |
+| census | Alessandria 1961 | share_age0 | 0.11% of population aged 0 |
+| census | Asti 1961 | share_age0 | 1.14% of population aged 0 |
 | census | Campobasso 1936 | share_age0 | 5.02% of population aged 0 |
 | census | Firenze 1936 | share_age0 | 1.20% of population aged 0 |
+| census | Genova 1961 | share_age0 | 1.17% of population aged 0 |
+| census | Pavia 1961 | share_age0 | 1.12% of population aged 0 |
+| census | Savona 1961 | share_age0 | 1.16% of population aged 0 |
+| census | Siena 1961 | share_age0 | 1.15% of population aged 0 |
+| census | Trieste 1961 | share_age0 | 0.98% of population aged 0 |
+| census | Varese 1961 | share_age0 | 0.16% of population aged 0 |
+| census | Vercelli 1961 | share_age0 | 1.16% of population aged 0 |
+| census | Verona 1961 | share_age0 | 0.00% of population aged 0 |
 | fertility | Alessandria 1931 | cbr_range | cbr=15.21 |
 | fertility | Aosta 1931 | cbr_range | cbr=17.81 |
 | fertility | Bologna 1931 | cbr_range | cbr=18.51 |
@@ -518,7 +703,7 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | mortality | Ravenna 1936 | imr_range | imr=56.0 |
 | mortality | Sondrio 1881 | imr_range | imr=370.0 |
 
-## INFO (288)
+## INFO (315)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -529,28 +714,47 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | census | Reggionell'Emilia 1936 | t_10_14!=m+f | 41,453 != 20,616+20,842 (off 5) |
 | census | Siena 1911 | t_10_14!=m+f | 23,520 != 11,999+11,516 (off 5) |
 | census | Catanzaro 1936 | t_15_19!=m+f | 48,611 != 24,870+23,738 (off 3) |
+| census | Parma 1961 | t_15_19!=m+f | 24,850 != 12,915+12,035 (off 100) |
+| census | Ravenna 1961 | t_15_19!=m+f | 20,726 != 10,556+10,180 (off 10) |
 | census | Trapani 1921 | t_15_19!=m+f | 39,677 != 19,856+19,823 (off 2) |
+| census | Treviso 1961 | t_15_19!=m+f | 50,358 != 25,560+24,809 (off 11) |
 | census | Cuneo 1931 | t_1_4!=m+f | 47,452 != 23,881+23,601 (off 30) |
 | census | Sassari 1921 | t_20_24!=m+f | 27,315 != 12,877+14,538 (off 100) |
+| census | Treviso 1961 | t_20_24!=m+f | 50,893 != 26,087+24,678 (off 128) |
+| census | Treviso 1961 | t_25_29!=m+f | 42,196 != 21,601+20,615 (off 20) |
+| census | Valled'Aosta 1961 | t_25_29!=m+f | 7,704 != 4,000+3,684 (off 20) |
 | census | Ravenna 1931 | t_30_34!=m+f | 18,595 != 9,387+9,207 (off 1) |
+| census | Treviso 1961 | t_30_34!=m+f | 43,720 != 21,961+21,801 (off 42) |
+| census | Valled'Aosta 1961 | t_30_34!=m+f | 8,383 != 4,336+4,086 (off 39) |
 | census | Grosseto 1881 | t_35_39!=m+f | 7,641 != 4,615+2,996 (off 30) |
 | census | Piacenza 1921 | t_35_39!=m+f | 15,900 != 7,586+8,304 (off 10) |
 | census | Ravenna 1931 | t_35_39!=m+f | 17,112 != 8,571+8,540 (off 1) |
+| census | Treviso 1961 | t_35_39!=m+f | 46,080 != 22,584+23,646 (off 150) |
 | census | ReggiodiCalabria 1936 | t_40_44!=m+f | 26,558 != 10,396+16,164 (off 2) |
 | census | Chieti 1936 | t_45_49!=m+f | 16,665 != 6,643+10,016 (off 6) |
 | census | Foggia 1936 | t_45_49!=m+f | 23,685 != 10,466+13,210 (off 9) |
 | census | Salerno 1881 | t_45_49!=m+f | 24,360 != 11,259+13,111 (off 10) |
+| census | Treviso 1961 | t_45_49!=m+f | 39,076 != 19,414+19,674 (off 12) |
+| census | Valled'Aosta 1961 | t_45_49!=m+f | 7,322 != 3,811+3,508 (off 3) |
 | census | Asti 1936 | t_50_54!=m+f | 14,209 != 6,903+7,305 (off 1) |
+| census | Macerata 1961 | t_50_54!=m+f | 19,857 != 9,742+10,125 (off 10) |
 | census | Ravenna 1931 | t_50_54!=m+f | 13,475 != 6,802+6,672 (off 1) |
 | census | Sassari 1921 | t_50_54!=m+f | 15,182 != 7,785+7,373 (off 24) |
 | census | Ancona 1936 | t_55_59!=m+f | 14,313 != 6,754+7,564 (off 5) |
 | census | Grosseto 1936 | t_55_59!=m+f | 7,205 != 3,871+3,333 (off 1) |
+| census | Valled'Aosta 1961 | t_55_59!=m+f | 5,818 != 2,925+2,900 (off 7) |
+| census | Avellino 1961 | t_5_9!=m+f | 36,056 != 14,332+21,544 (off 180) |
 | census | Firenze 1921 | t_5_9!=m+f | 98,983 != 49,760+49,423 (off 200) |
+| census | Chieti 1961 | t_60_64!=m+f | 15,711 != 6,907+8,814 (off 10) |
 | census | Latina 1936 | t_60_64!=m+f | 5,874 != 2,843+3,022 (off 9) |
+| census | Treviso 1961 | t_60_64!=m+f | 26,564 != 12,007+14,561 (off 4) |
 | census | Parma 1921 | t_65_69!=m+f | 7,164 != 3,639+3,515 (off 10) |
+| census | Treviso 1961 | t_65_69!=m+f | 20,869 != 8,991+11,885 (off 7) |
 | census | Bergamo 1881 | t_70_74!=m+f | 5,137 != 2,838+2,279 (off 20) |
 | census | Macerata 1881 | t_70_74!=m+f | 5,775 != 2,846+2,925 (off 4) |
+| census | Macerata 1961 | t_70_74!=m+f | 8,420 != 3,460+4,970 (off 10) |
 | census | Napoli 1911 | t_70_74!=m+f | 25,639 != 12,051+13,581 (off 7) |
+| census | Parma 1961 | t_70_74!=m+f | 13,038 != 5,587+7,452 (off 1) |
 | census | Benevento 1936 | t_75_79!=m+f | 5,288 != 2,475+2,808 (off 5) |
 | census | Forlì 1881 | t_75_79!=m+f | 1,863 != 1,065+800 (off 2) |
 | census | Cuneo 1931 | t_80_84!=m+f | 3,853 != 1,928+1,924 (off 1) |
@@ -574,6 +778,7 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | census | Bergamo 1881 | total!=M+F | 390,768 != 196,889+193,861 (off 18) |
 | census | Catanzaro 1936 | total!=M+F | 606,286 != 289,935+316,348 (off 3) |
 | census | Chieti 1936 | total!=M+F | 374,719 != 178,414+196,293 (off 12) |
+| census | Chieti 1961 | total!=M+F | 373,648 != 180,530+193,302 (off 184) |
 | census | Como 1881 | total!=M+F | 515,046 != 256,444+258,572 (off 30) |
 | census | Cremona 1936 | total!=M+F | 369,466 != 182,999+186,471 (off 4) |
 | census | Cuneo 1931 | total!=M+F | 619,708 != 314,804+304,902 (off 2) |
@@ -585,12 +790,16 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | census | Grosseto 1936 | total!=M+F | 185,799 != 96,145+89,653 (off 1) |
 | census | Latina 1936 | total!=M+F | 227,158 != 114,802+112,347 (off 9) |
 | census | Macerata 1881 | total!=M+F | 239,652 != 116,572+123,076 (off 4) |
+| census | Macerata 1961 | total!=M+F | 291,392 != 142,181+149,231 (off 20) |
 | census | Matera 1936 | total!=M+F | 166,770 != 82,697+84,076 (off 3) |
 | census | Napoli 1911 | total!=M+F | 1,302,007 != 641,314+660,686 (off 7) |
+| census | Novara 1961 | total!=M+F | 455,773 != 218,783+237,287 (off 297) |
 | census | Parma 1921 | total!=M+F | 343,394 != 172,295+171,089 (off 10) |
+| census | Parma 1961 | total!=M+F | 389,088 != 191,852+197,337 (off 101) |
 | census | Potenza 1936 | total!=M+F | 376,482 != 184,150+192,337 (off 5) |
 | census | Ravenna 1881 | total!=M+F | 225,757 != 115,138+110,615 (off 4) |
 | census | Ravenna 1931 | total!=M+F | 271,666 != 136,151+135,512 (off 3) |
+| census | Ravenna 1961 | total!=M+F | 329,549 != 162,530+167,029 (off 10) |
 | census | Reggio nell'Emilia 1921 | total!=M+F | 344,532 != 172,508+172,026 (off 2) |
 | census | ReggiodiCalabria 1936 | total!=M+F | 578,127 != 278,686+299,443 (off 2) |
 | census | Reggionell'Emilia 1936 | total!=M+F | 375,261 != 187,469+187,797 (off 5) |
@@ -600,6 +809,7 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | census | Siena 1911 | total!=M+F | 241,535 != 124,795+116,735 (off 5) |
 | census | Siracusa 1921 | total!=M+F | 526,953 != 267,126+259,927 (off 100) |
 | census | Trapani 1921 | total!=M+F | 405,743 != 200,457+205,288 (off 2) |
+| census | Treviso 1961 | total!=M+F | 607,663 != 298,664+308,937 (off 62) |
 | census | Venezia 1921 | total!=M+F | 517,970 != 257,222+261,108 (off 360) |
 | census | Vicenza 1921 | total!=M+F | 545,991 != 269,010+277,481 (off 500) |
 | cross | Campobasso 1871 | cdr>cbr | deaths exceed births: CDR 39.88 > CBR 39.61 |
@@ -608,6 +818,8 @@ Flags: **36 ERROR**, 470 WARNING, 288 INFO
 | cross | Foggia 1871 | cdr>cbr | deaths exceed births: CDR 41.75 > CBR 36.46 |
 | cross | Padova 1931 | cdr>cbr | deaths exceed births: CDR 26.8 > CBR 20.85 |
 | cross | Ravenna 1931 | cdr>cbr | deaths exceed births: CDR 16.46 > CBR 15.84 |
+| fertility | Fiume 1931 | missing_rate | births present, cbr empty |
+| marriages | Fiume 1931 | missing_rate | marriages present, nuptiality empty |
 | migration | Alessandria 1913->1914 | yoy_jump | emig_rate 17.21 -> 7.73 (WWI disruption) |
 | migration | Alessandria 1914->1915 | yoy_jump | emig_rate 7.73 -> 3.91 (WWI disruption) |
 | migration | Alessandria 1919->1920 | yoy_jump | emig_rate 5.87 -> 10.05 (WWI disruption) |
