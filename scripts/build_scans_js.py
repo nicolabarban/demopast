@@ -10,13 +10,14 @@ import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936]
+YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961]
 
 # tavola originale per censimento (cf. docs/fonti_tavole_province.md)
 TAVOLE = {
     1861: "TAVOLA II", 1871: "Tavola II", 1881: "TAVOLA II",
     1901: "TAV. XX", 1911: "TAVOLA IV", 1921: "TAVOLA XIV",
     1931: "TAVOLA IX", 1936: "TAVOLA X",
+    1951: "TAV. 4", 1961: "TAV. 4",
 }
 
 
