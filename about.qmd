@@ -30,7 +30,7 @@ DEMOPAST is part of the [GENPOP](https://genpop.org) research project.
 | 1921 | 69 | Includes Venezia Giulia and Venezia Tridentina (post-WWI) |
 | 1931 | 89 | Province boundaries redrawn under the fascist administrative reform |
 | 1936 | 91 | New provinces of Asti and Littoria (Latina) established |
-| 1961 | 87 | First post-war census in the atlas (republican borders); age data not yet available for Latina, Cosenza, Catanzaro, Reggio di Calabria and Messina |
+| 1961 | 89 | First post-war census in the atlas (republican borders); age data not yet available for Latina, Reggio di Calabria and Messina |
 
 ### Team
 
