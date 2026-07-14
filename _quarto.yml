@@ -1,6 +1,7 @@
 project:
   type: website
   output-dir: _site
+  pre-render: scripts/write_last_updated.sh
   resources:
     - data/**
     - downloads/**
@@ -28,4 +29,5 @@ format:
     css: styles.css
     toc: false
     include-after-body:
-      file: _includes/footer.html
+      - file: _includes/footer.html
+      - file: _includes/last_updated.html

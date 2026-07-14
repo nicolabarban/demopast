@@ -7,3 +7,4 @@ _site/
 /.quarto/
 **/*.quarto_ipynb
 scripts/__pycache__/
+_includes/last_updated.html
