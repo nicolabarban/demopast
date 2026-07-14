@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DEMOPAST (demopast.it) is an Italian historical demographic atlas, part of the GENPOP project. It displays interactive choropleth maps of Italian provinces with census data for 1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, and 1961.
+DEMOPAST (demopast.it) is an Italian historical demographic atlas, part of the GENPOP project. It displays interactive choropleth maps of Italian provinces with census data for 1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, and 1961.
 
 ## Tech Stack
 

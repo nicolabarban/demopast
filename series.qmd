@@ -13,7 +13,7 @@ format:
 <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
 <p style="max-width:780px;margin:0 auto 1.5rem;color:var(--c-text-muted);font-size:0.95rem;">
-  Build historical trends across census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1961). Pick a geographic level — national, macro-area, region, or individual provinces — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
+  Build historical trends across census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961). Pick a geographic level — national, macro-area, region, or individual provinces — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
 </p>
 
 <div class="series-controls">
@@ -78,7 +78,7 @@ format:
 </div>
 
 <script>
-const YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1961];
+const YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961];
 
 // COD_PROV -> {region, macro}. Codes follow ISTAT numbering; we use modern
 // regions/macro-areas so that historical name changes (Girgenti -> Agrigento,
@@ -358,7 +358,7 @@ function render() {
   canvas.style.display = '';
 
   const datasets = series.map((s, i) => {
-    const data = YEARS.map(y => readMetric(aggregate(censusByYear[y], s.codes), metric));
+    const data = YEARS.map(y => ({x: y, y: readMetric(aggregate(censusByYear[y], s.codes), metric)}));
     const color = PALETTE[i % PALETTE.length];
     return {
       label: s.label,
@@ -376,7 +376,7 @@ function render() {
   if (chart) chart.destroy();
   chart = new Chart(canvas.getContext('2d'), {
     type: 'line',
-    data: {labels: YEARS.map(String), datasets},
+    data: {datasets},
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -395,7 +395,12 @@ function render() {
         }
       },
       scales: {
-        x: {title: {display: true, text: 'Census year'}, grid: {display: false}},
+        // linear x-axis so the spacing between censuses is proportional to
+        // the elapsed time (1936->1951 is 15 years, not one slot)
+        x: {type: 'linear', min: YEARS[0] - 3, max: YEARS[YEARS.length - 1] + 3,
+            title: {display: true, text: 'Census year'}, grid: {display: false},
+            afterBuildTicks: axis => { axis.ticks = YEARS.map(v => ({value: v})); },
+            ticks: {callback: v => String(v), maxRotation: 45, minRotation: 45}},
         y: {title: {display: true, text: metricLabel()}, beginAtZero: false,
             ticks: {callback: fmtTick}}
       }
