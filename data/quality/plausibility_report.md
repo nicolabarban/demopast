@@ -1,13 +1,12 @@
 # DEMOPAST data plausibility report
 
-Flags: **202 ERROR**, 489 WARNING, 315 INFO
+Flags: **201 ERROR**, 489 WARNING, 315 INFO
 
-## ERROR (202)
+## ERROR (201)
 
 | dataset | where | check | detail |
 |---|---|---|---|
 | census | Firenze 1936->1961 | intercensal_jump | 322,526 -> 1,012,703 (x3.14) |
-| census | Foggia 1936->1961 | intercensal_jump | 523,586 -> 328,989 (x0.63) |
 | census | Palermo 1861->1871 | intercensal_jump | 384,526 -> 617,618 (x1.61) |
 | census | PesaroUrbino 1936->1961 | intercensal_jump | 311,860 -> 521,138 (x1.67) |
 | census | Roma 1936->1961 | intercensal_jump | 1,562,414 -> 2,775,419 (x1.78) |
