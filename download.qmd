@@ -3,7 +3,7 @@ title: "Download"
 ---
 
 All DEMOPAST data is available for direct download below, for each of the
-ten census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961): the
+eleven census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971): the
 long-format adjusted-age census tabulation and the province boundary
 shapes as GeoJSON.
 
@@ -28,6 +28,7 @@ tables; everything else on the site is computed from them.
 | 1936 | [data_census_1936_adjusted_age.csv](/downloads/1936/data_census_1936_adjusted_age.csv) | 68 KB |
 | 1951 | [data_census_1951_adjusted_age.csv](/downloads/1951/data_census_1951_adjusted_age.csv) | 70 KB |
 | 1961 | [data_census_1961_adjusted_age.csv](/downloads/1961/data_census_1961_adjusted_age.csv) | 68 KB |
+| 1971 | [data_census_1971_adjusted_age.csv](/downloads/1971/data_census_1971_adjusted_age.csv) | 76 KB |
 
 ## Province boundaries — GeoJSON
 
@@ -49,6 +50,7 @@ collection. Each feature exposes `COD_PROV` (integer) and `DEN_PROV`
 | 1936 | [province_1936.geojson](/data/geojson/province_1936.geojson) | 635 KB | 91 |
 | 1951 | [province_1951.geojson](/data/geojson/province_1951.geojson) | 596 KB | 92 |
 | 1961 | [province_1961.geojson](/data/geojson/province_1961.geojson) | 596 KB | 92 |
+| 1971 | [province_1971.geojson](/data/geojson/province_1971.geojson) | 600 KB | 94 |
 
 ## Citation
 

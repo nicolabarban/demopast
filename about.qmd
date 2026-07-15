@@ -32,6 +32,7 @@ DEMOPAST is part of the [GENPOP](https://genpop.org) research project.
 | 1936 | 91 | New provinces of Asti and Littoria (Latina) established |
 | 1951 | 92 | First census of the Republic; Genova, Pistoia and Napoli reconstructed from the printed Tav. 4 province rows |
 | 1961 | 92 | Six provinces reconstructed from the printed Tav. 4 province rows |
+| 1971 | 94 | New provinces of Pordenone (1968) and Isernia (1970); transcribed from the printed Tav. 3 province rows |
 
 ### Team
 

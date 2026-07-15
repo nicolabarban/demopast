@@ -13,7 +13,7 @@ format:
 <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
 <p style="max-width:780px;margin:0 auto 1.5rem;color:var(--c-text-muted);font-size:0.95rem;">
-  Build historical trends across census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961). Pick a geographic level — national, macro-area, region, or individual provinces — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
+  Build historical trends across census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971). Pick a geographic level — national, macro-area, region, or individual provinces — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
 </p>
 
 <div class="series-controls">
@@ -78,7 +78,7 @@ format:
 </div>
 
 <script>
-const YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961];
+const YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971];
 
 // COD_PROV -> {region, macro}. Codes follow ISTAT numbering; we use modern
 // regions/macro-areas so that historical name changes (Girgenti -> Agrigento,
@@ -117,6 +117,7 @@ const REGION_MAP = {
   30: {r: 'Friuli-Venezia Giulia', m: NE},
   31: {r: 'Friuli-Venezia Giulia', m: NE},
   32: {r: 'Friuli-Venezia Giulia', m: NE},
+  93: {r: 'Friuli-Venezia Giulia', m: NE},
   33: {r: 'Emilia-Romagna',     m: NE},
   34: {r: 'Emilia-Romagna',     m: NE},
   35: {r: 'Emilia-Romagna',     m: NE},
@@ -155,6 +156,7 @@ const REGION_MAP = {
   68: {r: 'Abruzzo',            m: SU},
   69: {r: 'Abruzzo',            m: SU},
   70: {r: 'Molise',             m: SU},
+  94: {r: 'Molise',             m: SU},
   71: {r: 'Puglia',             m: SU},
   72: {r: 'Puglia',             m: SU},
   73: {r: 'Puglia',             m: SU},

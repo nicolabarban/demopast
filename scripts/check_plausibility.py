@@ -22,7 +22,7 @@ HERE = Path(__file__).resolve().parent.parent
 DATA = HERE / "data"
 OUTDIR = DATA / "quality"
 
-CENSUS_YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961]
+CENSUS_YEARS = [1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971]
 AGE_KEYS = (["0", "1_4"] + [f"{lo}_{lo + 4}" for lo in range(5, 85, 5)]
             + ["85plus"])
 
@@ -98,7 +98,10 @@ def check_census() -> dict[int, dict[int, dict]]:
                 flag("WARNING", "census", where, "share_85plus",
                      f"{sh85:.2f}% of population aged 85+")
             sh0 = (fnum(r, "t_0") or 0) / tot * 100
-            if not 1.2 <= sh0 <= 5:
+            # the post-war fertility decline pushes the age-0 share well below
+            # what is plausible for the pre-war censuses
+            sh0_min = 0.9 if cy >= 1961 else 1.2
+            if not sh0_min <= sh0 <= 5:
                 flag("WARNING", "census", where, "share_age0",
                      f"{sh0:.2f}% of population aged 0")
             for k in AGE_KEYS[2:]:
@@ -107,7 +110,9 @@ def check_census() -> dict[int, dict[int, dict]]:
                     flag("WARNING", "census", where, f"share_{k}",
                          f"{sh:.1f}% in one 5-year group")
             ma = fnum(r, "mean_age")
-            if ma is not None and not 22 <= ma <= 38:
+            # ageing lifts the ceiling: the 1971 median province sits at 35.1
+            ma_max = 42 if cy >= 1961 else 38
+            if ma is not None and not 22 <= ma <= ma_max:
                 flag("WARNING", "census", where, "mean_age", f"{ma:.1f}")
 
     # intercensal growth + provinces vanishing between censuses
@@ -125,11 +130,11 @@ def check_census() -> dict[int, dict[int, dict]]:
             ratio = p1 / p0
             growth = (ratio ** (1 / gap) - 1) * 100
             where = f"{r['DEN_PROV']} {prev}->{cur}"
-            boundary = cur in (1931, 1936)   # 1927/1935 province redraws
+            # 1927/1935 province redraws; 1968 Pordenone and 1970 Isernia splits
+            boundary = cur in (1931, 1936, 1971)
             if not RATIO_HARD[0] <= ratio <= RATIO_HARD[1]:
                 sev = "WARNING" if boundary else "ERROR"
-                note = " (possible 1927/1935 boundary change)" \
-                    if boundary else ""
+                note = " (possible boundary change)" if boundary else ""
                 flag(sev, "census", where, "intercensal_jump",
                      f"{p0:,.0f} -> {p1:,.0f} (x{ratio:.2f}){note}")
             elif not GROWTH_SOFT[0] <= growth <= GROWTH_SOFT[1]:

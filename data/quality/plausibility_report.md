@@ -1,6 +1,6 @@
 # DEMOPAST data plausibility report
 
-Flags: **50 ERROR**, 505 WARNING, 313 INFO
+Flags: **50 ERROR**, 493 WARNING, 313 INFO
 
 ## ERROR (50)
 
@@ -57,7 +57,7 @@ Flags: **50 ERROR**, 505 WARNING, 313 INFO
 | migration | Belluno 1913 | emig_rate_implausible | emig_rate=94.07 |
 | migration | Belluno 1914 | emig_rate_implausible | emig_rate=82.21 |
 
-## WARNING (505)
+## WARNING (493)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -74,22 +74,17 @@ Flags: **50 ERROR**, 505 WARNING, 313 INFO
 | census | Rovigo 1951->1961 | intercensal_growth | -2.48%/yr (356,963 -> 277,794) |
 | census | Teramo 1921->1931 | intercensal_growth | -3.40%/yr (319,988 -> 226,401) |
 | census | Trieste 1931->1936 | intercensal_growth | +5.74%/yr (348,405 -> 460,596) |
-| census | Alessandria 1931->1936 | intercensal_jump | 755,968 -> 494,688 (x0.65) (possible 1927/1935 boundary change) |
-| census | Caltanissetta 1921->1931 | intercensal_jump | 382,444 -> 245,476 (x0.64) (possible 1927/1935 boundary change) |
-| census | Firenze 1931->1936 | intercensal_jump | 840,043 -> 322,526 (x0.38) (possible 1927/1935 boundary change) |
-| census | Lecce 1921->1931 | intercensal_jump | 877,583 -> 487,029 (x0.55) (possible 1927/1935 boundary change) |
-| census | Livorno 1921->1931 | intercensal_jump | 143,190 -> 245,707 (x1.72) (possible 1927/1935 boundary change) |
-| census | Novara 1921->1931 | intercensal_jump | 723,269 -> 389,312 (x0.54) (possible 1927/1935 boundary change) |
-| census | Siracusa 1921->1931 | intercensal_jump | 526,953 -> 284,193 (x0.54) (possible 1927/1935 boundary change) |
+| census | Udine 1961->1971 | intercensal_growth | -3.88%/yr (767,908 -> 516,910) |
+| census | Alessandria 1931->1936 | intercensal_jump | 755,968 -> 494,688 (x0.65) (possible boundary change) |
+| census | Caltanissetta 1921->1931 | intercensal_jump | 382,444 -> 245,476 (x0.64) (possible boundary change) |
+| census | Campobasso 1961->1971 | intercensal_jump | 358,068 -> 227,641 (x0.64) (possible boundary change) |
+| census | Firenze 1931->1936 | intercensal_jump | 840,043 -> 322,526 (x0.38) (possible boundary change) |
+| census | Lecce 1921->1931 | intercensal_jump | 877,583 -> 487,029 (x0.55) (possible boundary change) |
+| census | Livorno 1921->1931 | intercensal_jump | 143,190 -> 245,707 (x1.72) (possible boundary change) |
+| census | Novara 1921->1931 | intercensal_jump | 723,269 -> 389,312 (x0.54) (possible boundary change) |
+| census | Siracusa 1921->1931 | intercensal_jump | 526,953 -> 284,193 (x0.54) (possible boundary change) |
 | census | Alessandria 1951 | mean_age | 38.3 |
-| census | Alessandria 1961 | mean_age | 40.1 |
-| census | Asti 1961 | mean_age | 39.9 |
-| census | Genova 1961 | mean_age | 38.5 |
 | census | Girgenti 1861 | mean_age | 42.7 |
-| census | Pavia 1961 | mean_age | 38.8 |
-| census | Savona 1961 | mean_age | 38.3 |
-| census | Trieste 1961 | mean_age | 40.0 |
-| census | Vercelli 1961 | mean_age | 39.1 |
 | census | COD_PROV 14 1881 | province_missing | present in 1871 and 1901, absent in 1881 (Sondrio) |
 | census | Aquila 1881 | sex_ratio | M/F = 87.0 per 100 |
 | census | Aquila 1901 | sex_ratio | M/F = 87.9 per 100 |
@@ -122,34 +117,27 @@ Flags: **50 ERROR**, 505 WARNING, 313 INFO
 | census | Roma 1881 | sex_ratio | M/F = 113.6 per 100 |
 | census | Trieste 1951 | sex_ratio | M/F = 87.4 per 100 |
 | census | Trieste 1961 | sex_ratio | M/F = 87.3 per 100 |
+| census | Trieste 1971 | sex_ratio | M/F = 86.9 per 100 |
 | census | Udine 1911 | sex_ratio | M/F = 83.0 per 100 |
 | census | Girgenti 1861 | share_50_54 | 17.0% in one 5-year group |
 | census | Alessandria 1951 | share_age0 | 0.94% of population aged 0 |
-| census | Alessandria 1961 | share_age0 | 1.07% of population aged 0 |
 | census | Asti 1951 | share_age0 | 1.07% of population aged 0 |
-| census | Asti 1961 | share_age0 | 1.19% of population aged 0 |
 | census | Bologna 1951 | share_age0 | 1.10% of population aged 0 |
 | census | Campobasso 1936 | share_age0 | 5.02% of population aged 0 |
 | census | Firenze 1936 | share_age0 | 1.20% of population aged 0 |
 | census | Firenze 1951 | share_age0 | 1.20% of population aged 0 |
 | census | Genova 1951 | share_age0 | 0.98% of population aged 0 |
-| census | Genova 1961 | share_age0 | 1.17% of population aged 0 |
 | census | Imperia 1951 | share_age0 | 1.02% of population aged 0 |
 | census | LaSpezia 1951 | share_age0 | 1.14% of population aged 0 |
 | census | Novara 1951 | share_age0 | 1.17% of population aged 0 |
 | census | Parma 1951 | share_age0 | 1.19% of population aged 0 |
 | census | Pavia 1951 | share_age0 | 1.04% of population aged 0 |
-| census | Pavia 1961 | share_age0 | 1.12% of population aged 0 |
 | census | Piacenza 1951 | share_age0 | 1.16% of population aged 0 |
 | census | Pisa 1951 | share_age0 | 1.19% of population aged 0 |
 | census | Savona 1951 | share_age0 | 0.99% of population aged 0 |
-| census | Savona 1961 | share_age0 | 1.16% of population aged 0 |
-| census | Siena 1961 | share_age0 | 1.15% of population aged 0 |
 | census | Torino 1951 | share_age0 | 1.04% of population aged 0 |
 | census | Trieste 1951 | share_age0 | 0.83% of population aged 0 |
-| census | Trieste 1961 | share_age0 | 0.98% of population aged 0 |
 | census | Vercelli 1951 | share_age0 | 1.05% of population aged 0 |
-| census | Vercelli 1961 | share_age0 | 1.15% of population aged 0 |
 | fertility | Alessandria 1931 | cbr_range | cbr=15.21 |
 | fertility | Aosta 1931 | cbr_range | cbr=17.81 |
 | fertility | Bologna 1931 | cbr_range | cbr=18.51 |

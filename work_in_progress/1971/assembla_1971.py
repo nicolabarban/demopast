@@ -2,11 +2,12 @@
 Split degli estremi: <5 -> 0/1-4 e 75+ -> 75-79/80-84/85+ con le proporzioni
 1961 della stessa provincia (largest remainder, totali esatti)."""
 import csv, json
-from collections import defaultdict
+import os
 
-S = '/private/tmp/claude-501/-Users-nicolabarban-Dropbox-demopasta/a01aba59-e75d-40e3-b7ba-c10937ca1f04/scratchpad'
-RES = json.load(open(f'{S}/trascrizioni_1971.json'))
-REF = json.load(open(f'{S}/ref_1971.json'))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+HERE = os.path.dirname(os.path.abspath(__file__))
+RES = json.load(open(f'{HERE}/trascrizioni_1971.json'))
+REF = json.load(open(f'{HERE}/ref_1971.json'))
 
 AGES = ['0','1_4','5_9','10_14','15_19','20_24','25_29','30_34','35_39','40_44',
         '45_49','50_54','55_59','60_64','65_69','70_74','75_79','80_84','85plus']
@@ -25,15 +26,14 @@ def lr_split(count, shares):
     return flo
 
 # proporzioni 1961 per gli split, dalla stessa provincia
-c61 = {int(r['COD_PROV']): r for r in csv.DictReader(open('/Users/nicolabarban/Dropbox/demopasta/data/census/census_1961.csv'))}
+c61 = {int(r['COD_PROV']): r for r in csv.DictReader(open(f'{ROOT}/data/census/census_1961.csv'))}
 # nomi provincia dal geojson 1971
-import json as j2
-gj = j2.load(open('/Users/nicolabarban/Dropbox/demopasta/data/geojson/province_1971.geojson'))
+gj = json.load(open(f'{ROOT}/data/geojson/province_1971.geojson'))
 geo_names = {f['properties']['COD_PROV']: f['properties']['DEN_PROV'] for f in gj['features']}
 NAME2COD = {v: k for k, v in geo_names.items()}
 ALIAS = {"Valle d'Aosta": 7, "L'Aquila": 66, "Ascoli Piceno": 44, "Bolzano": 21,
          "Reggio di Calabria": 80, "Reggio nell'Emilia": 35, "Pesaro e Urbino": 41,
-         "Massa-Carrara": 45, "Forlì": 40, "La Spezia": 11, "Monza"[:0]: None}
+         "Massa-Carrara": 45, "Forlì": 40, "La Spezia": 11}
 
 rows_out = []
 report = []
@@ -69,8 +69,7 @@ for name, res in sorted(RES.items()):
                          'male': out['m'][a], 'female': out['f'][a], 'total': out['m'][a]+out['f'][a]})
 
 rows_out.sort(key=lambda r: (r['code'], AGES.index(next(k for k,v in LABEL.items() if v==r['age_class']))))
-dst = '/Users/nicolabarban/Dropbox/demopasta/downloads/1971/data_census_1971_adjusted_age.csv'
-import os
+dst = f'{ROOT}/downloads/1971/data_census_1971_adjusted_age.csv'
 os.makedirs(os.path.dirname(dst), exist_ok=True)
 with open(dst, 'w', newline='') as f:
     w = csv.writer(f, quoting=csv.QUOTE_NONNUMERIC)
