@@ -1,0 +1,32 @@
+{
+"_fonte": "ISTAT, Popolazione residente e presente dei comuni 1861-1971 (ed. 1977), TOMO 2 = confini dell'epoca. Il tomo 1 e' ricalcolato ai confini 1971 e NON e' utilizzabile come checksum.",
+"_concetto_per_anno": {
+  "1871": "presente  (nel tomo 2 sta sotto l'intestazione 'residente': nel 1871 fu rilevata la sola popolazione presente, considerata legale a tutti gli effetti)",
+  "1881": "presente  (NESSUN riferimento disponibile: il tomo 2 pubblica il presente solo per 1861/1901/1931/1951/1961/1971; il residente stampato NON e' confrontabile, cfr. Napoli 481.419 res. vs ~494.000 pres.)",
+  "1921": "presente  (riferimento disponibile SOLO per Torino)",
+  "1931": "presente",
+  "1936": "residente (la Tav. X del 1936 tabula la popolazione residente)",
+  "1951": "residente",
+  "1961": "residente",
+  "1971": "residente"
+},
+"_avvertenze": [
+  "1921: il tomo riporta la popolazione rilevata al censimento, NON quella rettificata successivamente (la rettifica riguardo' le province meridionali e insulari: Bari, Napoli, Palermo, Messina, Catania).",
+  "1936: nella popolazione presente non e' compresa quella 'speciale' (forze armate all'estero e civili al seguito delle truppe)."
+],
+"ref": {
+"Torino":  {"1871": 212644, "1881": null, "1921": 502274, "1931": 597260, "1936": 629115, "1951": 719300, "1961": 1025822, "1971": 1167968},
+"Milano":  {"1871": 199009, "1881": null, "1921": null, "1931": 992036, "1936": 1115848, "1951": 1274245, "1961": 1582534, "1971": 1732000},
+"Venezia": {"1871": 128901, "1881": null, "1921": null, "1931": 260247, "1936": 264027, "1951": 316891, "1961": 347347, "1971": 363062},
+"Genova":  {"1871": 130269, "1881": null, "1921": null, "1931": 608096, "1936": 634646, "1951": 688447, "1961": 784194, "1971": 816872},
+"Bologna": {"1871": 115957, "1881": null, "1921": null, "1931": 246280, "1936": 269687, "1951": 340526, "1961": 444872, "1971": 490528},
+"Firenze": {"1871": 167093, "1881": null, "1921": null, "1931": 316286, "1936": 322535, "1951": 374625, "1961": 436516, "1971": 457803},
+"Livorno": {"1871": 97096,  "1881": null, "1921": null, "1931": 124391, "1936": 124963, "1951": 142333, "1961": 161077, "1971": 174791},
+"Roma":    {"1871": 244484, "1881": null, "1921": null, "1931": 1008083, "1936": 1155722, "1951": 1651754, "1961": 2188160, "1971": 2781993},
+"Napoli":  {"1871": 448335, "1881": null, "1921": null, "1931": 839390, "1936": 865913, "1951": 1010550, "1961": 1182815, "1971": 1226594},
+"Bari":    {"1871": 50524,  "1881": null, "1921": null, "1931": 171810, "1936": 196747, "1951": 268183, "1961": 312023, "1971": 357274},
+"Palermo": {"1871": 219398, "1881": null, "1921": null, "1931": 389699, "1936": 411879, "1951": 490692, "1961": 587985, "1971": 642814},
+"Messina": {"1871": 111854, "1881": null, "1921": null, "1931": 182508, "1936": 192051, "1951": 220766, "1961": 254715, "1971": 250656},
+"Catania": {"1871": 84397,  "1881": null, "1921": null, "1931": 227765, "1936": 244972, "1951": 299629, "1961": 363928, "1971": 400048}
+}
+}
