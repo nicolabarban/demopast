@@ -13,7 +13,10 @@ format:
 <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
 <p style="max-width:780px;margin:0 auto 1.5rem;color:var(--c-text-muted);font-size:0.95rem;">
-  Build historical trends across census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971). Pick a geographic level — national, macro-area, region, or individual provinces — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
+  Build historical trends across census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971). Pick a geographic level — national, macro-area, region, individual provinces, or the 13 largest cities — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
+</p>
+<p style="margin-bottom:1rem;color:#6b7280;font-size:0.85rem;line-height:1.5;">
+  <strong>Reading the city level.</strong> Cities are the <em>comune</em> of each capoluogo, not its province, and they cover 8 of the 11 census years — 1861, 1901 and 1911 are missing because those censuses never published a usable age breakdown below the province, so the lines break there. Note also that 1871–1931 counts the <em>present</em> population (de facto) while 1936–1971 counts the <em>resident</em> population: the step between 1931 and 1936 partly reflects that change of concept, not only real change.
 </p>
 
 <div class="series-controls">
@@ -24,6 +27,7 @@ format:
       <option value="macro">Macro-area</option>
       <option value="region">Region</option>
       <option value="province">Province</option>
+      <option value="city">City (13 largest)</option>
     </select>
   </div>
 
@@ -198,9 +202,50 @@ const OLD_T = ['t_65_69','t_70_74','t_75_79','t_80_84','t_85plus'];
 // Palette for series lines; cycles if more series than colors.
 const PALETTE = ['#1e40af','#be185d','#15803d','#b45309','#7c3aed','#0e7490','#9f1239','#4d7c0f','#1d4ed8','#c2410c'];
 
-let censusByYear = {};   // {year: {cod: row}}
+let censusByYear = {};   // {year: {cod: row}} — provinces
 let provinceCanon = {};  // {cod: canonical name}
 let chart = null;
+
+// Cities are a separate store keyed by the SAME codes as provinces (each city is
+// its province's capoluogo), so the two must never share a dictionary.
+const CITY_YEARS = [1871, 1881, 1921, 1931, 1936, 1951, 1961, 1971];
+let cityByYear = {};     // {year: {cod: row}}
+let cityCanon = {};      // {cod: city name}
+
+// long-format age_class label -> the m_/f_/t_ suffix used everywhere else
+const CITY_AGE_KEY = {'0':'0','1-4':'1_4','5-9':'5_9','10-14':'10_14','15-19':'15_19',
+  '20-24':'20_24','25-29':'25_29','30-34':'30_34','35-39':'35_39','40-44':'40_44',
+  '45-49':'45_49','50-54':'50_54','55-59':'55_59','60-64':'60_64','65-69':'65_69',
+  '70-74':'70_74','75-79':'75_79','80-84':'80_84','85+':'85plus'};
+
+// Pivots downloads/citta/data_census_citta.csv (long) into the same wide shape the
+// province rows use, so aggregate()/readMetric() work on it unchanged.
+async function loadCities() {
+  const resp = await fetch('downloads/citta/data_census_citta.csv');
+  const text = await resp.text();
+  const parsed = Papa.parse(text, {header: true, skipEmptyLines: true, dynamicTyping: true});
+  CITY_YEARS.forEach(y => cityByYear[y] = {});
+  parsed.data.forEach(r => {
+    const y = parseInt(r.year), cod = parseInt(r.code);
+    if (!cityByYear[y]) return;
+    const suf = CITY_AGE_KEY[String(r.age_class).trim()];
+    if (!suf) return;
+    let row = cityByYear[y][cod];
+    if (!row) {
+      row = {den_prov: r.city};
+      COUNT_FIELDS.forEach(f => row[f] = 0);
+      cityByYear[y][cod] = row;
+      cityCanon[cod] = r.city;
+    }
+    const m = parseFloat(r.male) || 0, f = parseFloat(r.female) || 0, t = parseFloat(r.total) || 0;
+    row['m_' + suf] += m; row['f_' + suf] += f; row['t_' + suf] += t;
+    row.male_pop += m; row.female_pop += f; row.total_pop += t;
+  });
+}
+
+function allCities() {
+  return Object.keys(cityCanon).map(Number);
+}
 
 async function loadAllCensus() {
   await Promise.all(YEARS.map(async y => {
@@ -280,14 +325,17 @@ function readMetric(agg, metric) {
 }
 
 function seriesForSelection(level, picks, metric) {
-  // Returns [{label, codes}].
-  if (level === 'italy') return [{label: 'Italy', codes: allProvinces()}];
+  // Returns [{label, codes, src}]; src picks the store, since city and province
+  // codes are the same numbers.
+  if (level === 'italy') return [{label: 'Italy', codes: allProvinces(), src: 'province'}];
   if (level === 'macro')
-    return picks.map(p => ({label: p, codes: provincesInMacro(p)}));
+    return picks.map(p => ({label: p, codes: provincesInMacro(p), src: 'province'}));
   if (level === 'region')
-    return picks.map(p => ({label: p, codes: provincesInRegion(p)}));
+    return picks.map(p => ({label: p, codes: provincesInRegion(p), src: 'province'}));
   if (level === 'province')
-    return picks.map(p => ({label: provinceCanon[parseInt(p)] || p, codes: [parseInt(p)]}));
+    return picks.map(p => ({label: provinceCanon[parseInt(p)] || p, codes: [parseInt(p)], src: 'province'}));
+  if (level === 'city')
+    return picks.map(p => ({label: cityCanon[parseInt(p)] || p, codes: [parseInt(p)], src: 'city'}));
   return [];
 }
 
@@ -317,6 +365,10 @@ function refreshPicker() {
     });
     options = codes.map(c => [String(c), provinceCanon[c] || String(c)]);
     label.textContent = 'Provinces';
+  } else if (level === 'city') {
+    const codes = allCities().sort((a, b) => (cityCanon[a] || '').localeCompare(cityCanon[b] || ''));
+    options = codes.map(c => [String(c), cityCanon[c]]);
+    label.textContent = 'Cities';
   }
 
   options.forEach(([val, txt]) => {
@@ -360,7 +412,9 @@ function render() {
   canvas.style.display = '';
 
   const datasets = series.map((s, i) => {
-    const data = YEARS.map(y => ({x: y, y: readMetric(aggregate(censusByYear[y], s.codes), metric)}));
+    const store = s.src === 'city' ? cityByYear : censusByYear;
+    // years the store doesn't cover yield null -> a gap, not a fake zero
+    const data = YEARS.map(y => ({x: y, y: readMetric(aggregate(store[y] || {}, s.codes), metric)}));
     const color = PALETTE[i % PALETTE.length];
     return {
       label: s.label,
@@ -415,7 +469,7 @@ document.getElementById('seriesPick').addEventListener('change', render);
 document.getElementById('seriesMetric').addEventListener('change', render);
 
 (async function init() {
-  await loadAllCensus();
+  await Promise.all([loadAllCensus(), loadCities()]);
   refreshPicker();
   render();
 })();

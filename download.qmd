@@ -30,6 +30,34 @@ tables; everything else on the site is computed from them.
 | 1961 | [data_census_1961_adjusted_age.csv](/downloads/1961/data_census_1961_adjusted_age.csv) | 68 KB |
 | 1971 | [data_census_1971_adjusted_age.csv](/downloads/1971/data_census_1971_adjusted_age.csv) | 76 KB |
 
+## Cities — the 13 largest, long format (adjusted age)
+
+Population by age and sex for the *comune* of Torino, Milano, Venezia, Genova,
+Bologna, Firenze, Livorno, Roma, Napoli, Bari, Palermo, Messina and Catania —
+the city itself, not its province. One row per (year, city, age class), on the
+same 19-group classification as the province tables, so the two join on `code`
+(the COD_PROV of the province each city is capoluogo of).
+
+| File | Size | Rows | Coverage |
+|------|------|------|----------|
+| [data_census_citta.csv](/downloads/citta/data_census_citta.csv) | 88 KB | 1,976 | 13 cities × 8 years × 19 age groups |
+
+Two things to know before using it. **Coverage is 8 of the 11 census years** —
+1871, 1881, 1921, 1931, 1936, 1951, 1961, 1971. The 1861 census published age
+only down to the province; 1911 published just three age classes for cities
+(0–15 / 15–65 / 65+); and 1901 gives single years only up to age 15, with
+groupings above that do not align to five-year classes. **And the concept
+changes mid-series**: 1871–1931 is the *present* population (de facto),
+1936–1971 the *resident* population — for Roma in 1921 the present exceeds the
+resident by 4.2%, so the 1931→1936 step is partly a change of definition.
+
+Transcribed in-house from the printed census volumes. Every city-year was
+verified against its printed total; for six of the eight years an independent
+ISTAT reference confirms the total to the unit. Age classes are exact for 1871,
+1881, 1921, 1931 and 1936, and estimated for 1951, 1961 and 1971, where the
+printed classes do not align to the standard groups. Full provenance, caveats
+and errata: [`work_in_progress/citta/README.md`](https://github.com/nicolabarban/demopast/blob/main/work_in_progress/citta/README.md).
+
 ## Province boundaries — GeoJSON
 
 Historical province polygons reprojected to WGS84 (EPSG:4326) and
