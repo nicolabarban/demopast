@@ -1,12 +1,11 @@
 # DEMOPAST data plausibility report
 
-Flags: **50 ERROR**, 493 WARNING, 313 INFO
+Flags: **41 ERROR**, 490 WARNING, 313 INFO
 
-## ERROR (50)
+## ERROR (41)
 
 | dataset | where | check | detail |
 |---|---|---|---|
-| census | Firenze 1936->1951 | intercensal_jump | 322,526 -> 916,310 (x2.84) |
 | census | Gorizia 1936->1951 | intercensal_jump | 200,146 -> 133,550 (x0.67) |
 | census | Palermo 1861->1871 | intercensal_jump | 384,526 -> 617,618 (x1.61) |
 | census | Trieste 1936->1951 | intercensal_jump | 460,596 -> 297,003 (x0.64) |
@@ -17,15 +16,11 @@ Flags: **50 ERROR**, 493 WARNING, 313 INFO
 | census | Vicenza 1921 | t_10_14!=m+f | 66,074 != 33,580+32,994 (off 500) |
 | census | Rovigo 1921 | t_15_19!=m+f | 30,248 != 15,184+14,884 (off 180) |
 | census | AscoliPiceno 1931 | t_1_4!=m+f | 27,610 != 14,286+13,504 (off 180) |
-| census | Catania 1936 | t_1_4!=m+f | 63,096 != 24,025+30,869 (off 8,202) |
 | census | Chieti 1961 | t_25_29!=m+f | 28,420 != 14,099+14,495 (off 174) |
-| census | Terni 1936 | t_30_34!=m+f | 13,024 != 6,708+6,816 (off 500) |
-| census | Cosenza 1936 | t_35_39!=m+f | 25,459 != 13,311+18,278 (off 6,130) |
 | census | ReggioCalabria 1911 | t_40_44!=m+f | 22,375 != 10,818+12,557 (off 1,000) |
 | census | Treviso 1961 | t_40_44!=m+f | 29,641 != 14,331+15,130 (off 180) |
 | census | Valled'Aosta 1961 | t_40_44!=m+f | 6,041 != 3,003+2,998 (off 40) |
 | census | Brindisi 1961 | t_45_49!=m+f | 19,626 != 9,504+8,583 (off 1,539) |
-| census | Enna 1936 | t_55_59!=m+f | 7,278 != 4,422+3,728 (off 872) |
 | census | Massa e Carrara 1921 | t_5_9!=m+f | 25,559 != 13,271+12,888 (off 600) |
 | census | PrincipatoUlteriore 1871 | t_5_9!=m+f | 40,436 != 13,687+19,929 (off 6,820) |
 | census | Valled'Aosta 1961 | t_60_64!=m+f | 4,838 != 2,173+2,460 (off 205) |
@@ -35,16 +30,12 @@ Flags: **50 ERROR**, 493 WARNING, 313 INFO
 | census | Valled'Aosta 1961 | t_70_74!=m+f | 2,899 != 1,289+1,628 (off 18) |
 | census | Imperia 1961 | t_80_84!=m+f | 2,959 != 128+1,679 (off 1,152) |
 | census | Brindisi 1961 | total!=M+F | 345,635 != 169,466+173,649 (off 2,520) |
-| census | Catania 1936 | total!=M+F | 713,108 != 343,463+361,443 (off 8,202) |
-| census | Cosenza 1936 | total!=M+F | 580,763 != 280,256+306,637 (off 6,130) |
-| census | Enna 1936 | total!=M+F | 216,240 != 110,509+106,603 (off 872) |
 | census | Forlì 1961 | total!=M+F | 521,518 != 256,405+263,988 (off 1,125) |
 | census | Imperia 1961 | total!=M+F | 202,219 != 96,729+104,338 (off 1,152) |
 | census | Massa e Carrara 1921 | total!=M+F | 223,346 != 110,053+113,893 (off 600) |
 | census | Piacenza 1921 | total!=M+F | 280,483 != 142,209+138,864 (off 590) |
 | census | PrincipatoUlteriore 1871 | total!=M+F | 377,207 != 179,187+191,200 (off 6,820) |
 | census | ReggioCalabria 1911 | total!=M+F | 443,611 != 212,964+231,647 (off 1,000) |
-| census | Terni 1936 | total!=M+F | 191,547 != 97,260+94,787 (off 500) |
 | census | Valled'Aosta 1961 | total!=M+F | 101,152 != 50,786+50,162 (off 204) |
 | fertility | Mantova 1865 | cbr_implausible | cbr=5.16 |
 | marriages | Ferrara 1866 | nuptiality_implausible | nuptiality=1.68 |
@@ -57,7 +48,7 @@ Flags: **50 ERROR**, 493 WARNING, 313 INFO
 | migration | Belluno 1913 | emig_rate_implausible | emig_rate=94.07 |
 | migration | Belluno 1914 | emig_rate_implausible | emig_rate=82.21 |
 
-## WARNING (493)
+## WARNING (490)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -78,7 +69,6 @@ Flags: **50 ERROR**, 493 WARNING, 313 INFO
 | census | Alessandria 1931->1936 | intercensal_jump | 755,968 -> 494,688 (x0.65) (possible boundary change) |
 | census | Caltanissetta 1921->1931 | intercensal_jump | 382,444 -> 245,476 (x0.64) (possible boundary change) |
 | census | Campobasso 1961->1971 | intercensal_jump | 358,068 -> 227,641 (x0.64) (possible boundary change) |
-| census | Firenze 1931->1936 | intercensal_jump | 840,043 -> 322,526 (x0.38) (possible boundary change) |
 | census | Lecce 1921->1931 | intercensal_jump | 877,583 -> 487,029 (x0.55) (possible boundary change) |
 | census | Livorno 1921->1931 | intercensal_jump | 143,190 -> 245,707 (x1.72) (possible boundary change) |
 | census | Novara 1921->1931 | intercensal_jump | 723,269 -> 389,312 (x0.54) (possible boundary change) |
@@ -103,7 +93,6 @@ Flags: **50 ERROR**, 493 WARNING, 313 INFO
 | census | Cosenza 1911 | sex_ratio | M/F = 84.1 per 100 |
 | census | Cosenza 1931 | sex_ratio | M/F = 87.8 per 100 |
 | census | Cremona 1931 | sex_ratio | M/F = 80.9 per 100 |
-| census | Firenze 1936 | sex_ratio | M/F = 85.4 per 100 |
 | census | Girgenti 1861 | sex_ratio | M/F = 153.8 per 100 |
 | census | Grosseto 1861 | sex_ratio | M/F = 135.4 per 100 |
 | census | Grosseto 1871 | sex_ratio | M/F = 130.3 per 100 |
@@ -124,7 +113,6 @@ Flags: **50 ERROR**, 493 WARNING, 313 INFO
 | census | Asti 1951 | share_age0 | 1.07% of population aged 0 |
 | census | Bologna 1951 | share_age0 | 1.10% of population aged 0 |
 | census | Campobasso 1936 | share_age0 | 5.02% of population aged 0 |
-| census | Firenze 1936 | share_age0 | 1.20% of population aged 0 |
 | census | Firenze 1951 | share_age0 | 1.20% of population aged 0 |
 | census | Genova 1951 | share_age0 | 0.98% of population aged 0 |
 | census | Imperia 1951 | share_age0 | 1.02% of population aged 0 |
