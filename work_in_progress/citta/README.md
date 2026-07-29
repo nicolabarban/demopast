@@ -1,20 +1,21 @@
 # Tabella per città — popolazione per età e sesso, 13 grandi città
 
-Completata il 2026-07-15. **13 città × 8 anni di censimento = 104 tavole trascritte**,
-tutte verificate. Prodotto finale: `downloads/citta/data_census_citta.csv`
-(1.976 righe = 104 × 19 gruppi di età).
+Completata il 2026-07-15 (8 anni); estesa il 2026-07-29 con 1901 e 1911.
+**13 città × 10 anni di censimento = 130 tavole trascritte**, tutte verificate.
+Prodotto finale: `downloads/citta/data_census_citta.csv`
+(2.470 righe = 130 × 19 gruppi di età).
 
 Città: Torino, Milano, Venezia, Genova, Bologna, Firenze, Livorno, Roma, Napoli,
 Bari, Palermo, Messina, Catania. Il `code` è il COD_PROV della provincia di cui la
 città è capoluogo, così la tabella si unisce a quella provinciale.
 
-## Anni: 8 su 11
-1871, 1881, 1921, 1931, 1936, 1951, 1961, 1971. Esclusi e perché — vedi
-`docs/fonti_tavole_citta.md`:
-- **1861**: non esiste. L'ISTAT dell'epoca pubblica l'età solo per provincia.
-- **1911**: solo `0-15 / 15-65 / 65+`. Con tre classi non si fa una piramide.
-- **1901**: anni singoli solo fino ai 15; sopra, i raggruppamenti (16-18, 19-21,
-  22-25, 26-30…) non si allineano ai quinquenni.
+## Anni: 10 su 11
+1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971. Escluso solo il
+**1861**: non esiste — l'ISTAT dell'epoca pubblica l'età solo per provincia.
+(La ricognizione iniziale aveva scartato anche 1901 e 1911 per errore: il 1901
+è per coorte di nascita e si converte in età quasi esattamente, e il Vol. II
+del 1911 ha le sezioni comunali con anni singoli — vedi
+`docs/fonti_tavole_citta.md`, aggiornato.)
 
 ## Qualità del dato, anno per anno
 
@@ -22,6 +23,8 @@ città è capoluogo, così la tabella si unisce a quella provinciale.
 |------|----------|------------------------------|---------------------|
 | 1871 | presente | **esatta** (anni singoli) | ✓ ufficiale, delta 0 su 13/13 |
 | 1881 | presente | **esatta** (subtotali stampati) | ✗ assente |
+| 1901 | presente | **quasi esatta** (coorti; stimato solo il confine 15-19/20-24) | ✓ totali M/F/M+F stampati, delta 0 su 13/13 |
+| 1911 | presente | **esatta** (anni singoli 0-21 + quinquenni) | ✓ totali stampati, delta 0 su 13/13; Torino via totale comune 427.106 |
 | 1921 | presente | **esatta** (anni singoli 0-20 + quinquenni) | ✗ solo Torino |
 | 1931 | presente | **esatta** (anni singoli 0-20 + classi) | ✓ ufficiale, delta 0 su 13/13 |
 | 1936 | residente | **esatta** (anni singoli 0-74) | ✓ ufficiale, delta 0 su 13/13 |
@@ -43,7 +46,8 @@ diffuso perché i tagli originali (6, 14, 18, 21) attraversano i quinquenni.
 
 **Età ignota**: le persone senza età dichiarata non appartengono ad alcuna classe e
 restano fuori dai 19 gruppi. Sono poche ovunque tranne il 1921 (25.238 sulle 13
-città, per lo più Roma e Napoli). Il totale della città dai 19 gruppi è quindi
+città, per lo più Roma e Napoli) e, in misura minore, il 1911 (8.807, di cui
+4.946 a Napoli e 1.748 a Roma). Il totale della città dai 19 gruppi è quindi
 leggermente sotto il totale stampato dove la riga esiste.
 
 ## Insidie della fonte, tutte verificate
@@ -100,6 +104,32 @@ che fosse un errore di stampa in una cella sola.
 python3 work_in_progress/citta/assembla_citta.py   # -> downloads/citta/data_census_citta.csv
 ```
 Richiede `data/census/census_{1951,1961,1971}.csv` come donatori di forma.
+Lo script scrive gli 8 anni originali e poi richiama `assembla_1901_1911.py`,
+che aggiunge 1901 e 1911 dalle rispettive trascrizioni (può anche essere
+lanciato da solo: fa il merge sul CSV esistente).
+
+Nota 1901: la tavola è per anno di nascita; la conversione in età al 10 feb
+1901 assegna i nati 1901+1900 all'età 0, 1899-1896 a 1-4, ecc. L'unico gruppo
+a cavallo dei quinquenni è 1882-80 (età 18-19-20), splittato tra 15-19 e 20-24
+con le proporzioni per anno singolo della stessa città al 1911.
+Nota 1911: la scansione di Torino è tagliata dopo «Oltre 100»; le righe Ignota
+e Totale sono ricostruite dal totale presente del comune (427.106).
+
+## Resto provincia
+`genera_resto_provincia.py` produce
+`downloads/citta/data_census_resto_provincia.csv`: provincia − comune
+capoluogo, cella per cella sui 19 gruppi, per i 10 anni del pannello
+(colonne: `year, code, province, city_excluded, age_class, male, female,
+total`). Nessuna cella negativa. Tre celle ereditano un'incoerenza
+m+f ≠ total già presente nella fonte provinciale (1911 Napoli 70-74 delta +7;
+1921 Venezia 10-14 −360; 1921 Firenze 5-9 −200). Una quarta — 1936 Catania
+1-4, delta +8.202 — è stata **corretta alla fonte** il 2026-07-29: nel CSV
+d'archivio l'età 1 M era scritta «8,202» con la virgola e il parser l'aveva
+scartata (stesso difetto per Cosenza età 38, totale «6,130»); entrambe
+verificate sulla tavola stampata e corrette in `downloads/1936/`. Le
+annessioni comunali degli
+anni '20-'30 (Grande Milano, Napoli, Roma…) creano discontinuità nel resto:
+sono cambi di confine, non errori.
 
 ## Cosa c'è qui
 - `trascrizioni_{anno}_citta.json` — trascrizioni grezze, con le classi originali

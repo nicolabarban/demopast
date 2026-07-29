@@ -16,8 +16,8 @@ scambiare il comune per il circondario o la provincia, che sono molto più grand
 | 1861 | ✗ nessuna | — | — |
 | 1871 | ✓ 13/13 | mesi nel 1º anno, poi anni singoli → 100, centenari | **esatta** |
 | 1881 | ✓ 13/13 | anni singoli → 100 + subtotali quinquennali stampati | **esatta** |
-| 1901 | ~ 13/13 | singoli → 15, poi 16-18, 19-21, 22-25, 26-30, 31-35, … | **solo fino a 14**; sopra è sfasata |
-| 1911 | ~ 13/13 | **solo 0-15 / 15-65 / 65+** | no — non è una piramide |
+| 1901 | ✓ 13/13 | anni di nascita: singoli → nati 1886, poi 1885-83, 1882-80, 1879-76, 1875-71, quinquennali | **quasi esatta** — solo il gruppo 1882-80 (età 18-20) va splittato |
+| 1911 | ✓ 13/13 | VOL2 Tav. IV: singoli 0-21, poi 21-25, 25-30, … 95-100, 100+ | **esatta** |
 | 1921 | ✓ 13/13 | singoli 0-20, poi 21-25, 25-30, … 95-100, 100+ | **esatta** |
 | 1931 | ✓ 13/13 | singoli 0-20, poi 21-24, 25-29, … 100+ | **esatta** |
 | 1936 | ✓ 13/13 | anni singoli 0-74, poi 75-79, … 100+ | **esatta** |
@@ -56,24 +56,37 @@ solo capoluoghi, ordine alfabetico, **3 pagine per città** (Bari 21-23, Bologna
 checksum sia scorciatoia per aggregare. Layer OCR presente ma mediocre.
 
 **1901** — `1901/VOL2/popby_sex_yob_comune.pdf` (203 pp.), Tav. III sez. A-1º,
-capoluoghi + comuni >15.000. Le città sono **colonne** (7 per pagina), le righe
-sono anni di nascita. Pagina stampata = pagina PDF + 138. Tutte e 13 verificate
-(Bari p.5, Bologna p.8, Catania p.12, Firenze p.17, Genova p.19, Livorno p.22,
-Messina p.24, Milano p.25, Napoli p.26, Palermo p.27, Roma p.33, Torino p.36,
-Venezia p.38). **Limite:** singoli solo fino ai nati 1886 (età 15); sopra, i
-raggruppamenti 16-18 / 19-21 / 22-25 / 26-30 / 31-35 non si allineano a
-15-19 / 20-24 / 25-29. Le classi `0`, `1_4`, `5_9`, `10_14` sono ricostruibili
-esattamente, il resto richiede interpolazione. Subtotali M/F/M+F stampati per
-colonna.
+capoluoghi + comuni >15.000; copia nel repo in
+`downloads/sources/1901/cities/`. Le città sono **colonne** (7 per pagina), le
+righe sono anni di nascita. Pagina stampata = pagina PDF + 138. Tutte e 13
+verificate (Bari p.5, Bologna p.8, Catania p.12, Firenze p.17, Genova p.19,
+Livorno p.22, Messina p.24, Milano p.25, Napoli p.26, Palermo p.27, Roma p.33,
+Torino p.36, Venezia p.38). **[AGGIORNATO 2026-07-29]** La prima ricognizione
+aveva letto male i raggruppamenti: sono per COORTE (1885-83, 1882-80, 1879-76,
+1875-71, poi quinquennali 1870-66 …), che convertiti in età al censimento
+(10 feb 1901) danno 15-17, 18-20, 21-24, 25-29, 30-34 … — cioè quasi tutti i
+quinquennali sono ricostruibili esattamente. L'unico gruppo a cavallo è
+1882-80 (età 18-19-20), splittato tra 15-19 e 20-24 con le proporzioni per
+anno singolo della stessa città al 1911 (largest-remainder, per sesso).
+Trascritto in `work_in_progress/citta/trascrizioni_1901_citta.json`, assemblato
+da `assembla_1901_1911.py`.
 
-**1911 — praticamente inservibile.** `1911/VOL6/popby_sex_agegroup_capolouoghi.pdf`
-(41 pp.), Tav. IX-A: è una tavola sul **luogo di nascita**, dove l'età è ridotta a
-**0-15 / 15-65 / 65+ / ignota**. Confermato che è il comune (Roma 542.123, Milano
-599.200, Napoli 678.031). L'alternativa `VOL6/popby_sex_agegroup_religion_comuni.pdf`
-ha le stesse 3 classi, richiede di sommare 6 religioni e ha gli «età ignota»
-ripartiti congetturalmente (⅓/½/⅙) — peggiore. Il resto del VOL6 non scende sotto
-le 3 classi, e in VOL2 l'età dettagliata si ferma al circondario. **Per una
-piramide 1911 delle città questi PDF non bastano.**
+**1911 — [CORRETTO 2026-07-29: pienamente utilizzabile].** La ricognizione
+iniziale si era fermata agli estratti VOL6 (Tav. IX-A sul luogo di nascita,
+3 sole classi) e aveva concluso che «in VOL2 l'età dettagliata si ferma al
+circondario»: **falso**. Il Vol. II completo (Tav. IV, «Popolazione presente
+classificata per sesso, età, stato civile ed istruzione», sez. A *Nei comuni
+capiluoghi di provincia e nei comuni di oltre 15.000 abitanti* —
+`~/Dropbox/dati_ISTAT/downloads/censimenti_popolazione/censpop1911/rav312263CP11vol2rilegato-OCR-ottim.pdf`)
+ha un blocco per ogni comune capoluogo con **anni singoli 0-21 e poi 21-25,
+25-30, … 95-100, oltre 100** — mappatura esatta sui 19 gruppi. Pagine PDF:
+Bari 31, Bologna 51, Catania 83, Firenze 114, Genova 130, Livorno 155,
+Messina 171, Milano 179, Napoli 188, Palermo 201, Roma 241, Torino 268,
+Venezia 285. Unico neo: la scansione di Torino è tagliata dopo «Oltre 100»
+(righe Ignota e Totale perse); il totale presente del comune (427.106, da
+*Censimento… Popolazione dei comuni*, p. stampata 303) implica ignota = 594,
+comunque scartata per convenzione. Trascritto in
+`work_in_progress/citta/trascrizioni_1911_citta.json`.
 
 **1921** — `1921/Popby_sex_agegroup_circondiari/{Regione}_1921.pdf`. Il nome
 inganna: è la **Tav. XIV**, che affianca *centri ≥15.000*, *comuni capoluoghi di
@@ -141,10 +154,9 @@ e verifica a tre livelli (somma classi = totale stampato, M+F = totale, confront
 con una fonte indipendente).
 
 **L'armonizzazione delle classi è il lavoro principale, non la trascrizione.**
-Cinque anni (1871, 1881, 1921, 1931, 1936) mappano esattamente sui 19 gruppi
+Sei anni (1871, 1881, 1911, 1921, 1931, 1936) mappano esattamente sui 19 gruppi
 perché hanno gli anni singoli. Tre (1951, 1961, 1971) richiedono la stessa
-redistribuzione già usata per le province. **1901 è armonizzabile solo fino ai 14
-anni**, e **1911 non è armonizzabile affatto**: con 0-15/15-65/65+ non si ricava
-una piramide. Una serie città completa e coerente sui 19 gruppi copre quindi
-**8 anni su 11** (1871, 1881, 1921, 1931, 1936, 1951, 1961, 1971); 1901 entra solo
-per le classi giovani; 1861 e 1911 restano fuori.
+redistribuzione già usata per le province. Nel 1901 (per coorte) solo il
+confine 15-19/20-24 è stimato. La serie città sui 19 gruppi copre quindi
+**10 anni su 11** (tutti tranne il 1861) — realizzata il 2026-07-29 con le
+trascrizioni 1901 e 1911 (cfr. `work_in_progress/citta/`).

@@ -16,7 +16,7 @@ format:
   Build historical trends across census years (1861, 1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971). Pick a geographic level — national, macro-area, region, individual provinces, or the 13 largest cities — then choose an indicator. Ratio indices are recomputed from aggregated counts, so they remain comparable across geographies.
 </p>
 <p style="margin-bottom:1rem;color:#6b7280;font-size:0.85rem;line-height:1.5;">
-  <strong>Reading the city level.</strong> Cities are the <em>comune</em> of each capoluogo, not its province, and they cover 8 of the 11 census years — 1861, 1901 and 1911 are missing because those censuses never published a usable age breakdown below the province, so the lines break there. Note also that 1871–1931 counts the <em>present</em> population (de facto) while 1936–1971 counts the <em>resident</em> population: the step between 1931 and 1936 partly reflects that change of concept, not only real change.
+  <strong>Reading the city level.</strong> Cities are the <em>comune</em> of each capoluogo, not its province, and they cover 10 of the 11 census years — only 1861 is missing, because that census never published an age breakdown below the province. Note also that 1871–1931 counts the <em>present</em> population (de facto) while 1936–1971 counts the <em>resident</em> population: the step between 1931 and 1936 partly reflects that change of concept, not only real change.
 </p>
 
 <div class="series-controls">
@@ -208,7 +208,7 @@ let chart = null;
 
 // Cities are a separate store keyed by the SAME codes as provinces (each city is
 // its province's capoluogo), so the two must never share a dictionary.
-const CITY_YEARS = [1871, 1881, 1921, 1931, 1936, 1951, 1961, 1971];
+const CITY_YEARS = [1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971];
 let cityByYear = {};     // {year: {cod: row}}
 let cityCanon = {};      // {cod: city name}
 

@@ -220,6 +220,11 @@ def main() -> None:
         nota = f'  (+{ign:,} di eta\' ignota, fuori dalle classi)' if ign else ''
         print(f'  {anno}: 13 citta\' = {tot:>10,}   armonizzazione {st}{nota}')
 
+    # il CSV appena scritto contiene solo gli 8 anni di questo script:
+    # riaggiunge 1901 e 1911 (trascritti a parte, si integrano per merge)
+    import assembla_1901_1911
+    assembla_1901_1911.main()
+
 
 if __name__ == '__main__':
     main()

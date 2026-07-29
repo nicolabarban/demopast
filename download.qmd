@@ -40,22 +40,37 @@ same 19-group classification as the province tables, so the two join on `code`
 
 | File | Size | Rows | Coverage |
 |------|------|------|----------|
-| [data_census_citta.csv](/downloads/citta/data_census_citta.csv) | 88 KB | 1,976 | 13 cities × 8 years × 19 age groups |
+| [data_census_citta.csv](/downloads/citta/data_census_citta.csv) | 113 KB | 2,470 | 13 cities × 10 years × 19 age groups |
 
-Two things to know before using it. **Coverage is 8 of the 11 census years** —
-1871, 1881, 1921, 1931, 1936, 1951, 1961, 1971. The 1861 census published age
-only down to the province; 1911 published just three age classes for cities
-(0–15 / 15–65 / 65+); and 1901 gives single years only up to age 15, with
-groupings above that do not align to five-year classes. **And the concept
-changes mid-series**: 1871–1931 is the *present* population (de facto),
-1936–1971 the *resident* population — for Roma in 1921 the present exceeds the
-resident by 4.2%, so the 1931→1936 step is partly a change of definition.
+Two things to know before using it. **Coverage is 10 of the 11 census years** —
+1871, 1881, 1901, 1911, 1921, 1931, 1936, 1951, 1961, 1971. Only the 1861
+census is missing, because it published age only down to the province. The 1901
+table classifies by year of birth (converted here to age at the census date)
+and 1911 has single years to 21 plus five-year groups, both transcribed from
+Vol. II of the respective censuses. **And the concept changes mid-series**:
+1871–1931 is the *present* population (de facto), 1936–1971 the *resident*
+population — for Roma in 1921 the present exceeds the resident by 4.2%, so the
+1931→1936 step is partly a change of definition.
+
+A companion file gives the complement — **the province excluding its
+capoluogo** (resto provincia), computed cell by cell as province minus city on
+the same 19 age groups. Useful for urban/rural contrasts within a province.
+No cell is negative; three cells inherit a male+female ≠ total inconsistency
+already present in the province source (flagged in the file's provenance
+notes). Boundary changes of the comune (the 1920s–30s annexations) show up as
+discontinuities in the resto series, by construction.
+
+| File | Size | Rows | Coverage |
+|------|------|------|----------|
+| [data_census_resto_provincia.csv](/downloads/citta/data_census_resto_provincia.csv) | 130 KB | 2,470 | 13 provinces minus capoluogo × 10 years × 19 age groups |
 
 Transcribed in-house from the printed census volumes. Every city-year was
-verified against its printed total; for six of the eight years an independent
+verified against its printed total; for six of the ten years an independent
 ISTAT reference confirms the total to the unit. Age classes are exact for 1871,
-1881, 1921, 1931 and 1936, and estimated for 1951, 1961 and 1971, where the
-printed classes do not align to the standard groups. Full provenance, caveats
+1881, 1911, 1921, 1931 and 1936, and estimated for 1951, 1961 and 1971, where
+the printed classes do not align to the standard groups; in 1901 only the
+15–19/20–24 boundary is estimated (the printed birth-year group 1882–80 spans
+ages 18–20 and is split using the same city's 1911 single-year profile). Full provenance, caveats
 and errata: [`work_in_progress/citta/README.md`](https://github.com/nicolabarban/demopast/blob/main/work_in_progress/citta/README.md).
 
 ## Province boundaries — GeoJSON
