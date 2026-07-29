@@ -1,8 +1,8 @@
 # DEMOPAST data plausibility report
 
-Flags: **41 ERROR**, 490 WARNING, 313 INFO
+Flags: **18 ERROR**, 490 WARNING, 304 INFO
 
-## ERROR (41)
+## ERROR (18)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -11,32 +11,9 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | census | Trieste 1936->1951 | intercensal_jump | 460,596 -> 297,003 (x0.64) |
 | census | Valled'Aosta 1936->1951 | intercensal_jump | 227,490 -> 94,069 (x0.41) |
 | census | AscoliPiceno 1931 | t_0!=m+f | 7,641 != 3,765+3,696 (off 180) |
-| census | Piacenza 1921 | t_10_14!=m+f | 32,152 != 16,871+15,881 (off 600) |
-| census | Venezia 1921 | t_10_14!=m+f | 58,411 != 29,590+29,181 (off 360) |
-| census | Vicenza 1921 | t_10_14!=m+f | 66,074 != 33,580+32,994 (off 500) |
-| census | Rovigo 1921 | t_15_19!=m+f | 30,248 != 15,184+14,884 (off 180) |
 | census | AscoliPiceno 1931 | t_1_4!=m+f | 27,610 != 14,286+13,504 (off 180) |
-| census | Chieti 1961 | t_25_29!=m+f | 28,420 != 14,099+14,495 (off 174) |
-| census | ReggioCalabria 1911 | t_40_44!=m+f | 22,375 != 10,818+12,557 (off 1,000) |
-| census | Treviso 1961 | t_40_44!=m+f | 29,641 != 14,331+15,130 (off 180) |
 | census | Valled'Aosta 1961 | t_40_44!=m+f | 6,041 != 3,003+2,998 (off 40) |
-| census | Brindisi 1961 | t_45_49!=m+f | 19,626 != 9,504+8,583 (off 1,539) |
-| census | Massa e Carrara 1921 | t_5_9!=m+f | 25,559 != 13,271+12,888 (off 600) |
-| census | PrincipatoUlteriore 1871 | t_5_9!=m+f | 40,436 != 13,687+19,929 (off 6,820) |
-| census | Valled'Aosta 1961 | t_60_64!=m+f | 4,838 != 2,173+2,460 (off 205) |
-| census | Brindisi 1961 | t_65_69!=m+f | 9,991 != 4,382+4,628 (off 981) |
-| census | Forlì 1961 | t_70_74!=m+f | 14,136 != 4,963+8,048 (off 1,125) |
-| census | Siracusa 1921 | t_70_74!=m+f | 9,870 != 5,028+4,942 (off 100) |
 | census | Valled'Aosta 1961 | t_70_74!=m+f | 2,899 != 1,289+1,628 (off 18) |
-| census | Imperia 1961 | t_80_84!=m+f | 2,959 != 128+1,679 (off 1,152) |
-| census | Brindisi 1961 | total!=M+F | 345,635 != 169,466+173,649 (off 2,520) |
-| census | Forlì 1961 | total!=M+F | 521,518 != 256,405+263,988 (off 1,125) |
-| census | Imperia 1961 | total!=M+F | 202,219 != 96,729+104,338 (off 1,152) |
-| census | Massa e Carrara 1921 | total!=M+F | 223,346 != 110,053+113,893 (off 600) |
-| census | Piacenza 1921 | total!=M+F | 280,483 != 142,209+138,864 (off 590) |
-| census | PrincipatoUlteriore 1871 | total!=M+F | 377,207 != 179,187+191,200 (off 6,820) |
-| census | ReggioCalabria 1911 | total!=M+F | 443,611 != 212,964+231,647 (off 1,000) |
-| census | Valled'Aosta 1961 | total!=M+F | 101,152 != 50,786+50,162 (off 204) |
 | fertility | Mantova 1865 | cbr_implausible | cbr=5.16 |
 | marriages | Ferrara 1866 | nuptiality_implausible | nuptiality=1.68 |
 | marriages | Girgenti 1866 | nuptiality_implausible | nuptiality=2.53 |
@@ -58,7 +35,7 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | census | Firenze 1921->1931 | intercensal_growth | -2.07%/yr (1,035,968 -> 840,043) |
 | census | Genova 1921->1931 | intercensal_growth | -3.38%/yr (1,171,838 -> 831,269) |
 | census | Girgenti 1861->1871 | intercensal_growth | -2.66%/yr (376,957 -> 287,763) |
-| census | MassaCarrara 1921->1931 | intercensal_growth | -1.62%/yr (223,346 -> 189,622) |
+| census | MassaCarrara 1921->1931 | intercensal_growth | -1.65%/yr (223,946 -> 189,622) |
 | census | Napoli 1921->1931 | intercensal_growth | +3.56%/yr (1,461,112 -> 2,073,825) |
 | census | Perugia 1921->1931 | intercensal_growth | -3.48%/yr (733,696 -> 514,830) |
 | census | Potenza 1921->1931 | intercensal_growth | -2.83%/yr (467,098 -> 350,618) |
@@ -72,7 +49,7 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | census | Lecce 1921->1931 | intercensal_jump | 877,583 -> 487,029 (x0.55) (possible boundary change) |
 | census | Livorno 1921->1931 | intercensal_jump | 143,190 -> 245,707 (x1.72) (possible boundary change) |
 | census | Novara 1921->1931 | intercensal_jump | 723,269 -> 389,312 (x0.54) (possible boundary change) |
-| census | Siracusa 1921->1931 | intercensal_jump | 526,953 -> 284,193 (x0.54) (possible boundary change) |
+| census | Siracusa 1921->1931 | intercensal_jump | 527,053 -> 284,193 (x0.54) (possible boundary change) |
 | census | Alessandria 1951 | mean_age | 38.3 |
 | census | Girgenti 1861 | mean_age | 42.7 |
 | census | COD_PROV 14 1881 | province_missing | present in 1871 and 1901, absent in 1881 (Sondrio) |
@@ -543,7 +520,7 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | mortality | Ravenna 1936 | imr_range | imr=56.0 |
 | mortality | Sondrio 1881 | imr_range | imr=370.0 |
 
-## INFO (313)
+## INFO (304)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -559,8 +536,6 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | census | Trapani 1921 | t_15_19!=m+f | 39,677 != 19,856+19,823 (off 2) |
 | census | Treviso 1961 | t_15_19!=m+f | 50,358 != 25,560+24,809 (off 11) |
 | census | Cuneo 1931 | t_1_4!=m+f | 47,452 != 23,881+23,601 (off 30) |
-| census | Sassari 1921 | t_20_24!=m+f | 27,315 != 12,877+14,538 (off 100) |
-| census | Treviso 1961 | t_20_24!=m+f | 50,893 != 26,087+24,678 (off 128) |
 | census | Treviso 1961 | t_25_29!=m+f | 42,196 != 21,601+20,615 (off 20) |
 | census | Valled'Aosta 1961 | t_25_29!=m+f | 7,704 != 4,000+3,684 (off 20) |
 | census | Ravenna 1931 | t_30_34!=m+f | 18,595 != 9,387+9,207 (off 1) |
@@ -569,7 +544,6 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | census | Grosseto 1881 | t_35_39!=m+f | 7,641 != 4,615+2,996 (off 30) |
 | census | Piacenza 1921 | t_35_39!=m+f | 15,900 != 7,586+8,304 (off 10) |
 | census | Ravenna 1931 | t_35_39!=m+f | 17,112 != 8,571+8,540 (off 1) |
-| census | Treviso 1961 | t_35_39!=m+f | 46,080 != 22,584+23,646 (off 150) |
 | census | ReggiodiCalabria 1936 | t_40_44!=m+f | 26,558 != 10,396+16,164 (off 2) |
 | census | Chieti 1936 | t_45_49!=m+f | 16,665 != 6,643+10,016 (off 6) |
 | census | Foggia 1936 | t_45_49!=m+f | 23,685 != 10,466+13,210 (off 9) |
@@ -583,8 +557,6 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | census | Ancona 1936 | t_55_59!=m+f | 14,313 != 6,754+7,564 (off 5) |
 | census | Grosseto 1936 | t_55_59!=m+f | 7,205 != 3,871+3,333 (off 1) |
 | census | Valled'Aosta 1961 | t_55_59!=m+f | 5,818 != 2,925+2,900 (off 7) |
-| census | Firenze 1921 | t_5_9!=m+f | 98,983 != 49,760+49,423 (off 200) |
-| census | Chieti 1961 | t_60_64!=m+f | 15,711 != 6,907+8,814 (off 10) |
 | census | Latina 1936 | t_60_64!=m+f | 5,874 != 2,843+3,022 (off 9) |
 | census | Treviso 1961 | t_60_64!=m+f | 26,564 != 12,007+14,561 (off 4) |
 | census | Parma 1921 | t_65_69!=m+f | 7,164 != 3,639+3,515 (off 10) |
@@ -617,12 +589,10 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | census | Bergamo 1881 | total!=M+F | 390,768 != 196,889+193,861 (off 18) |
 | census | Catanzaro 1936 | total!=M+F | 606,286 != 289,935+316,348 (off 3) |
 | census | Chieti 1936 | total!=M+F | 374,719 != 178,414+196,293 (off 12) |
-| census | Chieti 1961 | total!=M+F | 373,648 != 180,530+193,302 (off 184) |
 | census | Como 1881 | total!=M+F | 515,046 != 256,444+258,572 (off 30) |
 | census | Cremona 1936 | total!=M+F | 369,466 != 182,999+186,471 (off 4) |
 | census | Cuneo 1931 | total!=M+F | 619,708 != 314,804+304,902 (off 2) |
 | census | Ferrara 1936 | total!=M+F | 381,293 != 190,014+191,282 (off 3) |
-| census | Firenze 1921 | total!=M+F | 1,035,968 != 511,493+524,675 (off 200) |
 | census | Forlì 1881 | total!=M+F | 251,081 != 128,609+122,474 (off 2) |
 | census | Grosseto 1881 | total!=M+F | 114,289 != 64,367+49,892 (off 30) |
 | census | Grosseto 1931 | total!=M+F | 176,975 != 91,567+85,410 (off 2) |
@@ -634,6 +604,7 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | census | Napoli 1911 | total!=M+F | 1,302,007 != 641,314+660,686 (off 7) |
 | census | Parma 1921 | total!=M+F | 343,394 != 172,295+171,089 (off 10) |
 | census | Parma 1961 | total!=M+F | 389,088 != 191,852+197,337 (off 101) |
+| census | Piacenza 1921 | total!=M+F | 280,483 != 141,609+138,864 (off 10) |
 | census | Potenza 1936 | total!=M+F | 376,482 != 184,150+192,337 (off 5) |
 | census | Ravenna 1881 | total!=M+F | 225,757 != 115,138+110,615 (off 4) |
 | census | Ravenna 1931 | total!=M+F | 271,666 != 136,151+135,512 (off 3) |
@@ -641,15 +612,12 @@ Flags: **41 ERROR**, 490 WARNING, 313 INFO
 | census | Reggio nell'Emilia 1921 | total!=M+F | 344,532 != 172,508+172,026 (off 2) |
 | census | ReggiodiCalabria 1936 | total!=M+F | 578,127 != 278,686+299,443 (off 2) |
 | census | Reggionell'Emilia 1936 | total!=M+F | 375,261 != 187,469+187,797 (off 5) |
-| census | Rovigo 1921 | total!=M+F | 286,688 != 141,941+144,567 (off 180) |
 | census | Salerno 1881 | total!=M+F | 550,157 != 266,129+284,038 (off 10) |
-| census | Sassari 1921 | total!=M+F | 330,548 != 165,097+165,527 (off 76) |
+| census | Sassari 1921 | total!=M+F | 330,648 != 165,097+165,527 (off 24) |
 | census | Siena 1911 | total!=M+F | 241,535 != 124,795+116,735 (off 5) |
-| census | Siracusa 1921 | total!=M+F | 526,953 != 267,126+259,927 (off 100) |
 | census | Trapani 1921 | total!=M+F | 405,743 != 200,457+205,288 (off 2) |
-| census | Treviso 1961 | total!=M+F | 607,663 != 298,664+308,937 (off 62) |
-| census | Venezia 1921 | total!=M+F | 517,970 != 257,222+261,108 (off 360) |
-| census | Vicenza 1921 | total!=M+F | 545,991 != 269,010+277,481 (off 500) |
+| census | Treviso 1961 | total!=M+F | 607,520 != 298,679+308,937 (off 96) |
+| census | Valled'Aosta 1961 | total!=M+F | 100,947 != 50,786+50,162 (off 1) |
 | cross | Campobasso 1871 | cdr>cbr | deaths exceed births: CDR 39.88 > CBR 39.61 |
 | cross | Chieti 1871 | cdr>cbr | deaths exceed births: CDR 38.34 > CBR 36.23 |
 | cross | Cuneo 1931 | cdr>cbr | deaths exceed births: CDR 20.85 > CBR 20.73 |
