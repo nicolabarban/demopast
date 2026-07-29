@@ -1,6 +1,6 @@
 # DEMOPAST data plausibility report
 
-Flags: **18 ERROR**, 490 WARNING, 304 INFO
+Flags: **18 ERROR**, 490 WARNING, 303 INFO
 
 ## ERROR (18)
 
@@ -520,7 +520,7 @@ Flags: **18 ERROR**, 490 WARNING, 304 INFO
 | mortality | Ravenna 1936 | imr_range | imr=56.0 |
 | mortality | Sondrio 1881 | imr_range | imr=370.0 |
 
-## INFO (304)
+## INFO (303)
 
 | dataset | where | check | detail |
 |---|---|---|---|
@@ -531,7 +531,6 @@ Flags: **18 ERROR**, 490 WARNING, 304 INFO
 | census | Reggionell'Emilia 1936 | t_10_14!=m+f | 41,453 != 20,616+20,842 (off 5) |
 | census | Siena 1911 | t_10_14!=m+f | 23,520 != 11,999+11,516 (off 5) |
 | census | Catanzaro 1936 | t_15_19!=m+f | 48,611 != 24,870+23,738 (off 3) |
-| census | Parma 1961 | t_15_19!=m+f | 24,850 != 12,915+12,035 (off 100) |
 | census | Ravenna 1961 | t_15_19!=m+f | 20,726 != 10,556+10,180 (off 10) |
 | census | Trapani 1921 | t_15_19!=m+f | 39,677 != 19,856+19,823 (off 2) |
 | census | Treviso 1961 | t_15_19!=m+f | 50,358 != 25,560+24,809 (off 11) |
@@ -603,7 +602,7 @@ Flags: **18 ERROR**, 490 WARNING, 304 INFO
 | census | Matera 1936 | total!=M+F | 166,770 != 82,697+84,076 (off 3) |
 | census | Napoli 1911 | total!=M+F | 1,302,007 != 641,314+660,686 (off 7) |
 | census | Parma 1921 | total!=M+F | 343,394 != 172,295+171,089 (off 10) |
-| census | Parma 1961 | total!=M+F | 389,088 != 191,852+197,337 (off 101) |
+| census | Parma 1961 | total!=M+F | 389,188 != 191,852+197,337 (off 1) |
 | census | Piacenza 1921 | total!=M+F | 280,483 != 141,609+138,864 (off 10) |
 | census | Potenza 1936 | total!=M+F | 376,482 != 184,150+192,337 (off 5) |
 | census | Ravenna 1881 | total!=M+F | 225,757 != 115,138+110,615 (off 4) |
