@@ -46,7 +46,7 @@ format:
     <h4 id="provName" style="margin-top:0;"></h4>
     <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
       <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Emigrants (all destinations)</td><td id="provCount" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
-      <tr><td style="padding:3px 4px;">Rate (per 1,000 inhabitants in 1881)</td><td id="provRate" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr><td style="padding:3px 4px;">Rate (per 1,000 inhabitants)</td><td id="provRate" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
     </table>
     <h5 style="margin-top:1rem;margin-bottom:0.5rem;" id="seriesTitle"></h5>
     <div style="height:220px;"><canvas id="seriesChart"></canvas></div>
@@ -62,8 +62,8 @@ const DATA_URL = '../data/migration/gentili/gentili_panel.csv';
 const GEO_URL = '../data/geojson/province_1901.geojson';
 const COLORS = ['#f7fcf5','#e5f5e0','#c7e9c0','#a1d99b','#74c476','#41ab5d','#238b45','#005a32'];
 const LINE_COLOR = '#238b45', HOVER_COLOR = '#14532d';
-const BASE_FIELDS = [['emigrants', 'Total emigrants'],
-                     ['emig_rate', 'Emigration rate (per 1,000 inhabitants, 1881 pop.; 1876–1895 only)']];
+const BASE_FIELDS = [['emig_rate', 'Emigration rate (per 1,000 inhabitants)'],
+                     ['emigrants', 'Total emigrants']];
 
 const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
   scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
@@ -215,14 +215,17 @@ Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0<
 from the <em>Statistica della emigrazione italiana all'estero</em> (Ministero di Agricoltura, Industria e Commercio):
 69 post-Unification provinces, 1876–1913, 54 variables. Missing provincial destination data were filled by the author
 with intertemporal linear interpolation (see the Zenodo record).</p>
-<p><strong>Processing by DEMOPAST.</strong> Province names were matched to the 1901 boundaries (COD_PROV). The
-rate is total emigrants divided by the 1881 population supplied in the dataset (the only population series it
-includes), × 1,000; it is therefore not a rate on contemporaneous population, and the dataset provides that
-population only for 1876–1895, so the rate is "no data" afterwards. Totals are missing in the source for
-1888, 1890 and 1892; sex and age breakdowns start in 1884.
+<p><strong>Processing by DEMOPAST.</strong> Province names were matched to the 1901 boundaries (COD_PROV).
+<em>Total emigrants</em> is male + female emigrants. In the source file the column <code>Total_Emigration</code> holds
+the full total up to 1903 (where it equals male + female in every province-year) but only a small partial figure from
+1904 on, so the sex-specific columns are used; their national sum matches the official totals (e.g. 1913: 872,596).
+Where no sex breakdown exists (1876–1883) the total is used; totals are missing for 1888, 1890 and 1892.
+<em>Rate</em> = emigrants / population × 1,000, with province population (sum of the age groups of the DEMOPAST
+censuses of 1871, 1881, 1901, 1911, 1921) linearly interpolated between censuses. Province 14 is absent from the
+1881 census and is interpolated between 1871 and 1901. Boundaries are held fixed at the 69 provinces of the dataset.
 Colour breaks are pooled over all years so shades are comparable across the slider.</p>
 <p><strong>Download:</strong> <a href="../data/migration/gentili/Italian_Migration_1876_1913_English_Panel.csv" download>original CSV (Zenodo, unmodified)</a> ·
-<a href="../data/migration/gentili/gentili_panel.csv" download>gentili_panel.csv</a> (with COD_PROV and rate)</p>
+<a href="../data/migration/gentili/gentili_panel.csv" download>gentili_panel.csv</a> (with COD_PROV, interpolated population and rate)</p>
 <p>Preliminary — test environment.</p>
 </div>
 ```
