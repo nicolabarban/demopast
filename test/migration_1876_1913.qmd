@@ -1,0 +1,228 @@
+---
+title: "Migration 1876–1913 — DEMOPAST (test)"
+page-layout: full
+format:
+  html:
+    toc: false
+    include-in-header:
+      text: |
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+---
+
+```{=html}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+<div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:4px;padding:0.5rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
+  <strong>Test section</strong> — provincial panel of Italian emigration by destination and occupational sector,
+  1876–1913, from Gentili (2026), <a href="https://doi.org/10.5281/zenodo.23478963">doi:10.5281/zenodo.23478963</a>.
+  <a href="migration.html">Emigration 1911–1921 (Annuario)</a> · <a href="index.html">← back to test home</a>
+</div>
+
+<div class="slider-container">
+  <label for="yearSlider" class="year-label">Year: <span id="yearDisplay">—</span></label><br>
+  <input type="range" id="yearSlider" min="0" max="0" step="1" value="0" style="width:60%;max-width:500px;">
+  <div id="yearTicks" style="display:flex;justify-content:space-between;max-width:500px;margin:0 auto;"></div>
+</div>
+
+<div style="text-align:center;margin:1rem 0;">
+  <label for="indSelect" style="font-weight:bold;">Indicator: </label>
+  <select id="indSelect" style="padding:4px 8px;font-size:1rem;"></select>
+</div>
+
+<div style="display:flex;gap:1.5rem;align-items:flex-start;">
+  <div style="flex:0 0 38%;display:flex;flex-direction:column;gap:0.75rem;">
+    <div id="map" style="width:100%;height:560px;"></div>
+    <div id="legendWrapper">
+      <div class="legend-header">
+        <span class="legend-title">Legend</span>
+        <button id="legendToggle" type="button">Hide</button>
+      </div>
+      <div id="legendContent" class="map-legend"></div>
+    </div>
+  </div>
+  <div id="provinceInfo" style="flex:0 0 59%;padding:1rem;background:#f8f9fa;border-radius:4px;display:none;max-height:760px;overflow-y:auto;">
+    <h4 id="provName" style="margin-top:0;"></h4>
+    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+      <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 4px;">Emigrants (all destinations)</td><td id="provCount" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+      <tr><td style="padding:3px 4px;">Rate (per 1,000 inhabitants in 1881)</td><td id="provRate" style="text-align:right;padding:3px 4px;font-weight:bold;"></td></tr>
+    </table>
+    <h5 style="margin-top:1rem;margin-bottom:0.5rem;" id="seriesTitle"></h5>
+    <div style="height:220px;"><canvas id="seriesChart"></canvas></div>
+    <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Destinations, <span class="yr"></span></h5>
+    <div id="destChartBox" style="height:300px;"><canvas id="destChart"></canvas></div>
+    <h5 style="margin-top:1rem;margin-bottom:0.5rem;">Occupational sectors, <span class="yr"></span></h5>
+    <div id="occChartBox" style="height:260px;"><canvas id="occChart"></canvas></div>
+  </div>
+</div>
+
+<script>
+const DATA_URL = '../data/migration/gentili/gentili_panel.csv';
+const GEO_URL = '../data/geojson/province_1901.geojson';
+const COLORS = ['#f7fcf5','#e5f5e0','#c7e9c0','#a1d99b','#74c476','#41ab5d','#238b45','#005a32'];
+const LINE_COLOR = '#238b45', HOVER_COLOR = '#14532d';
+const BASE_FIELDS = [['emigrants', 'Total emigrants'],
+                     ['emig_rate', 'Emigration rate (per 1,000 inhabitants, 1881 pop.; 1876–1895 only)']];
+
+const map = L.map('map', {zoomControl:false, attributionControl:false, dragging:false,
+  scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false,
+  touchZoom:false}).setView([41.5, 12.5], 6);
+
+let rows = [], panel = {}, YEARS = [], destCols = [], occCols = [];
+let geojson = null, currentLayer = null, currentBreaks = null;
+let seriesChart = null, destChart = null, occChart = null, selCod = null;
+
+const fmt = n => (n == null || n === '') ? 'N/A' : Number(n).toLocaleString('en-US');
+const pretty = c => c.replace(/^(Dest|Occ)_/, '').replace(/_/g, ' ');
+const getYear = () => YEARS[document.getElementById('yearSlider').value];
+const getField = () => document.getElementById('indSelect').value;
+const valueOf = (rec, f) => (rec && rec[f] != null && rec[f] !== '') ? rec[f] : null;
+
+function fillIndicators() {
+  const sel = document.getElementById('indSelect');
+  const group = (label, items) => '<optgroup label="' + label + '">' +
+    items.map(([v, t]) => '<option value="' + v + '">' + t + '</option>').join('') + '</optgroup>';
+  sel.innerHTML = group('Totals', BASE_FIELDS) +
+    group('Emigrants by destination', destCols.map(c => [c, pretty(c)])) +
+    group('Emigrants by occupational sector', occCols.map(c => [c, pretty(c)]));
+}
+
+async function init() {
+  const [text, gj] = await Promise.all([fetch(DATA_URL).then(r => r.text()),
+                                        fetch(GEO_URL).then(r => r.json())]);
+  geojson = gj;
+  const parsed = Papa.parse(text, {header:true, skipEmptyLines:true, dynamicTyping:true});
+  rows = parsed.data;
+  destCols = parsed.meta.fields.filter(c => c.startsWith('Dest_'));
+  occCols = parsed.meta.fields.filter(c => c.startsWith('Occ_'));
+  rows.forEach(r => { (panel[r.year] = panel[r.year] || {})[r.COD_PROV] = r; });
+  YEARS = Object.keys(panel).map(Number).sort((a, b) => a - b);
+  const slider = document.getElementById('yearSlider');
+  slider.max = YEARS.length - 1;
+  slider.value = YEARS.length - 1;
+  document.getElementById('yearTicks').innerHTML = YEARS.map((y, i) =>
+    '<span>' + (i % 5 === 0 || i === YEARS.length - 1 ? y : '') + '</span>').join('');
+  fillIndicators();
+  slider.addEventListener('input', updateMap);
+  document.getElementById('indSelect').addEventListener('change', updateMap);
+  updateMap();
+}
+
+// Breaks are fixed across years (pooled quantiles) so colours are comparable over time.
+function computeBreaks() {
+  const f = getField();
+  const values = rows.map(r => valueOf(r, f)).filter(v => v != null && v > 0).sort((a, b) => a - b);
+  if (!values.length) return [0, 1];
+  const breaks = [];
+  for (let i = 1; i <= 7; i++) breaks.push(values[Math.min(Math.floor(values.length * i / 8), values.length - 1)]);
+  return [...new Set(breaks)].sort((a, b) => a - b);
+}
+
+function getColor(v, breaks) {
+  if (v == null) return '#e5e7eb';
+  for (let i = breaks.length - 1; i >= 0; i--) if (v > breaks[i]) return COLORS[Math.min(i + 1, COLORS.length - 1)];
+  return COLORS[0];
+}
+
+function style(feature) {
+  const v = valueOf((panel[getYear()] || {})[feature.properties.COD_PROV], getField());
+  return {fillColor: getColor(v, currentBreaks), weight: 0.8, opacity: 1, color: '#94a3b8', fillOpacity: 0.85};
+}
+
+function barChart(old, id, cols, rec) {
+  if (old) old.destroy();
+  const items = cols.map(c => [pretty(c), valueOf(rec, c)]).filter(([, v]) => v != null && v > 0)
+    .sort((a, b) => b[1] - a[1]).slice(0, 12);
+  return new Chart(document.getElementById(id).getContext('2d'), {
+    type: 'bar',
+    data: {labels: items.map(i => i[0]),
+           datasets: [{data: items.map(i => i[1]), backgroundColor: LINE_COLOR}]},
+    options: {indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false}}, scales: {x: {beginAtZero: true}}}
+  });
+}
+
+function showProvince(cod) {
+  selCod = cod;
+  const year = getYear(), rec = (panel[year] || {})[cod];
+  const f = getField();
+  const label = document.getElementById('indSelect').selectedOptions[0].text;
+  const name = rec ? rec.Province : '';
+  document.getElementById('provinceInfo').style.display = 'block';
+  document.getElementById('provName').textContent = name + ' (' + year + ')';
+  document.getElementById('provCount').textContent = fmt(valueOf(rec, 'emigrants'));
+  document.getElementById('provRate').textContent = fmt(valueOf(rec, 'emig_rate'));
+  document.getElementById('seriesTitle').textContent = label + ' over time';
+  document.querySelectorAll('.yr').forEach(e => e.textContent = year);
+  const data = YEARS.map(y => ({x: y, y: valueOf((panel[y] || {})[cod], f)})).filter(d => d.y != null);
+  if (seriesChart) seriesChart.destroy();
+  seriesChart = new Chart(document.getElementById('seriesChart').getContext('2d'), {
+    type: 'line',
+    data: {datasets: [{data: data, borderColor: LINE_COLOR, backgroundColor: LINE_COLOR, pointRadius: 2, borderWidth: 1.5}]},
+    options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}},
+      scales: {x: {type: 'linear', ticks: {callback: v => v}}, y: {beginAtZero: true}}}
+  });
+  destChart = barChart(destChart, 'destChart', destCols, rec);
+  occChart = barChart(occChart, 'occChart', occCols, rec);
+}
+
+function onEachFeature(feature, layer) {
+  layer.on({
+    mouseover: e => { e.target.setStyle({weight: 2, color: HOVER_COLOR, fillOpacity: 1}); e.target.bringToFront(); },
+    mouseout: e => { if (currentLayer) currentLayer.resetStyle(e.target); },
+    click: () => showProvince(feature.properties.COD_PROV)
+  });
+}
+
+function updateMap() {
+  document.getElementById('yearDisplay').textContent = getYear();
+  currentBreaks = computeBreaks();
+  if (currentLayer) map.removeLayer(currentLayer);
+  currentLayer = L.geoJSON(geojson, {style: style, onEachFeature: onEachFeature}).addTo(map);
+  map.fitBounds(currentLayer.getBounds(), {padding: [10, 10]});
+  updateLegend();
+  if (selCod != null) showProvince(selCod);
+}
+
+document.getElementById('legendToggle').addEventListener('click', function() {
+  const hidden = document.getElementById('legendWrapper').classList.toggle('legend-hidden');
+  this.textContent = hidden ? 'Show' : 'Hide';
+});
+
+function updateLegend() {
+  const div = document.getElementById('legendContent');
+  const label = document.getElementById('indSelect').selectedOptions[0].text;
+  let html = '<strong>' + label + '</strong>';
+  html += '<div class="legend-row"><i style="background:' + COLORS[0] + '"></i><span>&lt; ' + fmt(currentBreaks[0]) + '</span></div>';
+  currentBreaks.forEach((b, i) => {
+    const next = currentBreaks[i + 1], clr = COLORS[Math.min(i + 1, COLORS.length - 1)];
+    html += '<div class="legend-row"><i style="background:' + clr + '"></i><span>' +
+      (next ? fmt(b) + '–' + fmt(next) : '&gt; ' + fmt(b)) + '</span></div>';
+  });
+  html += '<div class="legend-row"><i style="background:#e5e7eb"></i><span>no data</span></div>';
+  div.innerHTML = html;
+}
+
+init();
+</script>
+
+<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
+<p><strong>Source and citation.</strong> Data: Gentili, A. (2026). <em>A provincial panel dataset of Italian
+historical mass migration by foreign destination and occupational sector (1876–1913)</em> (Version v2) [Data set].
+Zenodo. <a href="https://doi.org/10.5281/zenodo.23478963">https://doi.org/10.5281/zenodo.23478963</a>.
+Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. The dataset was hand-digitised
+from the <em>Statistica della emigrazione italiana all'estero</em> (Ministero di Agricoltura, Industria e Commercio):
+69 post-Unification provinces, 1876–1913, 54 variables. Missing provincial destination data were filled by the author
+with intertemporal linear interpolation (see the Zenodo record).</p>
+<p><strong>Processing by DEMOPAST.</strong> Province names were matched to the 1901 boundaries (COD_PROV). The
+rate is total emigrants divided by the 1881 population supplied in the dataset (the only population series it
+includes), × 1,000; it is therefore not a rate on contemporaneous population, and the dataset provides that
+population only for 1876–1895, so the rate is "no data" afterwards. Totals are missing in the source for
+1888, 1890 and 1892; sex and age breakdowns start in 1884.
+Colour breaks are pooled over all years so shades are comparable across the slider.</p>
+<p><strong>Download:</strong> <a href="../data/migration/gentili/Italian_Migration_1876_1913_English_Panel.csv" download>original CSV (Zenodo, unmodified)</a> ·
+<a href="../data/migration/gentili/gentili_panel.csv" download>gentili_panel.csv</a> (with COD_PROV and rate)</p>
+<p>Preliminary — test environment.</p>
+</div>
+```

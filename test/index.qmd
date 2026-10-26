@@ -108,6 +108,18 @@ format:
     </div>
   </a>
 
+  <a href="migration_1876_1913.html" style="text-decoration:none;color:inherit;">
+    <div style="border:1px solid #ddd;border-radius:8px;padding:1.25rem;height:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <h3 style="margin-top:0;color:#005a32;">🚢 Migration 1876–1913</h3>
+      <p style="font-size:0.95rem;">Emigration by province, destination and occupational sector.</p>
+      <ul style="font-size:0.85rem;color:#555;">
+        <li>69 provinces, 38 years, 29 destinations, 15 occupational sectors</li>
+        <li>Source: Gentili (2026), Zenodo, doi:10.5281/zenodo.23478963 (CC BY 4.0)</li>
+      </ul>
+      <p style="font-weight:bold;color:#d97706;">● Preliminary</p>
+    </div>
+  </a>
+
 </div>
 
 <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ddd;font-size:0.9rem;color:#555;">
